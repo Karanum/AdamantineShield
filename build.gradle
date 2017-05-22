@@ -1,0 +1,28 @@
+plugins {
+    id 'org.spongepowered.plugin' version '0.8.1'
+}
+
+group= 'com.karanum'
+version = '5.1.0-0.1'
+description = 'Action logging and rollback plugin for Sponge'
+
+sourceCompatibility = targetCompatibility = "1.8"
+compileJava {
+    sourceCompatibility = targetCompatibility = "1.8"
+}
+
+dependencies {
+    compile 'org.spongepowered:spongeapi:5.1.0'
+}
+
+sponge {
+    plugin {
+        id = 'adamantineshield'
+        meta {
+            name = 'AdamantineShield'
+            version = '5.1.0-0.1'
+            description = 'Action logging and rollback plugin for Sponge'
+            url = null
+        }
+    }
+}
