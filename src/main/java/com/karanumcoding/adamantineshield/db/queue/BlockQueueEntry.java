@@ -2,14 +2,18 @@ package com.karanumcoding.adamantineshield.db.queue;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.spongepowered.api.block.BlockSnapshot;
 
 import com.karanumcoding.adamantineshield.ActionType;
+import com.karanumcoding.adamantineshield.db.Database;
 
 public class BlockQueueEntry extends QueueEntry {
 
+	private static final String QUERY_GET_WORLD = "SELECT id FROM AS_World WHERE world = ?";
+	private static final String QUERY_GET_CAUSE = "SELECT id FROM AS_Cause WHERE cause = ?";
 	private static final String QUERY = "INSERT INTO AS_Block (x, y, z, world, type, cause, block, data, time) "
 			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
 	
@@ -27,13 +31,33 @@ public class BlockQueueEntry extends QueueEntry {
 
 	@Override
 	public void writeToConnection(Connection c) throws SQLException {
+		String world = block.getWorldUniqueId().toString();
+		
+		if (!Database.worldCache.containsKey(world)) {
+			PreparedStatement ps1 = c.prepareStatement(QUERY_GET_WORLD);
+			ps1.setString(1, block.getWorldUniqueId().toString());
+			ResultSet result1 = ps1.executeQuery();
+			result1.next();
+			Database.worldCache.put(world, result1.getInt("id"));
+		}
+		int worldId = Database.worldCache.get(world);
+		
+		if (!Database.causeCache.containsKey(cause)) {
+			PreparedStatement ps2 = c.prepareStatement(QUERY_GET_CAUSE);
+			ps2.setString(1, cause);
+			ResultSet result2 = ps2.executeQuery();
+			result2.next();
+			Database.causeCache.put(cause, result2.getInt("id"));
+		}
+		int causeId = Database.causeCache.get(cause);
+		
 		PreparedStatement ps = c.prepareStatement(QUERY);
 		ps.setInt(1, block.getPosition().getX());
 		ps.setInt(2, block.getPosition().getY());
 		ps.setInt(3, block.getPosition().getZ());
-		ps.setString(4, block.getWorldUniqueId().toString());
+		ps.setInt(4, worldId);
 		ps.setString(5, type.toString());
-		ps.setString(6, cause);
+		ps.setInt(6, causeId);
 		ps.setString(7, block.getState().getType().getId());
 		ps.setString(8, "NULL");
 		ps.setLong(9, timestamp);

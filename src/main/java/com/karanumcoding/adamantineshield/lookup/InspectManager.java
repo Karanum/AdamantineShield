@@ -17,6 +17,7 @@ import com.karanumcoding.adamantineshield.db.Database;
 
 public class InspectManager {
 
+	private final String QUERY_GET_WORLD = "SELECT id FROM AS_World WHERE world = ?";
 	private final String INSPECT_QUERY = "SELECT * FROM AS_Block WHERE x = ? AND y = ? AND z = ? AND world = ? ORDER BY time DESC;";
 	
 	private List<Player> inspectors;
@@ -45,11 +46,20 @@ public class InspectManager {
 		LookupResult lookup = null;
 		
 		try {
+			if (!Database.worldCache.containsKey(world)) {
+				PreparedStatement ps1 = c.prepareStatement(QUERY_GET_WORLD);
+				ps1.setString(1, world.toString());
+				ResultSet result1 = ps1.executeQuery();
+				result1.next();
+				Database.worldCache.put(world.toString(), result1.getInt("id"));
+			}
+			int worldId = Database.worldCache.get(world);
+			
 			PreparedStatement ps = c.prepareStatement(INSPECT_QUERY);
 			ps.setInt(1, pos.getX());
 			ps.setInt(2, pos.getY());
 			ps.setInt(3, pos.getZ());
-			ps.setString(4, world.toString());
+			ps.setInt(4, worldId);
 			ResultSet result = ps.executeQuery();
 			
 			lookup = new LookupResult(result);
