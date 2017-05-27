@@ -13,6 +13,7 @@ compileJava {
 
 dependencies {
     compile 'org.spongepowered:spongeapi:5.1.0'
+    compile 'org.apache.commons:commons-collections4:4.1'
 }
 
 sponge {

@@ -37,8 +37,12 @@ public class BlockQueueEntry extends QueueEntry {
 			PreparedStatement ps1 = c.prepareStatement(QUERY_GET_WORLD);
 			ps1.setString(1, block.getWorldUniqueId().toString());
 			ResultSet result1 = ps1.executeQuery();
-			result1.next();
-			Database.worldCache.put(world, result1.getInt("id"));
+			if (!result1.isBeforeFirst()) {
+				//TODO: Add thingamajig to the database instead
+			} else {
+				result1.next();
+				Database.worldCache.put(world, result1.getInt("id"));
+			}
 		}
 		int worldId = Database.worldCache.get(world);
 		
@@ -46,8 +50,12 @@ public class BlockQueueEntry extends QueueEntry {
 			PreparedStatement ps2 = c.prepareStatement(QUERY_GET_CAUSE);
 			ps2.setString(1, cause);
 			ResultSet result2 = ps2.executeQuery();
-			result2.next();
-			Database.causeCache.put(cause, result2.getInt("id"));
+			if (!result2.isBeforeFirst()) {
+				//TODO: Add thingamajig to the database instead
+			} else {
+				result2.next();
+				Database.causeCache.put(cause, result2.getInt("id"));
+			}
 		}
 		int causeId = Database.causeCache.get(cause);
 		
