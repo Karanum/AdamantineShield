@@ -6,7 +6,7 @@ import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
 
-public class CommandMain implements CommandExecutor {
+public class CommandReload implements CommandExecutor {
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {

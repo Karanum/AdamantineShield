@@ -7,8 +7,8 @@ import java.sql.SQLException;
 
 import org.spongepowered.api.block.BlockSnapshot;
 
-import com.karanumcoding.adamantineshield.ActionType;
 import com.karanumcoding.adamantineshield.db.Database;
+import com.karanumcoding.adamantineshield.enums.ActionType;
 
 public class BlockQueueEntry extends QueueEntry {
 

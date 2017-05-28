@@ -1,4 +1,4 @@
-package com.karanumcoding.adamantineshield;
+package com.karanumcoding.adamantineshield.enums;
 
 public enum ActionType {
 	PLACE("place"),

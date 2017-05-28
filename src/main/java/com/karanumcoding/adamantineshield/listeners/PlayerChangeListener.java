@@ -17,10 +17,10 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import com.flowpowered.math.vector.Vector3i;
-import com.karanumcoding.adamantineshield.ActionType;
 import com.karanumcoding.adamantineshield.AdamantineShield;
 import com.karanumcoding.adamantineshield.db.Database;
 import com.karanumcoding.adamantineshield.db.queue.BlockQueueEntry;
+import com.karanumcoding.adamantineshield.enums.ActionType;
 
 public class PlayerChangeListener {
 	

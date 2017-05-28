@@ -15,9 +15,12 @@ import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.text.Text;
 
 import com.google.inject.Inject;
-import com.karanumcoding.adamantineshield.commands.CommandInspect;
-import com.karanumcoding.adamantineshield.commands.CommandMain;
+import com.karanumcoding.adamantineshield.commands.*;
+import com.karanumcoding.adamantineshield.commands.lookup.*;
+import com.karanumcoding.adamantineshield.commands.pages.*;
+import com.karanumcoding.adamantineshield.commands.rollback.*;
 import com.karanumcoding.adamantineshield.db.Database;
+import com.karanumcoding.adamantineshield.enums.Permissions;
 import com.karanumcoding.adamantineshield.listeners.MobChangeListener;
 import com.karanumcoding.adamantineshield.listeners.NaturalChangeListener;
 import com.karanumcoding.adamantineshield.listeners.PlayerChangeListener;
@@ -89,31 +92,79 @@ public class AdamantineShield {
 	}
 	
 	private void registerCommands(CommandManager man) {
+		CommandSpec filterCommand = CommandSpec.builder()
+				.permission(Permissions.FILTER.get())
+				.executor(new CommandFilter())
+				.build();
+		
+		CommandSpec helpCommand = CommandSpec.builder()
+				.executor(new CommandMain())
+				.build();
+		
 		CommandSpec inspectCommand = CommandSpec.builder()
-				.permission("adamantineshield.use.inspect")
+				.permission(Permissions.LOOKUP.get())
 				.executor(new CommandInspect(this))
 				.build();
-
-//		CommandSpec undoCommand = CommandSpec.builder()
-//				.permission("adamantineshield.use")
-//				.build();	//TODO: Add executor
-//		
-//		CommandSpec lookupCommand = CommandSpec.builder()
-//				.permission("adamantineshield.use.lookup")
-//				.build();	//TODO: Add executor
-//		
-//		CommandSpec rollbackCommand = CommandSpec.builder()
-//				.permission("adamantineshield.use.rollback")
-//				.build();	//TODO: Add executor
 		
-		//TODO: Add commands for on-the-fly result filtering
+		CommandSpec lookupCommand = CommandSpec.builder()
+				.permission(Permissions.LOOKUP.get())
+				.executor(new CommandLookup())
+				.build();
+		
+		CommandSpec nextPageCommand = CommandSpec.builder()
+				.permission(Permissions.LOOKUP.get())
+				.executor(new CommandNextPage())
+				.build();
+		
+		CommandSpec pageCommand = CommandSpec.builder()
+				.permission(Permissions.LOOKUP.get())
+				.executor(new CommandPage())
+				.build();
+		
+		CommandSpec prevPageCommand = CommandSpec.builder()
+				.permission(Permissions.LOOKUP.get())
+				.executor(new CommandPrevPage())
+				.build();
+		
+		CommandSpec purgeCommand = CommandSpec.builder()
+				.permission(Permissions.PURGE.get())
+				.executor(new CommandPurge())
+				.build();
+		
+		CommandSpec redoCommand = CommandSpec.builder()
+				.permission(Permissions.REDO.get())
+				.executor(new CommandRedo())
+				.build();
+		
+		CommandSpec reloadCommand = CommandSpec.builder()
+				.permission(Permissions.RELOAD.get())
+				.executor(new CommandReload())
+				.build();
+		
+		CommandSpec rollbackCommand = CommandSpec.builder()
+				.permission(Permissions.ROLLBACK.get())
+				.executor(new CommandRollback())
+				.build();
+		
+		CommandSpec undoCommand = CommandSpec.builder()
+				.permission(Permissions.UNDO.get())
+				.executor(new CommandUndo())
+				.build();
 		
 		CommandSpec parentCommand = CommandSpec.builder()
 				.description(Text.of("Main command for AdamantineShield"))
 				.child(inspectCommand, "inspect", "i")
-				//.child(undoCommand, "undo", "u")
-				//.child(lookupCommand, "lookup", "l")
-				//.child(rollbackCommand, "rollback", "rb", "r")
+				.child(lookupCommand, "lookup", "l")
+				.child(filterCommand, "filter", "f")
+				.child(pageCommand, "page", "p")
+				.child(nextPageCommand, "nextpage", "next")
+				.child(prevPageCommand, "prevpage", "prev")
+				.child(rollbackCommand, "rollback", "rb", "r")
+				.child(undoCommand, "undo", "u")
+				.child(redoCommand, "redo", "re")
+				.child(purgeCommand, "purge")
+				.child(reloadCommand, "reload")
+				.child(helpCommand, "help", "?")
 				.executor(new CommandMain())
 				.build();
 		

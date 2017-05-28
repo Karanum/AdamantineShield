@@ -14,7 +14,7 @@ import org.spongepowered.api.text.format.TextColors;
 
 import com.flowpowered.math.vector.Vector3i;
 import com.google.common.collect.Lists;
-import com.karanumcoding.adamantineshield.ActionType;
+import com.karanumcoding.adamantineshield.enums.ActionType;
 import com.karanumcoding.adamantineshield.util.TimeUtils;
 
 public class LookupResult {

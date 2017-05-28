@@ -1,4 +1,4 @@
-package com.karanumcoding.adamantineshield.commands;
+package com.karanumcoding.adamantineshield.commands.lookup;
 
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
