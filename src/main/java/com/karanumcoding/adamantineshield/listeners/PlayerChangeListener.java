@@ -60,7 +60,7 @@ public class PlayerChangeListener {
 		Vector3i blockPos = block.getPosition();
 		
 		p.sendMessage(Text.of(TextColors.BLUE, "Querying database, please wait..."));
-		Sponge.getScheduler().createAsyncExecutor(plugin).submit(() -> {
+		Sponge.getScheduler().createAsyncExecutor(plugin).execute(() -> {
 				plugin.getInspectManager().inspect(p, block.getWorldUniqueId(), blockPos); });
 	}
 	
@@ -76,7 +76,7 @@ public class PlayerChangeListener {
 		Vector3i blockPos = block.getPosition().add(e.getTargetSide().asBlockOffset());
 		
 		p.sendMessage(Text.of(TextColors.BLUE, "Querying database, please wait..."));
-		Sponge.getScheduler().createAsyncExecutor(plugin).submit(() -> {
+		Sponge.getScheduler().createAsyncExecutor(plugin).execute(() -> {
 				plugin.getInspectManager().inspect(p, block.getWorldUniqueId(), blockPos); });
 	}
 	

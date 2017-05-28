@@ -3,7 +3,7 @@ plugins {
 }
 
 group= 'com.karanum'
-version = '5.1.0-0.1'
+version = '0.1.1'
 description = 'Action logging and rollback plugin for Sponge'
 
 sourceCompatibility = targetCompatibility = "1.8"
@@ -13,7 +13,6 @@ compileJava {
 
 dependencies {
     compile 'org.spongepowered:spongeapi:5.1.0'
-    compile 'org.apache.commons:commons-collections4:4.1'
 }
 
 sponge {
@@ -21,7 +20,7 @@ sponge {
         id = 'adamantineshield'
         meta {
             name = 'AdamantineShield'
-            version = '5.1.0-0.1'
+            version = '0.1.1'
             description = 'Action logging and rollback plugin for Sponge'
             url = null
         }

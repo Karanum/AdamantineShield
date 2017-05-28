@@ -26,7 +26,7 @@ import com.karanumcoding.adamantineshield.listeners.NaturalChangeListener;
 import com.karanumcoding.adamantineshield.listeners.PlayerChangeListener;
 import com.karanumcoding.adamantineshield.lookup.InspectManager;
 
-@Plugin(id = "adamantineshield", name = "AdamantineShield", version = "0.1", authors = { "Karanum", "Snootiful" },
+@Plugin(id = "adamantineshield", name = "AdamantineShield", version = "0.1.1", authors = { "Karanum", "Snootiful" },
 	description = "Action logging and rollback plugin for Sponge"
 )
 public class AdamantineShield {
@@ -76,6 +76,7 @@ public class AdamantineShield {
 	
 	@Listener
 	public void onServerStopping(GameStoppingServerEvent e) {
+		if (db == null) return;
 		db.stop();
 	}
 	

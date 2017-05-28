@@ -3,13 +3,13 @@ package com.karanumcoding.adamantineshield.db;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.collections4.map.LRUMap;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.service.sql.SqlService;
@@ -25,8 +25,8 @@ public class Database {
 	private ConcurrentLinkedQueue<QueueEntry> queue;
 	private Task task;
 	
-	public static final Map<String, Integer> worldCache = Collections.synchronizedMap(new LRUMap<>(10));
-	public static final Map<String, Integer> causeCache = Collections.synchronizedMap(new LRUMap<>(100));
+	public static final Map<String, Integer> worldCache = Collections.synchronizedMap(new HashMap<>());
+	public static final Map<String, Integer> causeCache = Collections.synchronizedMap(new HashMap<>());
 	
 	public Database(AdamantineShield plugin, String jdbc) throws SQLException {
 		queue = new ConcurrentLinkedQueue<>();
