@@ -3,6 +3,7 @@ package com.karanumcoding.adamantineshield.listeners;
 import java.util.Date;
 import java.util.UUID;
 
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.Transaction;
@@ -12,6 +13,8 @@ import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.block.ChangeBlockEvent;
 import org.spongepowered.api.event.block.InteractBlockEvent;
 import org.spongepowered.api.event.filter.cause.First;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColors;
 
 import com.flowpowered.math.vector.Vector3i;
 import com.karanumcoding.adamantineshield.ActionType;
@@ -56,7 +59,9 @@ public class PlayerChangeListener {
 		BlockSnapshot block = e.getTargetBlock();
 		Vector3i blockPos = block.getPosition();
 		
-		plugin.getInspectManager().inspect(p, block.getWorldUniqueId(), blockPos);
+		p.sendMessage(Text.of(TextColors.BLUE, "Querying database, please wait..."));
+		Sponge.getScheduler().createAsyncExecutor(plugin).submit(() -> {
+				plugin.getInspectManager().inspect(p, block.getWorldUniqueId(), blockPos); });
 	}
 	
 	@Listener
@@ -70,7 +75,9 @@ public class PlayerChangeListener {
 		BlockSnapshot block = e.getTargetBlock();
 		Vector3i blockPos = block.getPosition().add(e.getTargetSide().asBlockOffset());
 		
-		plugin.getInspectManager().inspect(p, block.getWorldUniqueId(), blockPos);
+		p.sendMessage(Text.of(TextColors.BLUE, "Querying database, please wait..."));
+		Sponge.getScheduler().createAsyncExecutor(plugin).submit(() -> {
+				plugin.getInspectManager().inspect(p, block.getWorldUniqueId(), blockPos); });
 	}
 	
 }

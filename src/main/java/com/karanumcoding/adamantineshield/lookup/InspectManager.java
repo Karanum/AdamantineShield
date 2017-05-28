@@ -19,7 +19,7 @@ public class InspectManager {
 
 	private final String QUERY_GET_WORLD = "SELECT id FROM AS_World WHERE world = ?";
 	private final String INSPECT_QUERY = "SELECT * FROM AS_Block WHERE x = ? AND y = ? AND z = ? AND world = ? ORDER BY time DESC;";
-	
+
 	private List<Player> inspectors;
 	private Database db;
 	

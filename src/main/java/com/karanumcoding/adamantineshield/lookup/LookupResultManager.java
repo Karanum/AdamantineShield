@@ -23,8 +23,8 @@ public class LookupResultManager {
 		lookupMap.put(p, res);
 	}
 	
-	public void getLookupResult(Player p) {
-		lookupMap.get(p);
+	public LookupResult getLookupResult(Player p) {
+		return lookupMap.get(p);
 	}
 	
 	public void clearLookupResult(Player p) {
