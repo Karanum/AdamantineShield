@@ -70,6 +70,7 @@ public class AdamantineShield {
 	
 	@Listener
 	public void onPostInit(GamePostInitializationEvent e) {
+		if (db == null) return;
 		logger.info("Registering plugin commands");
 		registerCommands(Sponge.getCommandManager());
 	}
