@@ -14,6 +14,8 @@ public class BlockQueueEntry extends QueueEntry {
 
 	private static final String QUERY_GET_WORLD = "SELECT id FROM AS_World WHERE world = ?";
 	private static final String QUERY_GET_CAUSE = "SELECT id FROM AS_Cause WHERE cause = ?";
+	private static final String QUERY_ADD_WORLD = "INSERT INTO AS_World (world) VALUES (?);";
+	private static final String QUERY_ADD_CAUSE = "INSERT INTO AS_Cause (cause) VALUES (?);";
 	private static final String QUERY = "INSERT INTO AS_Block (x, y, z, world, type, cause, block, data, time) "
 			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
 	
@@ -35,10 +37,14 @@ public class BlockQueueEntry extends QueueEntry {
 		
 		if (!Database.worldCache.containsKey(world)) {
 			PreparedStatement ps1 = c.prepareStatement(QUERY_GET_WORLD);
-			ps1.setString(1, block.getWorldUniqueId().toString());
+			ps1.setString(1, world);
 			ResultSet result1 = ps1.executeQuery();
 			if (!result1.isBeforeFirst()) {
 				//TODO: Add thingamajig to the database instead
+				PreparedStatement add = c.prepareStatement(QUERY_ADD_WORLD);
+				add.setString(1, world);
+				ResultSet r = add.executeQuery();
+				Database.worldCache.put(world, r.getInt("id"));
 			} else {
 				result1.next();
 				Database.worldCache.put(world, result1.getInt("id"));
