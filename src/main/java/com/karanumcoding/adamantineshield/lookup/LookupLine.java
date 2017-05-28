@@ -5,7 +5,7 @@ import java.util.UUID;
 import org.spongepowered.api.block.BlockType;
 
 import com.flowpowered.math.vector.Vector3i;
-import com.karanumcoding.adamantineshield.ActionType;
+import com.karanumcoding.adamantineshield.enums.ActionType;
 import com.karanumcoding.adamantineshield.util.PlayerUtils;
 
 public class LookupLine {

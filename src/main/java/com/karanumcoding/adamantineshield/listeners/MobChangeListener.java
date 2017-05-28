@@ -11,9 +11,9 @@ import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.block.ChangeBlockEvent;
 import org.spongepowered.api.event.filter.cause.First;
 
-import com.karanumcoding.adamantineshield.ActionType;
 import com.karanumcoding.adamantineshield.db.Database;
 import com.karanumcoding.adamantineshield.db.queue.BlockQueueEntry;
+import com.karanumcoding.adamantineshield.enums.ActionType;
 
 public class MobChangeListener {
 
