@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandManager;
+import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
@@ -120,6 +121,7 @@ public class AdamantineShield {
 		
 		CommandSpec pageCommand = CommandSpec.builder()
 				.permission(Permissions.LOOKUP.get())
+				.arguments(GenericArguments.onlyOne(GenericArguments.integer(Text.of("page"))))
 				.executor(new CommandPage())
 				.build();
 		
