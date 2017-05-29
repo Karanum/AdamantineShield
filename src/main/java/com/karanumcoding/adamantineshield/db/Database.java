@@ -34,6 +34,7 @@ public class Database {
 		service = Sponge.getServiceManager().provide(SqlService.class).get();
 		source = service.getDataSource(jdbc);
 		prepareTables();
+		plugin.getLogger().info("AS database loaded successfully");
 		
 		task = Task.builder().async()
 				.interval(1, TimeUnit.SECONDS)
@@ -61,6 +62,18 @@ public class Database {
 	
 	public ConcurrentLinkedQueue<QueueEntry> getQueue() {
 		return queue;
+	}
+	
+	public boolean purgeEntries(long before) {
+		try {
+			Connection c = source.getConnection();
+			c.createStatement().executeQuery("DELETE FROM AS_Block WHERE time < " + before + ";");
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 	
 	private void prepareTables() throws SQLException {

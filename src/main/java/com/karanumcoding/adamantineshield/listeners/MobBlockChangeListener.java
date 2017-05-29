@@ -15,11 +15,11 @@ import com.karanumcoding.adamantineshield.db.Database;
 import com.karanumcoding.adamantineshield.db.queue.BlockQueueEntry;
 import com.karanumcoding.adamantineshield.enums.ActionType;
 
-public class MobChangeListener {
+public class MobBlockChangeListener {
 
 	private Database db;
 	
-	public MobChangeListener(Database db) {
+	public MobBlockChangeListener(Database db) {
 		this.db = db;
 	}
 	

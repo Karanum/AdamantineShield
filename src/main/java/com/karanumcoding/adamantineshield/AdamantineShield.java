@@ -2,12 +2,15 @@ package com.karanumcoding.adamantineshield;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandManager;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
+import org.spongepowered.api.event.EventManager;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
@@ -17,14 +20,16 @@ import org.spongepowered.api.text.Text;
 
 import com.google.inject.Inject;
 import com.karanumcoding.adamantineshield.commands.*;
+import com.karanumcoding.adamantineshield.commands.arguments.TimeStringArgument;
 import com.karanumcoding.adamantineshield.commands.lookup.*;
 import com.karanumcoding.adamantineshield.commands.pages.*;
 import com.karanumcoding.adamantineshield.commands.rollback.*;
 import com.karanumcoding.adamantineshield.db.Database;
 import com.karanumcoding.adamantineshield.enums.Permissions;
-import com.karanumcoding.adamantineshield.listeners.MobChangeListener;
-import com.karanumcoding.adamantineshield.listeners.NaturalChangeListener;
-import com.karanumcoding.adamantineshield.listeners.PlayerChangeListener;
+import com.karanumcoding.adamantineshield.listeners.MobBlockChangeListener;
+import com.karanumcoding.adamantineshield.listeners.LiquidFlowListener;
+import com.karanumcoding.adamantineshield.listeners.PlayerBlockChangeListener;
+import com.karanumcoding.adamantineshield.listeners.PlayerInspectListener;
 import com.karanumcoding.adamantineshield.lookup.InspectManager;
 
 @Plugin(id = "adamantineshield", name = "AdamantineShield", version = "0.1.1", authors = { "Karanum", "Snootiful" },
@@ -61,12 +66,18 @@ public class AdamantineShield {
 			return;
 		}
 		
+		if (config.getBool("purge", "auto-purge")) {
+			int days = config.getInt("purge", "auto-purge-days");
+			logger.info("Purging entries older than " + days + " days");
+			if (!db.purgeEntries(new Date().getTime() - TimeUnit.DAYS.toMillis(days))) {
+				logger.warn("Automatic purge failed!");
+			}
+		}
+		
 		inspectManager = new InspectManager(db);
 		
 		logger.info("Registering event listeners");
-		Sponge.getEventManager().registerListeners(this, new PlayerChangeListener(this, db));
-		Sponge.getEventManager().registerListeners(this, new MobChangeListener(db));
-		Sponge.getEventManager().registerListeners(this, new NaturalChangeListener(db));
+		registerListeners(Sponge.getEventManager());
 	}
 	
 	@Listener
@@ -92,6 +103,19 @@ public class AdamantineShield {
 	
 	public InspectManager getInspectManager() {
 		return inspectManager;
+	}
+	
+	private void registerListeners(EventManager man) {
+		man.registerListeners(this, new PlayerInspectListener(this));
+		if (config.getBool("logging", "blocks")) {
+			man.registerListeners(this, new PlayerBlockChangeListener(db));
+		}
+		if (config.getBool("logging", "mobs")) {
+			man.registerListeners(this, new MobBlockChangeListener(db));
+		}
+		if (config.getBool("logging", "flow")) {
+			man.registerListeners(this, new LiquidFlowListener(db));
+		}
 	}
 	
 	private void registerCommands(CommandManager man) {
@@ -132,7 +156,8 @@ public class AdamantineShield {
 		
 		CommandSpec purgeCommand = CommandSpec.builder()
 				.permission(Permissions.PURGE.get())
-				.executor(new CommandPurge())
+				.arguments(GenericArguments.onlyOne(new TimeStringArgument(Text.of("time"))))
+				.executor(new CommandPurge(this))
 				.build();
 		
 		CommandSpec redoCommand = CommandSpec.builder()

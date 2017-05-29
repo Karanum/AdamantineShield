@@ -26,10 +26,12 @@ public class ConfigHandler {
 		mainNode = configLoader.load();
 	}
 	
-	public Object get(Object... path) {
-		if (path.length == 0)
-			return null;
-		return mainNode.getNode(path).getValue();
+	public boolean getBool(Object... path) {
+		return mainNode.getNode(path).getBoolean();
+	}
+	
+	public int getInt(Object... path) {
+		return mainNode.getNode(path).getInt();
 	}
 	
 	public String getJdbcString() {

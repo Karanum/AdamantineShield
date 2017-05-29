@@ -16,11 +16,11 @@ import com.karanumcoding.adamantineshield.db.Database;
 import com.karanumcoding.adamantineshield.db.queue.BlockQueueEntry;
 import com.karanumcoding.adamantineshield.enums.ActionType;
 
-public class NaturalChangeListener {
+public class LiquidFlowListener {
 
 	private Database db;
 	
-	public NaturalChangeListener(Database db) {
+	public LiquidFlowListener(Database db) {
 		this.db = db;
 	}
 	
