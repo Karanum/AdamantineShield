@@ -62,7 +62,7 @@ public class BlockQueueEntry extends QueueEntry {
 		ps.setInt(2, block.getPosition().getY());
 		ps.setInt(3, block.getPosition().getZ());
 		ps.setInt(4, worldId);
-		ps.setString(5, type.toString());
+		ps.setByte(5, (byte) type.ordinal());
 		ps.setInt(6, causeId);
 		ps.setString(7, block.getState().getType().getId());
 		ps.setString(8, "NULL");	//TODO: Find a way to efficiently store block data

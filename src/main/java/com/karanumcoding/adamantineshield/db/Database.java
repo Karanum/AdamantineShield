@@ -88,9 +88,9 @@ public class Database {
 				+ "PRIMARY KEY (id));");
 		
 		c.createStatement().executeQuery("CREATE TABLE IF NOT EXISTS AS_Block ("
-				+ "x INT, y INT, z INT, world INT, type TEXT, "
-				+ "cause INT, block TEXT, data TEXT, time BIGINT,"
-				+ "FOREIGN KEY (world) REFERENCES AS_World(id),"
+				+ "x INT, y INT, z INT, world INT, type TINYINT, "
+				+ "cause INT, block TEXT, data TEXT, time BIGINT, "
+				+ "FOREIGN KEY (world) REFERENCES AS_World(id), "
 				+ "FOREIGN KEY (cause) REFERENCES AS_Cause(id)) "
 				+ "CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
 		

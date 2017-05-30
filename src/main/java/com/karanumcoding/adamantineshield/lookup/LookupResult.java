@@ -27,7 +27,7 @@ public class LookupResult {
 		while (results.next()) {
 			Vector3i pos = new Vector3i(results.getInt("x"), results.getInt("y"), results.getInt("z"));
 			UUID world = UUID.fromString(results.getString("world"));
-			ActionType type = ActionType.fromString(results.getString("type"));
+			ActionType type = ActionType.valueCache[results.getByte("type")];
 			String cause = results.getString("cause");
 			BlockType block = Sponge.getRegistry().getType(BlockType.class, results.getString("block")).get();
 			long timestamp = results.getLong("time");

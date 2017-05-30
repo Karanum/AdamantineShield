@@ -1,29 +1,11 @@
 package com.karanumcoding.adamantineshield.enums;
 
 public enum ActionType {
-	PLACE("place"),
-	DESTROY("destroy"),
-	MOB_PLACE("mobplace"),
-	MOB_DESTROY("mobdestroy"),
-	FLOW("flow");
+	PLACE,
+	DESTROY,
+	MOB_PLACE,
+	MOB_DESTROY,
+	FLOW;
 	
-	
-	private String type;
-	
-	private ActionType(String type) {
-		this.type = type;
-	}
-	
-	public static ActionType fromString(String type) {
-		for (ActionType v : ActionType.values()) {
-			if (v.toString().equals(type))
-				return v;
-		}
-		return null;
-	}
-	
-	@Override
-	public String toString() {
-		return type;
-	}
+	public final static ActionType[] valueCache = values();
 }
