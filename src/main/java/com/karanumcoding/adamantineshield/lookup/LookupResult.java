@@ -55,6 +55,8 @@ public class LookupResult {
 			return;
 		}
 		
+		lastPage = page;
+		
 		Text text = Text.of(TextColors.DARK_AQUA, "[AS] ", TextColors.YELLOW, "Showing results, page ", page, "/", getPages());
 		for (int i = (page - 1) * 15; i < page * 15 && i < lines.size(); ++i) {
 			LookupLine line = lines.get(i);
