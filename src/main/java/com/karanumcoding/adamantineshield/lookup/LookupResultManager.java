@@ -15,6 +15,8 @@ public class LookupResultManager {
 	
 	private Map<Player, LookupResult> lookupMap;
 	
+	private int linesPerPage = 15;
+	
 	private LookupResultManager() {
 		lookupMap = Maps.newHashMap();
 	}
@@ -29,6 +31,14 @@ public class LookupResultManager {
 	
 	public void clearLookupResult(Player p) {
 		lookupMap.remove(p);
+	}
+	
+	public void setLinesPerPage(int lines) {
+		linesPerPage = lines;
+	}
+	
+	public int getLinesPerPage() {
+		return linesPerPage;
 	}
 	
 }

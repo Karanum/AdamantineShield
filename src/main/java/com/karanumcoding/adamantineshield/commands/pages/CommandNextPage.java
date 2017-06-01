@@ -28,7 +28,7 @@ public class CommandNextPage implements CommandExecutor {
 		}
 		
 		int page = result.getLastSeenPage() + 1;
-		if (page > result.getPages()) {
+		if (page > result.getPages(LookupResultManager.instance().getLinesPerPage())) {
 			src.sendMessage(Text.of(TextColors.DARK_AQUA, "[AS] ", TextColors.YELLOW, "Already on the last page!"));
 			return CommandResult.empty();
 		}

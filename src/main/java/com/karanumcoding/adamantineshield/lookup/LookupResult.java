@@ -36,8 +36,8 @@ public class LookupResult {
 		lastPage = 0;
 	}
 	
-	public int getPages() {
-		return (lines.size() / 15) + 1;
+	public int getPages(int linesPerPage) {
+		return (lines.size() / linesPerPage) + 1;
 	}
 	
 	public int getLastSeenPage() {
@@ -45,8 +45,10 @@ public class LookupResult {
 	}
 	
 	public void showPage(Player p, int page) {
-		if (page > getPages()) {
-			p.sendMessage(Text.of(TextColors.DARK_AQUA, "[AS] ", TextColors.RED, "Page number exceeds amount of pages (max ", getPages(), ")"));
+		int linesPerPage = LookupResultManager.instance().getLinesPerPage();
+		int pages = getPages(linesPerPage);
+		if (page > pages) {
+			p.sendMessage(Text.of(TextColors.DARK_AQUA, "[AS] ", TextColors.RED, "Page number exceeds amount of pages (max ", pages, ")"));
 			return;
 		}
 		
@@ -57,8 +59,8 @@ public class LookupResult {
 		
 		lastPage = page;
 		
-		Text text = Text.of(TextColors.DARK_AQUA, "[AS] ", TextColors.YELLOW, "Showing results, page ", page, "/", getPages());
-		for (int i = (page - 1) * 15; i < page * 15 && i < lines.size(); ++i) {
+		Text text = Text.of(TextColors.DARK_AQUA, "[AS] ", TextColors.YELLOW, "Showing results, page ", page, "/", pages);
+		for (int i = (page - 1) * linesPerPage; i < page * linesPerPage && i < lines.size(); ++i) {
 			LookupLine line = lines.get(i);
 			Text hover = Text.builder(line.toString())
 					.color(TextColors.GOLD)
