@@ -13,16 +13,17 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 
 public class ConfigHandler {
 
+	private Path pluginPath;
 	private ConfigurationLoader<CommentedConfigurationNode> configLoader;
 	private ConfigurationNode mainNode;
 	
 	public ConfigHandler(AdamantineShield plugin) throws IOException {
-		Path path = Sponge.getGame().getConfigManager().getPluginConfig(plugin).getConfigPath();
-		if (Files.notExists(path)) {
-			Sponge.getAssetManager().getAsset(plugin, "config.conf").get().copyToFile(path);
+		pluginPath = Sponge.getGame().getConfigManager().getPluginConfig(plugin).getConfigPath();
+		if (Files.notExists(pluginPath)) {
+			Sponge.getAssetManager().getAsset(plugin, "config.conf").get().copyToFile(pluginPath);
 		}
 		
-		configLoader = HoconConfigurationLoader.builder().setPath(path).build();
+		configLoader = HoconConfigurationLoader.builder().setPath(pluginPath).build();
 		mainNode = configLoader.load();
 	}
 	
@@ -35,6 +36,9 @@ public class ConfigHandler {
 	}
 	
 	public String getJdbcString() {
+		if (mainNode.getNode("database", "local-mode").getBoolean())
+			return "jdbc:h2:file:" + pluginPath.getParent().toAbsolutePath() + "/db/database";
+		
 		return String.format("jdbc:%s://%s:%d/%s?user=%s&password=%s",
 				mainNode.getNode("database", "type").getString(),
 				mainNode.getNode("database", "hostname").getString(),

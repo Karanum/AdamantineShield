@@ -67,7 +67,7 @@ public class Database {
 	public boolean purgeEntries(long before) {
 		try {
 			Connection c = source.getConnection();
-			c.createStatement().executeQuery("DELETE FROM AS_Block WHERE time < " + before + ";");
+			c.createStatement().executeUpdate("DELETE FROM AS_Block WHERE time < " + before + ";");
 			c.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -79,24 +79,23 @@ public class Database {
 	private void prepareTables() throws SQLException {
 		Connection c = source.getConnection();
 		
-		c.createStatement().executeQuery("CREATE TABLE IF NOT EXISTS AS_World ("
+		c.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS AS_World ("
 				+ "id INT AUTO_INCREMENT NOT NULL, world TEXT NOT NULL, "
 				+ "PRIMARY KEY (id));");
 		
-		c.createStatement().executeQuery("CREATE TABLE IF NOT EXISTS AS_Cause ("
+		c.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS AS_Cause ("
 				+ "id INT AUTO_INCREMENT NOT NULL, cause TEXT NOT NULL, "
 				+ "PRIMARY KEY (id));");
 		
-		c.createStatement().executeQuery("CREATE TABLE IF NOT EXISTS AS_Block ("
+		c.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS AS_Block ("
 				+ "x INT, y INT, z INT, world INT, type TINYINT, "
 				+ "cause INT, block TEXT, data TEXT, time BIGINT, "
 				+ "FOREIGN KEY (world) REFERENCES AS_World(id), "
-				+ "FOREIGN KEY (cause) REFERENCES AS_Cause(id)) "
-				+ "CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+				+ "FOREIGN KEY (cause) REFERENCES AS_Cause(id));");
 		
-		c.createStatement().executeQuery("DROP TABLE IF EXISTS AS_Meta;");
-		c.createStatement().executeQuery("CREATE TABLE AS_Meta (version_id SMALLINT);");
-		c.createStatement().executeQuery("INSERT INTO AS_Meta VALUES (1);");
+		c.createStatement().executeUpdate("DROP TABLE IF EXISTS AS_Meta;");
+		c.createStatement().executeUpdate("CREATE TABLE AS_Meta (version_id SMALLINT);");
+		c.createStatement().executeUpdate("INSERT INTO AS_Meta VALUES (1);");
 		c.close();
 	}
 	

@@ -37,8 +37,8 @@ public class BlockQueueEntry extends QueueEntry {
 			r = c.createStatement().executeQuery("SELECT id FROM AS_World WHERE world = '" + world + "'");
 			if (!r.isBeforeFirst()) {
 				Statement s = c.createStatement();
-				s.executeQuery("INSERT INTO AS_World (world) VALUES ('" + world + "');");
-				r = s.getGeneratedKeys();
+				s.executeUpdate("INSERT INTO AS_World (world) VALUES ('" + world + "');");
+				r = c.createStatement().executeQuery("SELECT id FROM AS_World WHERE world = '" + world + "'");
 			}
 			r.next();
 			Database.worldCache.put(world, r.getInt("id"));
@@ -49,8 +49,8 @@ public class BlockQueueEntry extends QueueEntry {
 			r = c.createStatement().executeQuery("SELECT id FROM AS_Cause WHERE cause = '" + cause + "'");
 			if (!r.isBeforeFirst()) {
 				Statement s = c.createStatement();
-				s.executeQuery("INSERT INTO AS_Cause (cause) VALUES ('" + cause + "');");
-				r = s.getGeneratedKeys();
+				s.executeUpdate("INSERT INTO AS_Cause (cause) VALUES ('" + cause + "');");
+				r = c.createStatement().executeQuery("SELECT id FROM AS_Cause WHERE cause = '" + cause + "'");
 			}
 			r.next();
 			Database.causeCache.put(cause, r.getInt("id"));
@@ -67,7 +67,7 @@ public class BlockQueueEntry extends QueueEntry {
 		ps.setString(7, block.getState().getType().getId());
 		ps.setString(8, "NULL");	//TODO: Find a way to efficiently store block data
 		ps.setLong(9, timestamp);
-		ps.executeQuery();
+		ps.executeUpdate();
 	}
 	
 }
