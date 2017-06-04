@@ -15,6 +15,7 @@ public class LookupLine {
 	private ActionType type;
 	private String cause;
 	private BlockType block;
+	//private String data;
 	private long timestamp;
 	
 	public LookupLine(Vector3i pos, UUID world, ActionType type, String cause, BlockType block, long timestamp) {
@@ -23,6 +24,7 @@ public class LookupLine {
 		this.type = type;
 		this.cause = cause;
 		this.block = block;
+		//this.data = data;
 		this.timestamp = timestamp;
 	}
 	
