@@ -67,6 +67,7 @@ public class Database {
 		try {
 			Connection c = source.getConnection();
 			c.createStatement().executeUpdate("DELETE FROM AS_Block WHERE time < " + before + ";");
+			c.createStatement().executeUpdate("DELETE FROM AS_Container WHERE time < " + before + ";");
 			c.close();
 		} catch (SQLException e) {
 			e.printStackTrace();

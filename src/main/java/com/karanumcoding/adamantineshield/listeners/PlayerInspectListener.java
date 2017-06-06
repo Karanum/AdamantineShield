@@ -2,14 +2,16 @@ package com.karanumcoding.adamantineshield.listeners;
 
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockSnapshot;
+import org.spongepowered.api.block.tileentity.carrier.TileEntityCarrier;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.InteractBlockEvent;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
+import org.spongepowered.api.world.Location;
+import org.spongepowered.api.world.World;
 
-import com.flowpowered.math.vector.Vector3i;
 import com.karanumcoding.adamantineshield.AdamantineShield;
 
 public class PlayerInspectListener {
@@ -27,11 +29,11 @@ public class PlayerInspectListener {
 		
 		e.setCancelled(true);
 		BlockSnapshot block = e.getTargetBlock();
-		Vector3i blockPos = block.getPosition();
+		Location<World> loc = block.getLocation().get();
 		
 		p.sendMessage(Text.of(TextColors.BLUE, "Querying database, please wait..."));
 		Sponge.getScheduler().createAsyncExecutor(plugin).execute(() -> {
-				plugin.getInspectManager().inspect(p, block.getWorldUniqueId(), blockPos); });
+			plugin.getInspectManager().inspect(p, block.getWorldUniqueId(), loc.getBlockPosition()); });
 	}
 	
 	@Listener
@@ -43,11 +45,16 @@ public class PlayerInspectListener {
 		
 		e.setCancelled(true);
 		BlockSnapshot block = e.getTargetBlock();
-		Vector3i blockPos = block.getPosition().add(e.getTargetSide().asBlockOffset());
+		Location<World> loc = block.getLocation().get();
 		
 		p.sendMessage(Text.of(TextColors.BLUE, "Querying database, please wait..."));
-		Sponge.getScheduler().createAsyncExecutor(plugin).execute(() -> {
-				plugin.getInspectManager().inspect(p, block.getWorldUniqueId(), blockPos); });
+		if (loc.getTileEntity().isPresent() && loc.getTileEntity().get() instanceof TileEntityCarrier) {
+			Sponge.getScheduler().createAsyncExecutor(plugin).execute(() -> {
+				plugin.getInspectManager().inspectContainer(p, block.getWorldUniqueId(), loc.getBlockPosition()); });
+		} else {
+			Sponge.getScheduler().createAsyncExecutor(plugin).execute(() -> {
+				plugin.getInspectManager().inspect(p, block.getWorldUniqueId(), loc.getBlockPosition().add(e.getTargetSide().asBlockOffset())); });
+		}
 	}
 	
 }

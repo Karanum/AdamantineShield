@@ -17,8 +17,12 @@ import com.karanumcoding.adamantineshield.db.Database;
 
 public class InspectManager {
 
-	private final String INSPECT_QUERY = "SELECT x, y, z, type, block, data, time, AS_Cause.cause, AS_World.world FROM AS_Block, AS_World, AS_Cause "
+	private final String INSPECT_BLOCK_QUERY = "SELECT x, y, z, type, block, data, time, AS_Cause.cause, AS_World.world FROM AS_Block, AS_World, AS_Cause "
 			+ "WHERE x = ? AND y = ? AND z = ? AND AS_World.world = ? AND AS_Block.cause = AS_Cause.id AND AS_Block.world = AS_World.id ORDER BY time DESC;";
+	private final String INSPECT_CONTAINER_QUERY = "SELECT x, y, z, type, slot, item, count, data, time, AS_Cause.cause, AS_World.world "
+			+ "FROM AS_Container, AS_World, AS_Cause "
+			+ "WHERE x = ? AND y = ? AND z = ? AND AS_World.world = ? AND AS_Container.cause = AS_Cause.id AND AS_Container.world = AS_World.id "
+			+ "ORDER BY time DESC;";
 
 	private List<Player> inspectors;
 	private Database db;
@@ -46,7 +50,7 @@ public class InspectManager {
 		LookupResult lookup = null;
 		
 		try {			
-			PreparedStatement ps = c.prepareStatement(INSPECT_QUERY);
+			PreparedStatement ps = c.prepareStatement(INSPECT_BLOCK_QUERY);
 			ps.setInt(1, pos.getX());
 			ps.setInt(2, pos.getY());
 			ps.setInt(3, pos.getZ());
@@ -63,6 +67,31 @@ public class InspectManager {
 			return;
 		}
 
+		lookup.showPage(p, 1);
+	}
+	
+	public synchronized void inspectContainer(Player p, UUID world, Vector3i pos) {
+		Connection c = db.getConnection();
+		ContainerLookupResult lookup = null;
+		
+		try {
+			PreparedStatement ps = c.prepareStatement(INSPECT_CONTAINER_QUERY);
+			ps.setInt(1, pos.getX());
+			ps.setInt(2, pos.getY());
+			ps.setInt(3, pos.getZ());
+			ps.setString(4, world.toString());
+			ResultSet result = ps.executeQuery();
+			
+			lookup = new ContainerLookupResult(result);
+			LookupResultManager.instance().setLookupResult(p, lookup);
+			
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			p.sendMessage(Text.of(TextColors.DARK_AQUA, "[AC] ", TextColors.RED, "A database error has occurred! Contact your server administrator!"));
+			return;
+		}
+		
 		lookup.showPage(p, 1);
 	}
 	

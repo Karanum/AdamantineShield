@@ -19,11 +19,16 @@ import com.karanumcoding.adamantineshield.util.TimeUtils;
 
 public class LookupResult {
 
-	private List<LookupLine> lines;
+	protected List<LookupLine> lines;
 	private int lastPage;
 	
 	public LookupResult(ResultSet results) throws SQLException {
 		lines = Lists.newArrayList();
+		readResult(results);
+		lastPage = 0;
+	}
+	
+	protected void readResult(ResultSet results) throws SQLException {
 		while (results.next()) {
 			Vector3i pos = new Vector3i(results.getInt("x"), results.getInt("y"), results.getInt("z"));
 			UUID world = UUID.fromString(results.getString("world"));
@@ -33,7 +38,6 @@ public class LookupResult {
 			long timestamp = results.getLong("time");
 			lines.add(new LookupLine(pos, world, type, cause, block.getId(), timestamp));
 		}
-		lastPage = 0;
 	}
 	
 	public int getPages(int linesPerPage) {
