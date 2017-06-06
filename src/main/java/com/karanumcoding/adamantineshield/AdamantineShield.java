@@ -117,8 +117,8 @@ public class AdamantineShield {
 		if (config.getBool("logging", "flow")) {
 			man.registerListeners(this, new LiquidFlowListener(db));
 		}
-		if (config.getBool("logging", "containers")) {
-			man.registerListeners(this, new InventoryChangeListener(db));
+		if (config.getBool("logging", "containers") || config.getBool("logging", "chests")) {
+			man.registerListeners(this, new InventoryChangeListener(db, config.getBool("logging", "containers")));
 		}
 	}
 	

@@ -2,6 +2,7 @@ package com.karanumcoding.adamantineshield.listeners;
 
 import java.util.Date;
 
+import org.spongepowered.api.block.tileentity.carrier.Chest;
 import org.spongepowered.api.block.tileentity.carrier.TileEntityCarrier;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
@@ -21,9 +22,11 @@ import com.karanumcoding.adamantineshield.enums.ActionType;
 public class InventoryChangeListener {
 
 	private Database db;
+	private boolean logContainers;
 	
-	public InventoryChangeListener(Database db) {
+	public InventoryChangeListener(Database db, boolean logContainers) {
 		this.db = db;
+		this.logContainers = logContainers;
 	}
 	
 	@Listener
@@ -35,6 +38,9 @@ public class InventoryChangeListener {
 		if (!c.getCarrier().isPresent() || !(c.getCarrier().get() instanceof TileEntityCarrier))
 			return;
 		TileEntityCarrier carrier = (TileEntityCarrier) c.getCarrier().get();
+		
+		if (!logContainers && !(carrier instanceof Chest))
+			return;
 		
 		long timestamp = new Date().getTime();
 		int containerSize = c.iterator().next().capacity();
