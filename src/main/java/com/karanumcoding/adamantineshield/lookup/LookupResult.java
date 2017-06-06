@@ -70,7 +70,7 @@ public class LookupResult {
 					.color(TextColors.GOLD)
 					.onHover(TextActions.showText(Text.of("Location: ", line.getPos().toString())))
 					.build();
-			text = Text.of(text, Text.NEW_LINE, TextColors.AQUA, TimeUtils.timeAgoToString(line.getTime()),
+			text = Text.of(text, Text.NEW_LINE, TimeUtils.timeAgoToString(line.getTime()),
 					TextColors.DARK_AQUA, " - ", hover);
 		}
 		p.sendMessage(text);

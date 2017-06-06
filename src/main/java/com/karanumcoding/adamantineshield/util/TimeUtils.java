@@ -1,9 +1,14 @@
 package com.karanumcoding.adamantineshield.util;
 
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.action.TextActions;
+import org.spongepowered.api.text.format.TextColors;
 
 public final class TimeUtils {
 
@@ -16,23 +21,26 @@ public final class TimeUtils {
 	
 	private static final Pattern timeRegex = Pattern.compile("((?<days>\\d+)d)?((?<hours>\\d+)h)?((?<mins>\\d+)m)?((?<secs>\\d+)s)?");
 	
-	public static String timeAgoToString(long time) {
+	public static Text timeAgoToString(long time) {
 		long current = new Date().getTime();
 		long diff = current - time;
 		
 		if (diff < 0)
-			return "Near future";
+			return Text.of("Near future");
 		
-		if (diff >= DAY) {
-			float days = diff / (float) DAY;
-			return String.format("%.2fd ago", days);
-		}
+		Text hoverText = Text.of(TextColors.DARK_AQUA, "Minutes: ", TextColors.AQUA, (diff % HOUR) / MINUTE);
 		if (diff >= HOUR) {
-			float hours = diff / (float) HOUR;
-			return String.format("%.2fh ago", hours);
+			hoverText = Text.of(TextColors.DARK_AQUA, "Hours: ", TextColors.AQUA, (diff % DAY) / HOUR, Text.NEW_LINE, hoverText);
+			if (diff >= DAY) {
+				hoverText = Text.of(TextColors.DARK_AQUA, "Days: ", TextColors.AQUA, diff / DAY, Text.NEW_LINE, hoverText);
+			}
 		}
-		float mins = diff / (float) MINUTE;
-		return String.format("%.2fm ago", mins);
+		
+		float hours = diff / (float) HOUR;
+		return Text.builder(String.format(Locale.ROOT, "%.2fh", hours))
+				.color(TextColors.AQUA)
+				.onHover(TextActions.showText(hoverText))
+				.build();
 	}
 	
 	public static long timeStringToLong(String timeStr) throws NumberFormatException {
