@@ -2,8 +2,6 @@ package com.karanumcoding.adamantineshield.lookup;
 
 import java.util.UUID;
 
-import org.spongepowered.api.block.BlockType;
-
 import com.flowpowered.math.vector.Vector3i;
 import com.karanumcoding.adamantineshield.enums.ActionType;
 import com.karanumcoding.adamantineshield.util.PlayerUtils;
@@ -14,16 +12,16 @@ public class LookupLine {
 	private UUID world;
 	private ActionType type;
 	private String cause;
-	private BlockType block;
+	private String target;
 	//private String data;
 	private long timestamp;
 	
-	public LookupLine(Vector3i pos, UUID world, ActionType type, String cause, BlockType block, long timestamp) {
+	public LookupLine(Vector3i pos, UUID world, ActionType type, String cause, String target, long timestamp) {
 		this.pos = pos;
 		this.world = world;
 		this.type = type;
 		this.cause = cause;
-		this.block = block;
+		this.target = target;
 		//this.data = data;
 		this.timestamp = timestamp;
 	}
@@ -64,8 +62,8 @@ public class LookupLine {
 		return UUID.fromString(cause);
 	}
 	
-	public BlockType getBlock() {
-		return block;
+	public String getTarget() {
+		return target;
 	}
 	
 	public long getTime() {
@@ -76,17 +74,22 @@ public class LookupLine {
 	public String toString() {
 		switch (type) {
 			case PLACE:
-				return PlayerUtils.getName(getPlayerCause()) + " placed " + block.getName();
+				return PlayerUtils.getName(getPlayerCause()) + " placed " + target;
 			case DESTROY:
-				return PlayerUtils.getName(getPlayerCause()) + " broke " + block.getName();
+				return PlayerUtils.getName(getPlayerCause()) + " broke " + target;
 			case FLOW:
 				return cause + " flow occurred";
 			case MOB_DESTROY:
-				return "Entity " + cause + " broke " + block.getName();
+				return "Entity " + cause + " broke " + target;
 			case MOB_PLACE:
-				return "Entity " + cause + " placed " + block.getName();
+				return "Entity " + cause + " placed " + target;
+			case CONTAINER_ADD:
+				return PlayerUtils.getName(getPlayerCause()) + " added " + target;
+			case CONTAINER_REMOVE:
+				return PlayerUtils.getName(getPlayerCause()) + " removed " + target;
+			default:
+				return "(unsupported action type)";
 		}
-		return "(unsupported action type)";
 	}
 	
 }

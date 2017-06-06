@@ -27,6 +27,7 @@ import com.karanumcoding.adamantineshield.commands.rollback.*;
 import com.karanumcoding.adamantineshield.db.Database;
 import com.karanumcoding.adamantineshield.enums.Permissions;
 import com.karanumcoding.adamantineshield.listeners.MobBlockChangeListener;
+import com.karanumcoding.adamantineshield.listeners.InventoryChangeListener;
 import com.karanumcoding.adamantineshield.listeners.LiquidFlowListener;
 import com.karanumcoding.adamantineshield.listeners.PlayerBlockChangeListener;
 import com.karanumcoding.adamantineshield.listeners.PlayerInspectListener;
@@ -115,6 +116,9 @@ public class AdamantineShield {
 		}
 		if (config.getBool("logging", "flow")) {
 			man.registerListeners(this, new LiquidFlowListener(db));
+		}
+		if (config.getBool("logging", "containers")) {
+			man.registerListeners(this, new InventoryChangeListener(db));
 		}
 	}
 	

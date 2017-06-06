@@ -5,7 +5,9 @@ public enum ActionType {
 	DESTROY,
 	MOB_PLACE,
 	MOB_DESTROY,
-	FLOW;
+	FLOW,
+	CONTAINER_ADD,
+	CONTAINER_REMOVE;
 	
 	public final static ActionType[] valueCache = values();
 }

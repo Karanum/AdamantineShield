@@ -31,7 +31,7 @@ public class LookupResult {
 			String cause = results.getString("cause");
 			BlockType block = Sponge.getRegistry().getType(BlockType.class, results.getString("block")).get();
 			long timestamp = results.getLong("time");
-			lines.add(new LookupLine(pos, world, type, cause, block, timestamp));
+			lines.add(new LookupLine(pos, world, type, cause, block.getId(), timestamp));
 		}
 		lastPage = 0;
 	}

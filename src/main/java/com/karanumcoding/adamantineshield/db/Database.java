@@ -2,9 +2,6 @@ package com.karanumcoding.adamantineshield.db;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 
@@ -15,6 +12,8 @@ import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.service.sql.SqlService;
 
 import com.karanumcoding.adamantineshield.AdamantineShield;
+import com.karanumcoding.adamantineshield.db.cache.CauseCache;
+import com.karanumcoding.adamantineshield.db.cache.WorldCache;
 import com.karanumcoding.adamantineshield.db.queue.QueueEntry;
 
 public class Database {
@@ -25,8 +24,8 @@ public class Database {
 	private ConcurrentLinkedQueue<QueueEntry> queue;
 	private Task task;
 	
-	public static final Map<String, Integer> worldCache = Collections.synchronizedMap(new HashMap<>());
-	public static final Map<String, Integer> causeCache = Collections.synchronizedMap(new HashMap<>());
+	public static final WorldCache worldCache = new WorldCache();
+	public static final CauseCache causeCache = new CauseCache();
 	
 	public Database(AdamantineShield plugin, String jdbc) throws SQLException {
 		queue = new ConcurrentLinkedQueue<>();
@@ -86,6 +85,12 @@ public class Database {
 		c.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS AS_Cause ("
 				+ "id INT AUTO_INCREMENT NOT NULL, cause TEXT NOT NULL, "
 				+ "PRIMARY KEY (id));");
+		
+		c.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS AS_Container ("
+				+ "x INT, y INT, z INT, world INT, type TINYINT, slot INT, "
+				+ "cause INT, item TEXT, count TINYINT, data TEXT, time BIGINT, "
+				+ "FOREIGN KEY (world) REFERENCES AS_World(id), "
+				+ "FOREIGN KEY (cause) REFERENCES AS_Cause(id));");
 		
 		c.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS AS_Block ("
 				+ "x INT, y INT, z INT, world INT, type TINYINT, "
