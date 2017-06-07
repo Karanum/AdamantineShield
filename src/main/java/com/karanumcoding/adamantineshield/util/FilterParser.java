@@ -144,18 +144,18 @@ public final class FilterParser {
 	
 	private static CatalogType getCatalogType(String id, LookupType lookupType) throws CommandException {
 		switch (lookupType) {
-		case BLOCK_LOOKUP:
-			Optional<BlockType> block = Sponge.getRegistry().getType(BlockType.class, id);
-			if (block.isPresent())
-				return block.get();
-			throw new CommandException(Text.of(TextColors.RED, "Unknown block id: " + id));
-		case ITEM_LOOKUP:
-			Optional<ItemType> item = Sponge.getRegistry().getType(ItemType.class, id);
-			if (item.isPresent())
-				return item.get();
-			throw new CommandException(Text.of(TextColors.RED, "Unknown item id: " + id));
-		default:
-			throw new CommandException(Text.of(TextColors.RED, "Could not determine lookup type!"));
+			case BLOCK_LOOKUP:
+				Optional<BlockType> block = Sponge.getRegistry().getType(BlockType.class, id);
+				if (block.isPresent())
+					return block.get();
+				throw new CommandException(Text.of(TextColors.RED, "Unknown block id: " + id));
+			case ITEM_LOOKUP:
+				Optional<ItemType> item = Sponge.getRegistry().getType(ItemType.class, id);
+				if (item.isPresent())
+					return item.get();
+				throw new CommandException(Text.of(TextColors.RED, "Unknown item id: " + id));
+			default:
+				throw new CommandException(Text.of(TextColors.RED, "Could not determine lookup type!"));
 		}
 	}
 	

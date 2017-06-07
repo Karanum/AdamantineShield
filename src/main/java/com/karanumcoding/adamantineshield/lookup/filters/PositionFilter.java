@@ -29,7 +29,9 @@ public class PositionFilter implements FilterBase {
 
 	@Override
 	public String getQueryCondition(LookupType lookupType) {
-		return String.format("x > %d AND x < %d AND z > %d AND z < %d",
+		if (radius == 0)
+			return "x = " + pos.getX() + " AND z = " + pos.getZ();
+		return String.format("x >= %d AND x <= %d AND z >= %d AND z <= %d",
 				pos.getX() - radius, pos.getX() + radius, pos.getZ() - radius, pos.getZ() + radius);
 	}
 

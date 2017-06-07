@@ -5,15 +5,15 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.item.ItemType;
+import org.spongepowered.api.block.BlockType;
 
 import com.flowpowered.math.vector.Vector3i;
 import com.karanumcoding.adamantineshield.enums.ActionType;
 import com.karanumcoding.adamantineshield.enums.LookupType;
 
-public class ContainerLookupResult extends LookupResult {
+public class BlockLookupResult extends LookupResult {
 
-	public ContainerLookupResult(ResultSet results) throws SQLException {
+	public BlockLookupResult(ResultSet results) throws SQLException {
 		super(results);
 	}
 	
@@ -23,10 +23,9 @@ public class ContainerLookupResult extends LookupResult {
 			UUID world = UUID.fromString(results.getString("world"));
 			ActionType type = ActionType.valueCache[results.getByte("type")];
 			String cause = results.getString("cause");
-			ItemType item = Sponge.getRegistry().getType(ItemType.class, results.getString("item")).get();
-			int count = results.getByte("count");
+			BlockType block = Sponge.getRegistry().getType(BlockType.class, results.getString("block")).get();
 			long timestamp = results.getLong("time");
-			lines.add(new LookupLine(pos, world, type, cause, item, count, timestamp));
+			lines.add(new LookupLine(pos, world, type, cause, block, 1, timestamp));
 		}
 	}
 	
@@ -35,7 +34,7 @@ public class ContainerLookupResult extends LookupResult {
 	}
 
 	public LookupType getLookupType() {
-		return LookupType.ITEM_LOOKUP;
+		return LookupType.BLOCK_LOOKUP;
 	}
 
 }

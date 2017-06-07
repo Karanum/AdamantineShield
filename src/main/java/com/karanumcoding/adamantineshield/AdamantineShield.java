@@ -32,6 +32,7 @@ import com.karanumcoding.adamantineshield.listeners.LiquidFlowListener;
 import com.karanumcoding.adamantineshield.listeners.PlayerBlockChangeListener;
 import com.karanumcoding.adamantineshield.listeners.PlayerInspectListener;
 import com.karanumcoding.adamantineshield.lookup.InspectManager;
+import com.karanumcoding.adamantineshield.util.FilterParser;
 
 @Plugin(id = "adamantineshield", name = "AdamantineShield", version = "0.1.1", authors = { "Karanum", "Snootiful" },
 	description = "Action logging and rollback plugin for Sponge"
@@ -58,6 +59,7 @@ public class AdamantineShield {
 			logger.error("Could not load configuration file! Plugin was not loaded!");
 			return;
 		}
+		FilterParser.setConfig(config);
 		
 		try {
 			db = new Database(this, config.getJdbcString());

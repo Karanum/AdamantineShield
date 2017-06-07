@@ -1,5 +1,7 @@
 package com.karanumcoding.adamantineshield.lookup.filters;
 
+import java.util.Date;
+
 import com.karanumcoding.adamantineshield.enums.LookupType;
 import com.karanumcoding.adamantineshield.lookup.LookupLine;
 
@@ -18,7 +20,7 @@ public class AfterTimeFilter implements FilterBase {
 
 	@Override
 	public String getQueryCondition(LookupType lookupType) {
-		return "time > " + timestamp;
+		return "time > " + (new Date().getTime() - timestamp);
 	}
 
 }

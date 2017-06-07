@@ -18,6 +18,7 @@ import org.spongepowered.api.text.format.TextColors;
 import com.karanumcoding.adamantineshield.AdamantineShield;
 import com.karanumcoding.adamantineshield.db.Database;
 import com.karanumcoding.adamantineshield.enums.LookupType;
+import com.karanumcoding.adamantineshield.lookup.BlockLookupResult;
 import com.karanumcoding.adamantineshield.lookup.ContainerLookupResult;
 import com.karanumcoding.adamantineshield.lookup.FilterSet;
 import com.karanumcoding.adamantineshield.lookup.LookupResult;
@@ -47,11 +48,16 @@ public class CommandLookup implements CommandExecutor {
 		String targetTable = filterSet.getLookupType().getTable();
 		
 		Sponge.getScheduler().createAsyncExecutor(plugin).execute(() -> {
+			String relevantColumns = filterSet.getLookupType().getRelevantColumn();
+			if (filterSet.getLookupType() == LookupType.ITEM_LOOKUP) {
+				relevantColumns += ", count";
+			}
+			
 			LookupResult lookup;
 			Connection c = plugin.getDatabase().getConnection();
 			try {
 				int worldId = Database.worldCache.getDataId(c, p.getWorld().getUniqueId().toString());
-				ResultSet r = c.createStatement().executeQuery("SELECT " + targetTable + ".*, AS_Cause.cause, AS_World.world "
+				ResultSet r = c.createStatement().executeQuery("SELECT x, y, z, type, time, " + relevantColumns + ", AS_Cause.cause, AS_World.world "
 						+ "FROM " + targetTable + ", AS_Cause, AS_World "
 						+ "WHERE AS_Cause.id = " + targetTable + ".cause AND " + targetTable + ".world = " + worldId + " "
 						+ "AND " + filterSet.getQueryConditions(p) + ";");
@@ -59,7 +65,7 @@ public class CommandLookup implements CommandExecutor {
 				if (filterSet.getLookupType() == LookupType.ITEM_LOOKUP)
 					lookup = new ContainerLookupResult(r);
 				else
-					lookup = new LookupResult(r);
+					lookup = new BlockLookupResult(r);
 				LookupResultManager.instance().setLookupResult(p, lookup);
 				
 				c.close();

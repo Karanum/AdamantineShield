@@ -42,6 +42,7 @@ public class CommandFilter implements CommandExecutor {
 		}
 		
 		FilterSet filterSet = new FilterSet(plugin, p);
+		filterSet.forceLookupType(lookup.getLookupType());
 		FilterParser.parse(filters, filterSet);
 		lookup.filterResult(filterSet);
 		

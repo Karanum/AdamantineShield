@@ -3,24 +3,20 @@ package com.karanumcoding.adamantineshield.lookup;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.UUID;
 
-import org.spongepowered.api.Sponge;
-import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
-import com.flowpowered.math.vector.Vector3i;
 import com.google.common.collect.Lists;
-import com.karanumcoding.adamantineshield.enums.ActionType;
+import com.karanumcoding.adamantineshield.enums.LookupType;
 import com.karanumcoding.adamantineshield.util.TimeUtils;
 
-public class LookupResult {
+public abstract class LookupResult {
 
 	protected List<LookupLine> lines;
-	private int lastPage;
+	protected int lastPage;
 	
 	public LookupResult(ResultSet results) throws SQLException {
 		lines = Lists.newArrayList();
@@ -28,22 +24,9 @@ public class LookupResult {
 		lastPage = 0;
 	}
 	
-	protected void readResult(ResultSet results) throws SQLException {
-		while (results.next()) {
-			Vector3i pos = new Vector3i(results.getInt("x"), results.getInt("y"), results.getInt("z"));
-			UUID world = UUID.fromString(results.getString("world"));
-			ActionType type = ActionType.valueCache[results.getByte("type")];
-			String cause = results.getString("cause");
-			BlockType block = Sponge.getRegistry().getType(BlockType.class, results.getString("block")).get();
-			long timestamp = results.getLong("time");
-			lines.add(new LookupLine(pos, world, type, cause, block, 1, timestamp));
-		}
-	}
-	
-	public void filterResult(FilterSet filter) {
-		lines = filter.apply(lines);
-		lastPage = 0;
-	}
+	protected abstract void readResult(ResultSet results) throws SQLException;
+	public abstract void filterResult(FilterSet filter);
+	public abstract LookupType getLookupType();
 	
 	public int getPages(int linesPerPage) {
 		return (lines.size() / linesPerPage) + 1;

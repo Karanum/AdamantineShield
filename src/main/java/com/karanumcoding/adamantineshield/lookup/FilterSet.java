@@ -18,8 +18,10 @@ import com.karanumcoding.adamantineshield.lookup.filters.PositionFilter;
 public class FilterSet {
 
 	private Map<Class<? extends FilterBase>, FilterBase> filters;
+	private LookupType lookupType;
 	
 	public FilterSet(AdamantineShield plugin, Player p) {
+		lookupType = null;
 		filters = Maps.newHashMap();
 		filters.put(PositionFilter.class, new PositionFilter(p.getLocation().getBlockPosition(), 
 				plugin.getConfig().getInt("lookup", "default-radius")));
@@ -44,12 +46,18 @@ public class FilterSet {
 	}
 	
 	public LookupType getLookupType() {
+		if (lookupType != null)
+			return lookupType;
 		if (!filters.containsKey(ActionFilter.class))
 			return LookupType.BLOCK_LOOKUP;
 		ActionFilter filter = (ActionFilter) filters.get(ActionFilter.class);
 		if (filter.isItemLookup())
 			return LookupType.ITEM_LOOKUP;
 		return LookupType.BLOCK_LOOKUP;
+	}
+	
+	public void forceLookupType(LookupType type) {
+		this.lookupType = type;
 	}
 	
 	public List<LookupLine> apply(List<LookupLine> lines) {
@@ -68,14 +76,14 @@ public class FilterSet {
 			filters.put(ActionFilter.class, new ActionFilter());
 		}
 		
-		LookupType lookupType = LookupType.BLOCK_LOOKUP;
+		LookupType type = LookupType.BLOCK_LOOKUP;
 		if (((ActionFilter) filters.get(ActionFilter.class)).isItemLookup())
-			lookupType = LookupType.ITEM_LOOKUP;
+			type = LookupType.ITEM_LOOKUP;
 		
 		Iterator<FilterBase> iter = filters.values().iterator();
-		String result = iter.next().getQueryCondition(lookupType);
+		String result = iter.next().getQueryCondition(type);
 		while (iter.hasNext()) {
-			result += " AND " + iter.next().getQueryCondition(lookupType);
+			result += " AND " + iter.next().getQueryCondition(type);
 		}
 		return result;
 	}

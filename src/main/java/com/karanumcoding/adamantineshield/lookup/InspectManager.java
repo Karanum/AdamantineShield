@@ -57,7 +57,7 @@ public class InspectManager {
 			ps.setString(4, world.toString());
 			ResultSet result = ps.executeQuery();
 			
-			lookup = new LookupResult(result);
+			lookup = new BlockLookupResult(result);
 			LookupResultManager.instance().setLookupResult(p, lookup);
 			
 			c.close();
