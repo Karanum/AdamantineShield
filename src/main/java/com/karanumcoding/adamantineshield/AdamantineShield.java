@@ -195,11 +195,11 @@ public class AdamantineShield {
 				.child(pageCommand, "page", "p")
 				.child(nextPageCommand, "nextpage", "next")
 				.child(prevPageCommand, "prevpage", "prev")
-				.child(rollbackCommand, "rollback", "rb", "r")
-				.child(undoCommand, "undo", "u")
+				//.child(rollbackCommand, "rollback", "rb", "r")
+				//.child(undoCommand, "undo", "u")
 				.child(purgeCommand, "purge")
-				.child(reloadCommand, "reload")
-				.child(helpCommand, "help", "?")
+				//.child(reloadCommand, "reload")
+				//.child(helpCommand, "help", "?")
 				.executor(new CommandMain())
 				.build();
 		
