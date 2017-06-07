@@ -15,6 +15,7 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
+import org.spongepowered.api.event.network.ClientConnectionEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.text.Text;
 
@@ -96,6 +97,11 @@ public class AdamantineShield {
 	public void onServerStopping(GameStoppingServerEvent e) {
 		if (db == null) return;
 		db.stop();
+	}
+	
+	@Listener
+	public void onPlayerLeave(ClientConnectionEvent.Disconnect e) {
+		LookupResultManager.instance().clearLookupResult(e.getTargetEntity());
 	}
 	
 	public Database getDatabase() {
