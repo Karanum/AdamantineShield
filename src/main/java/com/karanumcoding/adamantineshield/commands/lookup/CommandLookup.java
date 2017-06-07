@@ -1,17 +1,77 @@
 package com.karanumcoding.adamantineshield.commands.lookup;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Collection;
+
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
+import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColors;
+
+import com.karanumcoding.adamantineshield.AdamantineShield;
+import com.karanumcoding.adamantineshield.db.Database;
+import com.karanumcoding.adamantineshield.enums.LookupType;
+import com.karanumcoding.adamantineshield.lookup.ContainerLookupResult;
+import com.karanumcoding.adamantineshield.lookup.FilterSet;
+import com.karanumcoding.adamantineshield.lookup.LookupResult;
+import com.karanumcoding.adamantineshield.lookup.LookupResultManager;
+import com.karanumcoding.adamantineshield.util.FilterParser;
 
 public class CommandLookup implements CommandExecutor {
 
+	private AdamantineShield plugin;
+	
+	public CommandLookup(AdamantineShield plugin) {
+		this.plugin = plugin;
+	}
+	
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-		// TODO Auto-generated method stub
-		return CommandResult.empty();
+		if (!(src instanceof Player)) {
+			src.sendMessage(Text.of(TextColors.RED, "Lookups can only be performed by players"));
+			return CommandResult.empty();
+		}
+		
+		Player p = (Player) src;
+		Collection<String> filters = args.getAll("filter");
+		
+		FilterSet filterSet = new FilterSet(plugin, p);
+		FilterParser.parse(filters, filterSet);
+		String targetTable = filterSet.getLookupType().getTable();
+		
+		Sponge.getScheduler().createAsyncExecutor(plugin).execute(() -> {
+			LookupResult lookup;
+			Connection c = plugin.getDatabase().getConnection();
+			try {
+				int worldId = Database.worldCache.getDataId(c, p.getWorld().getUniqueId().toString());
+				ResultSet r = c.createStatement().executeQuery("SELECT " + targetTable + ".*, AS_Cause.cause, AS_World.world "
+						+ "FROM " + targetTable + ", AS_Cause, AS_World "
+						+ "WHERE AS_Cause.id = " + targetTable + ".cause AND " + targetTable + ".world = " + worldId + " "
+						+ "AND " + filterSet.getQueryConditions(p) + ";");
+				
+				if (filterSet.getLookupType() == LookupType.ITEM_LOOKUP)
+					lookup = new ContainerLookupResult(r);
+				else
+					lookup = new LookupResult(r);
+				LookupResultManager.instance().setLookupResult(p, lookup);
+				
+				c.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				p.sendMessage(Text.of(TextColors.DARK_AQUA, "[AC] ", TextColors.RED, "A database error has occurred! Contact your server administrator!"));
+				return;
+			}
+			
+			lookup.showPage(p, 1);
+		});
+		return CommandResult.success();
 	}
 
 }

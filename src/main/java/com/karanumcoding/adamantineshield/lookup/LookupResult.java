@@ -40,6 +40,11 @@ public class LookupResult {
 		}
 	}
 	
+	public void filterResult(FilterSet filter) {
+		lines = filter.apply(lines);
+		lastPage = 0;
+	}
+	
 	public int getPages(int linesPerPage) {
 		return (lines.size() / linesPerPage) + 1;
 	}

@@ -126,7 +126,7 @@ public class AdamantineShield {
 		CommandSpec filterCommand = CommandSpec.builder()
 				.permission(Permissions.FILTER.get())
 				.arguments(GenericArguments.allOf(GenericArguments.string(Text.of("filter"))))
-				.executor(new CommandFilter())
+				.executor(new CommandFilter(this))
 				.build();
 		
 		CommandSpec helpCommand = CommandSpec.builder()
@@ -141,7 +141,7 @@ public class AdamantineShield {
 		CommandSpec lookupCommand = CommandSpec.builder()
 				.permission(Permissions.LOOKUP.get())
 				.arguments(GenericArguments.allOf(GenericArguments.string(Text.of("filter"))))
-				.executor(new CommandLookup())
+				.executor(new CommandLookup(this))
 				.build();
 		
 		CommandSpec nextPageCommand = CommandSpec.builder()

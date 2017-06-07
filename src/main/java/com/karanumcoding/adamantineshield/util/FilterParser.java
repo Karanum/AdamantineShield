@@ -1,5 +1,6 @@
 package com.karanumcoding.adamantineshield.util;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,14 +34,13 @@ public final class FilterParser {
 		FilterParser.config = config;
 	}
 	
-	public static void parse(String rawFilters, FilterSet container) throws CommandException {
-		if (container == null || rawFilters.isEmpty())
+	public static void parse(Collection<String> filters, FilterSet container) throws CommandException {
+		if (container == null || filters.isEmpty())
 			return;
 		
 		List<String> includedTypes = Lists.newArrayList();
 		List<String> excludedTypes = Lists.newArrayList();
 		
-		String[] filters = rawFilters.split(" ");
 		for (String filter : filters) {
 			if (filter.isEmpty()) continue;
 			String[] bits = filter.split(":", 2);

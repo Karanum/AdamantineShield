@@ -26,16 +26,7 @@ public class CauseFilter implements FilterBase {
 
 	@Override
 	public String getQueryCondition(LookupType lookupType) {
-		String tableName = "";
-		switch (lookupType) {
-			case BLOCK_LOOKUP:
-				tableName = "AS_Block";
-				break;
-			case ITEM_LOOKUP:
-				tableName = "AS_Container";
-				break;
-		}
-		
+		String tableName = lookupType.getTable();
 		Iterator<String> iter = causes.iterator();
 		String result = "(AS_Cause.cause = '" + iter.next() + "'";
 		while (iter.hasNext()) {

@@ -28,16 +28,7 @@ public class IncludeTypeFilter implements FilterBase {
 
 	@Override
 	public String getQueryCondition(LookupType lookupType) {
-		String columnName = "";
-		switch (lookupType) {
-			case BLOCK_LOOKUP:
-				columnName = "block";
-				break;
-			case ITEM_LOOKUP:
-				columnName = "item";
-				break;
-		}
-		
+		String columnName = lookupType.getRelevantColumn();
 		Iterator<CatalogType> iter = include.iterator();
 		String result = "(" + columnName + " = '" + iter.next().getId() + "'";
 		while (iter.hasNext()) {
