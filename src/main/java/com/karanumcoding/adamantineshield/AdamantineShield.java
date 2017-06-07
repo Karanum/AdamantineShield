@@ -125,6 +125,7 @@ public class AdamantineShield {
 	private void registerCommands(CommandManager man) {
 		CommandSpec filterCommand = CommandSpec.builder()
 				.permission(Permissions.FILTER.get())
+				.arguments(GenericArguments.allOf(GenericArguments.string(Text.of("filter"))))
 				.executor(new CommandFilter())
 				.build();
 		
@@ -139,6 +140,7 @@ public class AdamantineShield {
 		
 		CommandSpec lookupCommand = CommandSpec.builder()
 				.permission(Permissions.LOOKUP.get())
+				.arguments(GenericArguments.allOf(GenericArguments.string(Text.of("filter"))))
 				.executor(new CommandLookup())
 				.build();
 		
@@ -164,11 +166,6 @@ public class AdamantineShield {
 				.executor(new CommandPurge(this))
 				.build();
 		
-		CommandSpec redoCommand = CommandSpec.builder()
-				.permission(Permissions.REDO.get())
-				.executor(new CommandRedo())
-				.build();
-		
 		CommandSpec reloadCommand = CommandSpec.builder()
 				.permission(Permissions.RELOAD.get())
 				.executor(new CommandReload())
@@ -176,11 +173,13 @@ public class AdamantineShield {
 		
 		CommandSpec rollbackCommand = CommandSpec.builder()
 				.permission(Permissions.ROLLBACK.get())
+				.arguments(GenericArguments.allOf(GenericArguments.string(Text.of("filter"))))
 				.executor(new CommandRollback())
 				.build();
 		
 		CommandSpec undoCommand = CommandSpec.builder()
 				.permission(Permissions.UNDO.get())
+				.arguments(GenericArguments.allOf(GenericArguments.string(Text.of("filter"))))
 				.executor(new CommandUndo())
 				.build();
 		
@@ -194,7 +193,6 @@ public class AdamantineShield {
 				.child(prevPageCommand, "prevpage", "prev")
 				.child(rollbackCommand, "rollback", "rb", "r")
 				.child(undoCommand, "undo", "u")
-				.child(redoCommand, "redo", "re")
 				.child(purgeCommand, "purge")
 				.child(reloadCommand, "reload")
 				.child(helpCommand, "help", "?")

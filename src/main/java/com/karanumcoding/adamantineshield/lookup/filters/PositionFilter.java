@@ -1,6 +1,7 @@
 package com.karanumcoding.adamantineshield.lookup.filters;
 
 import com.flowpowered.math.vector.Vector3i;
+import com.karanumcoding.adamantineshield.enums.LookupType;
 import com.karanumcoding.adamantineshield.lookup.LookupLine;
 
 public class PositionFilter implements FilterBase {
@@ -10,6 +11,10 @@ public class PositionFilter implements FilterBase {
 	
 	public PositionFilter(Vector3i pos, int radius) {
 		this.pos = pos;
+		this.radius = radius;
+	}
+	
+	public void setRadius(int radius) {
 		this.radius = radius;
 	}
 	
@@ -23,7 +28,7 @@ public class PositionFilter implements FilterBase {
 	}
 
 	@Override
-	public String getQueryCondition() {
+	public String getQueryCondition(LookupType lookupType) {
 		return String.format("x > %d AND x < %d AND z > %d AND z < %d",
 				pos.getX() - radius, pos.getX() + radius, pos.getZ() - radius, pos.getZ() + radius);
 	}

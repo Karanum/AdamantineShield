@@ -26,7 +26,7 @@ public class ContainerLookupResult extends LookupResult {
 			ItemType item = Sponge.getRegistry().getType(ItemType.class, results.getString("item")).get();
 			int count = results.getByte("count");
 			long timestamp = results.getLong("time");
-			lines.add(new LookupLine(pos, world, type, cause, count + "x " + item.getId(), timestamp));
+			lines.add(new LookupLine(pos, world, type, cause, item, count, timestamp));
 		}
 	}
 

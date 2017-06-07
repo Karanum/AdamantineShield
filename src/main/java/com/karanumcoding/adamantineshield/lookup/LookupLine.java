@@ -2,6 +2,8 @@ package com.karanumcoding.adamantineshield.lookup;
 
 import java.util.UUID;
 
+import org.spongepowered.api.CatalogType;
+
 import com.flowpowered.math.vector.Vector3i;
 import com.karanumcoding.adamantineshield.enums.ActionType;
 import com.karanumcoding.adamantineshield.util.PlayerUtils;
@@ -12,16 +14,18 @@ public class LookupLine {
 	private UUID world;
 	private ActionType type;
 	private String cause;
-	private String target;
+	private CatalogType target;
+	private int count;
 	//private String data;
 	private long timestamp;
 	
-	public LookupLine(Vector3i pos, UUID world, ActionType type, String cause, String target, long timestamp) {
+	public LookupLine(Vector3i pos, UUID world, ActionType type, String cause, CatalogType target, int count, long timestamp) {
 		this.pos = pos;
 		this.world = world;
 		this.type = type;
 		this.cause = cause;
 		this.target = target;
+		this.count = count;
 		//this.data = data;
 		this.timestamp = timestamp;
 	}
@@ -62,8 +66,12 @@ public class LookupLine {
 		return UUID.fromString(cause);
 	}
 	
-	public String getTarget() {
+	public CatalogType getTarget() {
 		return target;
+	}
+	
+	public int getCount() {
+		return count;
 	}
 	
 	public long getTime() {
@@ -74,19 +82,19 @@ public class LookupLine {
 	public String toString() {
 		switch (type) {
 			case PLACE:
-				return PlayerUtils.getName(getPlayerCause()) + " placed " + target;
+				return PlayerUtils.getName(getPlayerCause()) + " placed " + target.getId();
 			case DESTROY:
-				return PlayerUtils.getName(getPlayerCause()) + " broke " + target;
+				return PlayerUtils.getName(getPlayerCause()) + " broke " + target.getId();
 			case FLOW:
 				return cause + " flow occurred";
 			case MOB_DESTROY:
-				return "Entity " + cause + " broke " + target;
+				return "Entity " + cause + " broke " + target.getId();
 			case MOB_PLACE:
-				return "Entity " + cause + " placed " + target;
+				return "Entity " + cause + " placed " + target.getId();
 			case CONTAINER_ADD:
-				return PlayerUtils.getName(getPlayerCause()) + " added " + target;
+				return PlayerUtils.getName(getPlayerCause()) + " added " + count + "x " + target.getId();
 			case CONTAINER_REMOVE:
-				return PlayerUtils.getName(getPlayerCause()) + " removed " + target;
+				return PlayerUtils.getName(getPlayerCause()) + " removed " + count + "x " + target.getId();
 			default:
 				return "(unsupported action type)";
 		}
