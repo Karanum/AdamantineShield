@@ -44,7 +44,7 @@ public class CommandLookup implements CommandExecutor {
 		Collection<String> filters = args.getAll("filter");
 		
 		FilterSet filterSet = new FilterSet(plugin, p, true);
-		FilterParser.parse(filters, filterSet);
+		FilterParser.parse(filters, filterSet, p);
 		String targetTable = filterSet.getLookupType().getTable();
 		
 		Sponge.getScheduler().createAsyncExecutor(plugin).execute(() -> {
@@ -81,7 +81,7 @@ public class CommandLookup implements CommandExecutor {
 	}
 	
 	public static Text getHelpEntry() {
-		return Text.of(TextColors.YELLOW, "/ashield lookup [filters]", TextColors.AQUA, " - Performs a lookup");
+		return Text.of(TextColors.AQUA, "/ashield lookup [filters]", TextColors.WHITE, " - Performs a lookup");
 	}
 
 }

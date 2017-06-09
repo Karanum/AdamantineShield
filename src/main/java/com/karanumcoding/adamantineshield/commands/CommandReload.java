@@ -17,7 +17,7 @@ public class CommandReload implements CommandExecutor {
 	}
 	
 	public static Text getHelpEntry() {
-		return Text.of(TextColors.YELLOW, "/ashield reload", TextColors.AQUA, " - Reloads this plugin");
+		return Text.of(TextColors.AQUA, "/ashield reload", TextColors.WHITE, " - Reloads this plugin");
 	}
 
 }

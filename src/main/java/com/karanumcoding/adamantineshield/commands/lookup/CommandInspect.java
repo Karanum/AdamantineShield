@@ -37,7 +37,7 @@ public class CommandInspect implements CommandExecutor {
 	}
 	
 	public static Text getHelpEntry() {
-		return Text.of(TextColors.YELLOW, "/ashield inspect", TextColors.AQUA, " - Toggles the inspector");
+		return Text.of(TextColors.AQUA, "/ashield inspect", TextColors.WHITE, " - Toggles the inspector");
 	}
 
 }

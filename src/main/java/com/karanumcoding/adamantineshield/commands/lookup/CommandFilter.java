@@ -43,7 +43,7 @@ public class CommandFilter implements CommandExecutor {
 		
 		FilterSet filterSet = new FilterSet(plugin, p, false);
 		filterSet.forceLookupType(lookup.getLookupType());
-		FilterParser.parse(filters, filterSet);
+		FilterParser.parse(filters, filterSet, p);
 		lookup.filterResult(filterSet);
 		
 		lookup.showPage(p, 1);
@@ -51,7 +51,7 @@ public class CommandFilter implements CommandExecutor {
 	}
 	
 	public static Text getHelpEntry() {
-		return Text.of(TextColors.YELLOW, "/ashield filter [filters]", TextColors.AQUA, " - Filters your last result");
+		return Text.of(TextColors.AQUA, "/ashield filter [filters]", TextColors.WHITE, " - Filters your last result");
 	}
 
 }

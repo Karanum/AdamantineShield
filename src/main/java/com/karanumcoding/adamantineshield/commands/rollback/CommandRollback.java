@@ -17,7 +17,7 @@ public class CommandRollback implements CommandExecutor {
 	}
 	
 	public static Text getHelpEntry() {
-		return Text.of(TextColors.YELLOW, "/ashield rollback [filters]", TextColors.AQUA, " - Performs a rollback");
+		return Text.of(TextColors.AQUA, "/ashield rollback [filters]", TextColors.WHITE, " - Performs a rollback");
 	}
 
 }

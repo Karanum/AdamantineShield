@@ -8,6 +8,7 @@ import org.spongepowered.api.CatalogType;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.command.CommandException;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.profile.GameProfile;
 import org.spongepowered.api.text.Text;
@@ -34,7 +35,7 @@ public final class FilterParser {
 		FilterParser.config = config;
 	}
 	
-	public static void parse(Collection<String> filters, FilterSet container) throws CommandException {
+	public static void parse(Collection<String> filters, FilterSet container, Player p) throws CommandException {
 		if (container == null || filters.isEmpty())
 			return;
 		
@@ -98,7 +99,7 @@ public final class FilterParser {
 						}
 						if (radius < 0 || radius > config.getInt("lookup", "max-radius"))
 							throw new CommandException(Text.of(TextColors.RED, "Radius is either negative or too large!"));
-						((PositionFilter) container.getFilter(PositionFilter.class).get()).setRadius(radius);
+						container.getOrCreate(new PositionFilter(p.getLocation().getBlockPosition(), 0)).setRadius(radius);
 						break;
 				}
 			}

@@ -17,7 +17,7 @@ public class CommandUndo implements CommandExecutor {
 	}
 	
 	public static Text getHelpEntry() {
-		return Text.of(TextColors.YELLOW, "/ashield undo [filters]", TextColors.AQUA, " - Undoes rollback results");
+		return Text.of(TextColors.AQUA, "/ashield undo [filters]", TextColors.WHITE, " - Undoes rollback results");
 	}
 
 }

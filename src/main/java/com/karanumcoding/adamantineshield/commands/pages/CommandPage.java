@@ -38,7 +38,7 @@ public class CommandPage implements CommandExecutor {
 	}
 	
 	public static Text getHelpEntry() {
-		return Text.of(TextColors.YELLOW, "/ashield page <page>", TextColors.AQUA, " - Switches lookup result page");
+		return Text.of(TextColors.AQUA, "/ashield page <page>", TextColors.WHITE, " - Switches lookup result page");
 	}
 
 }

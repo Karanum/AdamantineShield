@@ -22,29 +22,29 @@ public class CommandMain implements CommandExecutor {
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		boolean hasAnyPermission = false;
-		Text text = Text.of(TextColors.DARK_AQUA, "[AS] ", TextColors.YELLOW, "Available commands: ", Text.NEW_LINE);
+		Text text = Text.of(TextColors.DARK_AQUA, "[AS] ", TextColors.YELLOW, "Available commands: ");
 		if (src.hasPermission(Permissions.LOOKUP.get())) {
 			hasAnyPermission = true;
-			text = Text.of(text, CommandInspect.getHelpEntry(), Text.NEW_LINE, CommandLookup.getHelpEntry(), Text.NEW_LINE);
+			text = Text.of(text, Text.NEW_LINE, CommandInspect.getHelpEntry(), Text.NEW_LINE, CommandLookup.getHelpEntry());
 		}
 		if (src.hasPermission(Permissions.FILTER.get())) {
 			hasAnyPermission = true;
-			text = Text.of(text, CommandFilter.getHelpEntry(), Text.NEW_LINE);
+			text = Text.of(text, Text.NEW_LINE, CommandFilter.getHelpEntry());
 		}
 		if (src.hasPermission(Permissions.LOOKUP.get())) {
-			text = Text.of(text, CommandPage.getHelpEntry(), Text.NEW_LINE, CommandNextPage.getHelpEntry(), Text.NEW_LINE,
-					CommandPrevPage.getHelpEntry(), Text.NEW_LINE);
+			text = Text.of(text, Text.NEW_LINE, CommandPage.getHelpEntry(), Text.NEW_LINE, CommandNextPage.getHelpEntry(), Text.NEW_LINE,
+					CommandPrevPage.getHelpEntry());
 		}
 		if (src.hasPermission(Permissions.PURGE.get())) {
 			hasAnyPermission = true;
-			text = Text.of(text, CommandPurge.getHelpEntry(), Text.NEW_LINE);
+			text = Text.of(text, Text.NEW_LINE, CommandPurge.getHelpEntry());
 		}
 		
 		if (hasAnyPermission) {
-			text = Text.of(text, getHelpEntry(), Text.NEW_LINE);
+			text = Text.of(text, Text.NEW_LINE, getHelpEntry());
 		} else {
-			text = Text.of(TextColors.DARK_AQUA, "[AS] ", TextColors.YELLOW, "AdmantineShield v",
-					Sponge.getPluginManager().getPlugin("adamantineshield").get().getVersion(), " by Karanum");
+			text = Text.of(TextColors.DARK_AQUA, "[AS] ", TextColors.YELLOW, "AdamantineShield v",
+					Sponge.getPluginManager().getPlugin("adamantineshield").get().getVersion().get());
 		}
 		
 		src.sendMessage(text);
@@ -52,7 +52,7 @@ public class CommandMain implements CommandExecutor {
 	}
 	
 	public static Text getHelpEntry() {
-		return Text.of(TextColors.YELLOW, "/ashield help", TextColors.AQUA, " - Shows command help");
+		return Text.of(TextColors.AQUA, "/ashield help", TextColors.WHITE, " - Shows command help");
 	}
 
 }

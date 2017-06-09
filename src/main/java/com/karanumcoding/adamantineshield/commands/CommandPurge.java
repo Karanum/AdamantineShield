@@ -51,7 +51,7 @@ public class CommandPurge implements CommandExecutor {
 	}
 	
 	public static Text getHelpEntry() {
-		return Text.of(TextColors.YELLOW, "/ashield purge <time>", TextColors.AQUA, " - Purges old log entries");
+		return Text.of(TextColors.AQUA, "/ashield purge <time>", TextColors.WHITE, " - Purges old log entries");
 	}
 
 }

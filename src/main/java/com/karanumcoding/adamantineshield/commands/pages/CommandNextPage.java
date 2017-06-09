@@ -38,7 +38,7 @@ public class CommandNextPage implements CommandExecutor {
 	}
 	
 	public static Text getHelpEntry() {
-		return Text.of(TextColors.YELLOW, "/ashield nextpage", TextColors.AQUA, " - Switches to next result page");
+		return Text.of(TextColors.AQUA, "/ashield nextpage", TextColors.WHITE, " - Switches to next result page");
 	}
 
 }

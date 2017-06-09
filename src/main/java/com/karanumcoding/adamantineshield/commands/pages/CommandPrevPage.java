@@ -38,7 +38,7 @@ public class CommandPrevPage implements CommandExecutor {
 	}
 	
 	public static Text getHelpEntry() {
-		return Text.of(TextColors.YELLOW, "/ashield prevpage", TextColors.AQUA, " - Switches to previous result page");
+		return Text.of(TextColors.AQUA, "/ashield prevpage", TextColors.WHITE, " - Switches to previous result page");
 	}
 
 }
