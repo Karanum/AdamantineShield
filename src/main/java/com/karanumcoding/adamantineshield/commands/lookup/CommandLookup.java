@@ -43,7 +43,7 @@ public class CommandLookup implements CommandExecutor {
 		Player p = (Player) src;
 		Collection<String> filters = args.getAll("filter");
 		
-		FilterSet filterSet = new FilterSet(plugin, p);
+		FilterSet filterSet = new FilterSet(plugin, p, true);
 		FilterParser.parse(filters, filterSet);
 		String targetTable = filterSet.getLookupType().getTable();
 		
@@ -78,6 +78,10 @@ public class CommandLookup implements CommandExecutor {
 			lookup.showPage(p, 1);
 		});
 		return CommandResult.success();
+	}
+	
+	public static Text getHelpEntry() {
+		return Text.of(TextColors.YELLOW, "/ashield lookup [filters]", TextColors.AQUA, " - Performs a lookup");
 	}
 
 }

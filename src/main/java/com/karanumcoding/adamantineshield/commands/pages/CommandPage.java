@@ -36,5 +36,9 @@ public class CommandPage implements CommandExecutor {
 		result.showPage((Player) src, page);
 		return CommandResult.success();
 	}
+	
+	public static Text getHelpEntry() {
+		return Text.of(TextColors.YELLOW, "/ashield page <page>", TextColors.AQUA, " - Switches lookup result page");
+	}
 
 }

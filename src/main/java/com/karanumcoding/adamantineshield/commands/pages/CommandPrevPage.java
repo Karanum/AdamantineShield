@@ -36,5 +36,9 @@ public class CommandPrevPage implements CommandExecutor {
 		result.showPage((Player) src, page);
 		return CommandResult.success();
 	}
+	
+	public static Text getHelpEntry() {
+		return Text.of(TextColors.YELLOW, "/ashield prevpage", TextColors.AQUA, " - Switches to previous result page");
+	}
 
 }

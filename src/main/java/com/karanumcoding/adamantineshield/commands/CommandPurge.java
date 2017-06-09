@@ -49,5 +49,9 @@ public class CommandPurge implements CommandExecutor {
 			src.sendMessage(Text.of(TextColors.BLUE, "[AS] ", TextColors.RED, "Purge failed! Check console for more information!"));
 		}
 	}
+	
+	public static Text getHelpEntry() {
+		return Text.of(TextColors.YELLOW, "/ashield purge <time>", TextColors.AQUA, " - Purges old log entries");
+	}
 
 }

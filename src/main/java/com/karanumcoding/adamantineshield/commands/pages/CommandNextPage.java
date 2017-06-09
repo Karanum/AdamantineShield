@@ -36,5 +36,9 @@ public class CommandNextPage implements CommandExecutor {
 		result.showPage((Player) src, page);
 		return CommandResult.success();
 	}
+	
+	public static Text getHelpEntry() {
+		return Text.of(TextColors.YELLOW, "/ashield nextpage", TextColors.AQUA, " - Switches to next result page");
+	}
 
 }

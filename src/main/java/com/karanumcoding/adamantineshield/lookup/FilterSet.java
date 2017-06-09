@@ -20,11 +20,13 @@ public class FilterSet {
 	private Map<Class<? extends FilterBase>, FilterBase> filters;
 	private LookupType lookupType;
 	
-	public FilterSet(AdamantineShield plugin, Player p) {
+	public FilterSet(AdamantineShield plugin, Player p, boolean initialFilter) {
 		lookupType = null;
 		filters = Maps.newHashMap();
-		filters.put(PositionFilter.class, new PositionFilter(p.getLocation().getBlockPosition(), 
-				plugin.getConfig().getInt("lookup", "default-radius")));
+		if (initialFilter) {
+			filters.put(PositionFilter.class, new PositionFilter(p.getLocation().getBlockPosition(), 
+					plugin.getConfig().getInt("lookup", "default-radius")));
+		}
 	}
 	
 	public <T extends FilterBase> Optional<FilterBase> getFilter(Class<T> filter) {

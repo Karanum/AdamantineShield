@@ -41,13 +41,17 @@ public class CommandFilter implements CommandExecutor {
 			return CommandResult.empty();
 		}
 		
-		FilterSet filterSet = new FilterSet(plugin, p);
+		FilterSet filterSet = new FilterSet(plugin, p, false);
 		filterSet.forceLookupType(lookup.getLookupType());
 		FilterParser.parse(filters, filterSet);
 		lookup.filterResult(filterSet);
 		
 		lookup.showPage(p, 1);
 		return CommandResult.success();
+	}
+	
+	public static Text getHelpEntry() {
+		return Text.of(TextColors.YELLOW, "/ashield filter [filters]", TextColors.AQUA, " - Filters your last result");
 	}
 
 }

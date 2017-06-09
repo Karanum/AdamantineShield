@@ -29,6 +29,9 @@ public class PlayerInspectListener {
 		
 		e.setCancelled(true);
 		BlockSnapshot block = e.getTargetBlock();
+		if (block == null || !block.getLocation().isPresent())
+			return;
+		
 		Location<World> loc = block.getLocation().get();
 		
 		p.sendMessage(Text.of(TextColors.BLUE, "Querying database, please wait..."));
@@ -45,6 +48,9 @@ public class PlayerInspectListener {
 		
 		e.setCancelled(true);
 		BlockSnapshot block = e.getTargetBlock();
+		if (block == null || !block.getLocation().isPresent())
+			return;
+		
 		Location<World> loc = block.getLocation().get();
 		
 		p.sendMessage(Text.of(TextColors.BLUE, "Querying database, please wait..."));
