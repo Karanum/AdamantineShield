@@ -30,7 +30,8 @@ public class InventoryChangeListener {
 	}
 	
 	@Listener
-	public void onInventoryTransfer(AffectSlotEvent e, @First Player p) {	
+	public void onInventoryTransfer(AffectSlotEvent e, @First Player p) {
+		if (e.getTransactions().isEmpty()) return;
 		if (!(e.getTransactions().get(0).getSlot().parent() instanceof CarriedInventory))
 			return;
 		
