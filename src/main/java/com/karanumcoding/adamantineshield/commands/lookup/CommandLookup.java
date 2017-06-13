@@ -61,7 +61,6 @@ public class CommandLookup implements CommandExecutor {
 						+ "FROM " + targetTable + ", AS_Cause, AS_World "
 						+ "WHERE AS_Cause.id = " + targetTable + ".cause AND " + targetTable + ".world = " + worldId + " "
 						+ "AND " + filterSet.getQueryConditions(p) + " ORDER BY time DESC;");
-				src.sendMessage(Text.of(TextColors.LIGHT_PURPLE, filterSet.getQueryConditions(p)));
 				
 				if (filterSet.getLookupType() == LookupType.ITEM_LOOKUP)
 					lookup = new ContainerLookupResult(r);

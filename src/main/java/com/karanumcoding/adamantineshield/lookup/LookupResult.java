@@ -29,7 +29,7 @@ public abstract class LookupResult {
 	public abstract LookupType getLookupType();
 	
 	public int getPages(int linesPerPage) {
-		return (lines.size() / linesPerPage) + 1;
+		return ((lines.size() - 1) / linesPerPage) + 1;
 	}
 	
 	public int getLastSeenPage() {
