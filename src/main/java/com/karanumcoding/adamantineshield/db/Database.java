@@ -12,8 +12,6 @@ import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.service.sql.SqlService;
 
 import com.karanumcoding.adamantineshield.AdamantineShield;
-import com.karanumcoding.adamantineshield.db.cache.CauseCache;
-import com.karanumcoding.adamantineshield.db.cache.WorldCache;
 import com.karanumcoding.adamantineshield.db.queue.QueueEntry;
 
 public class Database {
@@ -24,8 +22,10 @@ public class Database {
 	private ConcurrentLinkedQueue<QueueEntry> queue;
 	private Task task;
 	
-	public static final WorldCache worldCache = new WorldCache();
-	public static final CauseCache causeCache = new CauseCache();
+	public static final DataCache worldCache = new DataCache("AS_World", "world");
+	public static final DataCache causeCache = new DataCache("AS_Cause", "cause");
+	public static final DataCache blockCache = new DataCache("AS_BlockID", "block");
+	public static final DataCache itemCache = new DataCache("AS_ItemID", "item");
 	
 	public Database(AdamantineShield plugin, String jdbc) throws SQLException {
 		queue = new ConcurrentLinkedQueue<>();
