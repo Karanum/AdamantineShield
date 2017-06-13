@@ -87,21 +87,31 @@ public class Database {
 				+ "id INT AUTO_INCREMENT NOT NULL, cause TEXT NOT NULL, "
 				+ "PRIMARY KEY (id));");
 		
+		c.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS AS_BlockID ("
+				+ "id INT AUTO_INCREMENT NOT NULL, block TEXT NOT NULL, "
+				+ "PRIMARY KEY (id));");
+		
+		c.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS AS_ItemID ("
+				+ "id INT AUTO_INCREMENT NOT NULL, item TEXT NOT NULL, "
+				+ "PRIMARY KEY (id));");
+		
 		c.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS AS_Container ("
 				+ "x INT, y INT, z INT, world INT, type TINYINT, slot INT, "
-				+ "cause INT, item TEXT, count TINYINT, data TEXT, time BIGINT, "
+				+ "cause INT, item INT, count TINYINT, data TEXT, time BIGINT, "
 				+ "FOREIGN KEY (world) REFERENCES AS_World(id), "
-				+ "FOREIGN KEY (cause) REFERENCES AS_Cause(id));");
+				+ "FOREIGN KEY (cause) REFERENCES AS_Cause(id), "
+				+ "FOREIGN KEY (item) REFERENCES AS_ItemID(id));");
 		
 		c.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS AS_Block ("
 				+ "x INT, y INT, z INT, world INT, type TINYINT, "
-				+ "cause INT, block TEXT, data TEXT, time BIGINT, "
+				+ "cause INT, block INT, data TEXT, time BIGINT, "
 				+ "FOREIGN KEY (world) REFERENCES AS_World(id), "
-				+ "FOREIGN KEY (cause) REFERENCES AS_Cause(id));");
+				+ "FOREIGN KEY (cause) REFERENCES AS_Cause(id), "
+				+ "FOREIGN KEY (block) REFERENCES AS_BlockID(id));");
 		
 		c.createStatement().executeUpdate("DROP TABLE IF EXISTS AS_Meta;");
 		c.createStatement().executeUpdate("CREATE TABLE AS_Meta (version_id SMALLINT);");
-		c.createStatement().executeUpdate("INSERT INTO AS_Meta VALUES (1);");
+		c.createStatement().executeUpdate("INSERT INTO AS_Meta VALUES (2);");
 		c.close();
 	}
 	

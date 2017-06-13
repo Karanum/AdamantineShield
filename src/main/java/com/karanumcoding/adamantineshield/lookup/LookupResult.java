@@ -29,6 +29,7 @@ public abstract class LookupResult {
 	public abstract LookupType getLookupType();
 	
 	public int getPages(int linesPerPage) {
+		if (lines.isEmpty()) return 0;
 		return ((lines.size() - 1) / linesPerPage) + 1;
 	}
 	
