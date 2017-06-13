@@ -60,7 +60,8 @@ public class CommandLookup implements CommandExecutor {
 				ResultSet r = c.createStatement().executeQuery("SELECT x, y, z, type, time, " + relevantColumns + ", AS_Cause.cause, AS_World.world "
 						+ "FROM " + targetTable + ", AS_Cause, AS_World "
 						+ "WHERE AS_Cause.id = " + targetTable + ".cause AND " + targetTable + ".world = " + worldId + " "
-						+ "AND " + filterSet.getQueryConditions(p) + ";");
+						+ "AND " + filterSet.getQueryConditions(p) + " ORDER BY time DESC;");
+				src.sendMessage(Text.of(TextColors.LIGHT_PURPLE, filterSet.getQueryConditions(p)));
 				
 				if (filterSet.getLookupType() == LookupType.ITEM_LOOKUP)
 					lookup = new ContainerLookupResult(r);

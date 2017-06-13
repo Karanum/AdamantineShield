@@ -17,6 +17,7 @@ import org.spongepowered.api.text.format.TextColors;
 import com.google.common.collect.Lists;
 import com.karanumcoding.adamantineshield.ConfigHandler;
 import com.karanumcoding.adamantineshield.enums.LookupType;
+import com.karanumcoding.adamantineshield.enums.Permissions;
 import com.karanumcoding.adamantineshield.lookup.FilterSet;
 import com.karanumcoding.adamantineshield.lookup.filters.ActionFilter;
 import com.karanumcoding.adamantineshield.lookup.filters.AfterTimeFilter;
@@ -42,12 +43,20 @@ public final class FilterParser {
 		List<String> includedTypes = Lists.newArrayList();
 		List<String> excludedTypes = Lists.newArrayList();
 		
+		boolean isGlobal = false;
+		
 		for (String filter : filters) {
 			if (filter.isEmpty()) continue;
 			String[] bits = filter.split(":", 2);
 			
 			if (bits.length == 1) {
-				container.getOrCreate(new CauseFilter()).addCause(getCause(filter));
+				if (filter.equalsIgnoreCase("#global")) {
+					if (!p.hasPermission(Permissions.TARGET_GLOBAL.get()))
+						throw new CommandException(Text.of(TextColors.RED, "You do not have permission to perform global operations!"));
+					isGlobal = true;
+				} else {
+					container.getOrCreate(new CauseFilter()).addCause(getCause(filter));
+				}
 			} else {
 				switch (bits[0].toLowerCase()) {
 					case "u":
@@ -109,6 +118,9 @@ public final class FilterParser {
 			addIncluded(type, container);
 		for (String type : excludedTypes)
 			addExcluded(type, container);
+		
+		if (isGlobal)
+			container.removeFilter(PositionFilter.class);
 	}
 	
 	private static String getCause(String name) throws CommandException {

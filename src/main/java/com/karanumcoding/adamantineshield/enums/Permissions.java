@@ -7,7 +7,8 @@ public enum Permissions {
 	LOOKUP("use.lookup.base"),
 	RELOAD("admin.reload"),
 	PURGE("admin.purge"),
-	FILTER("use.lookup.filter");
+	FILTER("use.lookup.filter"),
+	TARGET_GLOBAL("target.global");
 	
 	
 	private String permission;

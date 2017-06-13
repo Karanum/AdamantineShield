@@ -39,6 +39,10 @@ public class FilterSet {
 		filters.put(filter.getClass(), filter);
 	}
 	
+	public <T extends FilterBase> void removeFilter(Class<T> filter) {
+		filters.remove(filter);
+	}
+	
 	@SuppressWarnings("unchecked")
 	public <T extends FilterBase> T getOrCreate(T alt) {
 		if (filters.containsKey(alt.getClass()))
