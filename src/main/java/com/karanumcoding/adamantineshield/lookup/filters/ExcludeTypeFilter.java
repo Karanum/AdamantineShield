@@ -28,11 +28,10 @@ public class ExcludeTypeFilter implements FilterBase {
 
 	@Override
 	public String getQueryCondition(LookupType lookupType) {
-		String columnName = lookupType.getRelevantColumn();
 		Iterator<CatalogType> iter = exclude.iterator();
-		String result = "NOT (" + columnName + " = '" + iter.next().getId() + "'";
+		String result = "NOT (AS_Id.value = '" + iter.next().getId() + "'";
 		while (iter.hasNext()) {
-			result += " OR " + columnName + " = '" + iter.next().getId() + "'";
+			result += " OR AS_Id.value = '" + iter.next().getId() + "'";
 		}
 		result += ")";
 		return result;

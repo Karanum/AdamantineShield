@@ -48,7 +48,8 @@ public class CommandLookup implements CommandExecutor {
 		String targetTable = filterSet.getLookupType().getTable();
 		
 		Sponge.getScheduler().createAsyncExecutor(plugin).execute(() -> {
-			String relevantColumns = filterSet.getLookupType().getRelevantColumn();
+			//String relevantColumns = filterSet.getLookupType().getRelevantColumn();
+			String relevantColumns = "AS_Id.value";
 			if (filterSet.getLookupType() == LookupType.ITEM_LOOKUP) {
 				relevantColumns += ", count";
 			}
@@ -58,7 +59,7 @@ public class CommandLookup implements CommandExecutor {
 			try {
 				int worldId = Database.worldCache.getDataId(c, p.getWorld().getUniqueId().toString());
 				ResultSet r = c.createStatement().executeQuery("SELECT x, y, z, type, time, " + relevantColumns + ", AS_Cause.cause, AS_World.world "
-						+ "FROM " + targetTable + ", AS_Cause, AS_World "
+						+ "FROM " + targetTable + ", AS_Cause, AS_World, AS_Id "
 						+ "WHERE AS_Cause.id = " + targetTable + ".cause AND " + targetTable + ".world = " + worldId + " "
 						+ "AND " + filterSet.getQueryConditions(p) + " ORDER BY time DESC;");
 				

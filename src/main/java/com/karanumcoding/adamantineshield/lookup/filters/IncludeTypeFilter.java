@@ -28,11 +28,10 @@ public class IncludeTypeFilter implements FilterBase {
 
 	@Override
 	public String getQueryCondition(LookupType lookupType) {
-		String columnName = lookupType.getRelevantColumn();
 		Iterator<CatalogType> iter = include.iterator();
-		String result = "(" + columnName + " = '" + iter.next().getId() + "'";
+		String result = "(AS_Id.value = '" + iter.next().getId() + "'";
 		while (iter.hasNext()) {
-			result += " OR " + columnName + " = '" + iter.next().getId() + "'";
+			result += " OR AS_Id.value = '" + iter.next().getId() + "'";
 		}
 		result += ")";
 		return result;

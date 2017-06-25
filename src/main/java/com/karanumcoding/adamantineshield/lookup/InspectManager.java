@@ -17,11 +17,11 @@ import com.karanumcoding.adamantineshield.db.Database;
 
 public class InspectManager {
 
-	private final String INSPECT_BLOCK_QUERY = "SELECT x, y, z, type, block, data, time, AS_Cause.cause, AS_World.world FROM AS_Block, AS_World, AS_Cause "
-			+ "WHERE x = ? AND y = ? AND z = ? AND AS_World.world = ? AND AS_Block.cause = AS_Cause.id AND AS_Block.world = AS_World.id ORDER BY time DESC;";
-	private final String INSPECT_CONTAINER_QUERY = "SELECT x, y, z, type, slot, item, count, data, time, AS_Cause.cause, AS_World.world "
-			+ "FROM AS_Container, AS_World, AS_Cause "
-			+ "WHERE x = ? AND y = ? AND z = ? AND AS_World.world = ? AND AS_Container.cause = AS_Cause.id AND AS_Container.world = AS_World.id "
+	private final String INSPECT_BLOCK_QUERY = "SELECT x, y, z, type, AS_Id.value, data, time, AS_Cause.cause, AS_World.world FROM AS_Block, AS_World, AS_Cause, AS_Id "
+			+ "WHERE x = ? AND y = ? AND z = ? AND AS_World.world = ? AND AS_Block.cause = AS_Cause.id AND AS_Block.world = AS_World.id AND AS_Block.id = AS_Id.id ORDER BY time DESC;";
+	private final String INSPECT_CONTAINER_QUERY = "SELECT x, y, z, type, slot, AS_Id.value, count, data, time, AS_Cause.cause, AS_World.world "
+			+ "FROM AS_Container, AS_World, AS_Cause, AS_Id "
+			+ "WHERE x = ? AND y = ? AND z = ? AND AS_World.world = ? AND AS_Container.cause = AS_Cause.id AND AS_Container.world = AS_World.id AND AS_Container.id = AS_Id.id "
 			+ "ORDER BY time DESC;";
 
 	private List<Player> inspectors;

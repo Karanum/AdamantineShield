@@ -23,7 +23,7 @@ public class BlockLookupResult extends LookupResult {
 			UUID world = UUID.fromString(results.getString("world"));
 			ActionType type = ActionType.valueCache[results.getByte("type")];
 			String cause = results.getString("cause");
-			BlockType block = Sponge.getRegistry().getType(BlockType.class, results.getString("block")).get();
+			BlockType block = Sponge.getRegistry().getType(BlockType.class, results.getString("AS_Id.value")).get();
 			long timestamp = results.getLong("time");
 			lines.add(new LookupLine(pos, world, type, cause, block, 1, timestamp));
 		}

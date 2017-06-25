@@ -21,7 +21,6 @@ public class DatabaseWriterTask implements Runnable {
 		
 		try {
 			ConcurrentLinkedQueue<QueueEntry> queue = database.getQueue();
-			//for (int i = 0; i < 20; ++i) {
 			while (!queue.isEmpty()) {
 				QueueEntry entry = queue.poll();
 				if (entry == null) break;

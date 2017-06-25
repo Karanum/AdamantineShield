@@ -16,7 +16,7 @@ import com.karanumcoding.adamantineshield.enums.ActionType;
 
 public class InventoryQueueEntry extends QueueEntry {
 
-	private static final String QUERY = "INSERT INTO AS_Container (x, y, z, world, type, slot, cause, item, count, data, time) "
+	private static final String QUERY = "INSERT INTO AS_Container (x, y, z, world, type, slot, cause, id, count, data, time) "
 			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 	
 	private TileEntityCarrier carrier;
@@ -47,7 +47,7 @@ public class InventoryQueueEntry extends QueueEntry {
 		ps.setByte(5, (byte) type.ordinal());
 		ps.setInt(6, slot);
 		ps.setInt(7, Database.causeCache.getDataId(c, cause.getUniqueId().toString()));
-		ps.setString(8, item.getType().getId());
+		ps.setInt(8, Database.idCache.getDataId(c, item.getType().getId()));
 		ps.setByte(9, (byte) item.getCount());
 		ps.setNull(10, Types.VARCHAR);
 		ps.setLong(11, timestamp);

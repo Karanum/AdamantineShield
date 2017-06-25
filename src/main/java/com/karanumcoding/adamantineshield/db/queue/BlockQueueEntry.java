@@ -12,7 +12,7 @@ import com.karanumcoding.adamantineshield.enums.ActionType;
 
 public class BlockQueueEntry extends QueueEntry {
 
-	private static final String QUERY = "INSERT INTO AS_Block (x, y, z, world, type, cause, block, data, time) "
+	private static final String QUERY = "INSERT INTO AS_Block (x, y, z, world, type, cause, id, data, time) "
 			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
 	
 	private BlockSnapshot block;
@@ -40,7 +40,7 @@ public class BlockQueueEntry extends QueueEntry {
 		ps.setInt(4, Database.worldCache.getDataId(c, world));
 		ps.setByte(5, (byte) type.ordinal());
 		ps.setInt(6, Database.causeCache.getDataId(c, cause));
-		ps.setString(7, block.getState().getType().getId());
+		ps.setInt(7, Database.idCache.getDataId(c, block.getState().getType().getId()));
 //		if ((type == ActionType.DESTROY || type == ActionType.MOB_DESTROY) && entity != null) {
 //			try {
 //				ps.setString(8, DataUtils.dataToString(entity.toContainer()));
