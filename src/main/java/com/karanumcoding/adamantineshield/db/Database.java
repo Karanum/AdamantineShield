@@ -12,6 +12,7 @@ import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.service.sql.SqlService;
 
 import com.karanumcoding.adamantineshield.AdamantineShield;
+import com.karanumcoding.adamantineshield.compat.DatabaseUpdater;
 import com.karanumcoding.adamantineshield.db.queue.QueueEntry;
 
 public class Database {
@@ -22,10 +23,11 @@ public class Database {
 	private ConcurrentLinkedQueue<QueueEntry> queue;
 	private Task task;
 	
+	private static final int DB_VERSION = 2;
+	
 	public static final DataCache worldCache = new DataCache("AS_World", "world");
 	public static final DataCache causeCache = new DataCache("AS_Cause", "cause");
-	public static final DataCache blockCache = new DataCache("AS_BlockID", "block");
-	public static final DataCache itemCache = new DataCache("AS_ItemID", "item");
+	public static final DataCache idCache = new DataCache("AS_Id", "value");
 	
 	public Database(AdamantineShield plugin, String jdbc) throws SQLException {
 		queue = new ConcurrentLinkedQueue<>();
@@ -78,6 +80,7 @@ public class Database {
 	
 	private void prepareTables() throws SQLException {
 		Connection c = source.getConnection();
+		int version = DatabaseUpdater.checkVersion(c);
 		
 		c.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS AS_World ("
 				+ "id INT AUTO_INCREMENT NOT NULL, world TEXT NOT NULL, "
@@ -87,31 +90,30 @@ public class Database {
 				+ "id INT AUTO_INCREMENT NOT NULL, cause TEXT NOT NULL, "
 				+ "PRIMARY KEY (id));");
 		
-		c.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS AS_BlockID ("
-				+ "id INT AUTO_INCREMENT NOT NULL, block TEXT NOT NULL, "
-				+ "PRIMARY KEY (id));");
-		
-		c.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS AS_ItemID ("
-				+ "id INT AUTO_INCREMENT NOT NULL, item TEXT NOT NULL, "
+		c.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS AS_Id ("
+				+ "id INT AUTO_INCREMENT NOT NULL, value TEXT NOT NULL, "
 				+ "PRIMARY KEY (id));");
 		
 		c.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS AS_Container ("
 				+ "x INT, y INT, z INT, world INT, type TINYINT, slot INT, "
-				+ "cause INT, item INT, count TINYINT, data TEXT, time BIGINT, "
+				+ "cause INT, id INT, count TINYINT, data TEXT, time BIGINT, "
 				+ "FOREIGN KEY (world) REFERENCES AS_World(id), "
 				+ "FOREIGN KEY (cause) REFERENCES AS_Cause(id), "
-				+ "FOREIGN KEY (item) REFERENCES AS_ItemID(id));");
+				+ "FOREIGN KEY (id) REFERENCES AS_Id(id));");
 		
 		c.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS AS_Block ("
 				+ "x INT, y INT, z INT, world INT, type TINYINT, "
-				+ "cause INT, block INT, data TEXT, time BIGINT, "
+				+ "cause INT, id INT, data TEXT, time BIGINT, "
 				+ "FOREIGN KEY (world) REFERENCES AS_World(id), "
 				+ "FOREIGN KEY (cause) REFERENCES AS_Cause(id), "
-				+ "FOREIGN KEY (block) REFERENCES AS_BlockID(id));");
+				+ "FOREIGN KEY (id) REFERENCES AS_Id(id));");
+		
+		if (version > 0 && version < DB_VERSION)
+			DatabaseUpdater.updateDatabase(c, version);
 		
 		c.createStatement().executeUpdate("DROP TABLE IF EXISTS AS_Meta;");
 		c.createStatement().executeUpdate("CREATE TABLE AS_Meta (version_id SMALLINT);");
-		c.createStatement().executeUpdate("INSERT INTO AS_Meta VALUES (2);");
+		c.createStatement().executeUpdate("INSERT INTO AS_Meta VALUES (" + DB_VERSION + ");");
 		c.close();
 	}
 	

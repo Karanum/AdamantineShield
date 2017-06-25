@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class DataCache {
 
@@ -33,6 +34,10 @@ public class DataCache {
 		int result = r.getInt("id");
 		cache.put(data, result);
 		return result;
+	}
+	
+	public Set<String> getCachedData() {
+		return cache.keySet();
 	}
 	
 }
