@@ -31,7 +31,6 @@ public final class DatabaseUpdater {
 	}
 	
 	private static void migrateIds(Connection c) throws SQLException {
-		//TODO: Implement moving over block and item IDs to separate tables
 		DataCache cache = Database.idCache;
 		
 		ResultSet r = c.createStatement().executeQuery("SELECT DISTINCT item FROM AS_Container;");

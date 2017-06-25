@@ -17,6 +17,7 @@ import com.karanumcoding.adamantineshield.db.queue.QueueEntry;
 
 public class Database {
 
+	private AdamantineShield plugin;
 	private SqlService service;
 	private DataSource source;
 	
@@ -30,8 +31,9 @@ public class Database {
 	public static final DataCache idCache = new DataCache("AS_Id", "value");
 	
 	public Database(AdamantineShield plugin, String jdbc) throws SQLException {
+		this.plugin = plugin;		
 		queue = new ConcurrentLinkedQueue<>();
-		
+
 		service = Sponge.getServiceManager().provide(SqlService.class).get();
 		source = service.getDataSource(jdbc);
 		prepareTables();
@@ -108,8 +110,11 @@ public class Database {
 				+ "FOREIGN KEY (cause) REFERENCES AS_Cause(id), "
 				+ "FOREIGN KEY (id) REFERENCES AS_Id(id));");
 		
-		if (version > 0 && version < DB_VERSION)
+		if (version > 0 && version < DB_VERSION) {
+			plugin.getLogger().info("Updating database from version " + version + " to version " + DB_VERSION);
 			DatabaseUpdater.updateDatabase(c, version);
+			plugin.getLogger().info("Database has been updated successfully!");
+		}
 		
 		c.createStatement().executeUpdate("DROP TABLE IF EXISTS AS_Meta;");
 		c.createStatement().executeUpdate("CREATE TABLE AS_Meta (version_id SMALLINT);");
