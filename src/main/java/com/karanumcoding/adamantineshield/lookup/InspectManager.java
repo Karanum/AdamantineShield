@@ -60,6 +60,7 @@ public class InspectManager {
 			lookup = new BlockLookupResult(result);
 			LookupResultManager.instance().setLookupResult(p, lookup);
 			
+			result.close();
 			c.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -85,6 +86,7 @@ public class InspectManager {
 			lookup = new ContainerLookupResult(result);
 			LookupResultManager.instance().setLookupResult(p, lookup);
 			
+			result.close();
 			c.close();
 		} catch (SQLException e) {
 			e.printStackTrace();

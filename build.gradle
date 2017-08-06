@@ -13,6 +13,7 @@ compileJava {
 
 dependencies {
     compile 'org.spongepowered:spongeapi:5.1.0'
+    compile fileTree(dir: "libs", include: "*.jar")
 }
 
 sponge {

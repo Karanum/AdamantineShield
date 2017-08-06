@@ -47,6 +47,7 @@ public class CommandLookup implements CommandExecutor {
 		FilterParser.parse(filters, filterSet, p);
 		String targetTable = filterSet.getLookupType().getTable();
 		
+		p.sendMessage(Text.of(TextColors.BLUE, "Querying database, please wait..."));
 		Sponge.getScheduler().createAsyncExecutor(plugin).execute(() -> {
 			//String relevantColumns = filterSet.getLookupType().getRelevantColumn();
 			String relevantColumns = "AS_Id.value";
@@ -69,6 +70,7 @@ public class CommandLookup implements CommandExecutor {
 					lookup = new BlockLookupResult(r);
 				LookupResultManager.instance().setLookupResult(p, lookup);
 				
+				r.close();
 				c.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
