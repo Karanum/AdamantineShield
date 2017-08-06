@@ -38,15 +38,15 @@ public abstract class LookupResult {
 	}
 	
 	public void showPage(Player p, int page) {
+		if (lines.isEmpty()) {
+			p.sendMessage(Text.of(TextColors.DARK_AQUA, "[AS] ", TextColors.GRAY, "No results at this location..."));
+			return;
+		}
+		
 		int linesPerPage = LookupResultManager.instance().getLinesPerPage();
 		int pages = getPages(linesPerPage);
 		if (page > pages) {
 			p.sendMessage(Text.of(TextColors.DARK_AQUA, "[AS] ", TextColors.RED, "Page number exceeds amount of pages (max ", pages, ")"));
-			return;
-		}
-		
-		if (lines.isEmpty()) {
-			p.sendMessage(Text.of(TextColors.DARK_AQUA, "[AS] ", TextColors.GRAY, "No results at this location..."));
 			return;
 		}
 		
