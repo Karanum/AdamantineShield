@@ -35,14 +35,14 @@ public final class DatabaseUpdater {
 		
 		ResultSet r = c.createStatement().executeQuery("SELECT DISTINCT item FROM AS_Container;");
 		if (r.isBeforeFirst()) {
-			while (!r.next()) {
+			while (r.next()) {
 				cache.getDataId(c, r.getString("item"));
 			}
 		}
 		
 		r = c.createStatement().executeQuery("SELECT DISTINCT block FROM AS_Block;");
 		if (r.isBeforeFirst()) {
-			while (!r.next()) {
+			while (r.next()) {
 				cache.getDataId(c, r.getString("block"));
 			}
 		}
@@ -61,6 +61,8 @@ public final class DatabaseUpdater {
 			itemQuery.setString(2, value);
 			itemQuery.executeUpdate();
 		}
+		blockQuery.close();
+		itemQuery.close();
 		
 		c.createStatement().executeUpdate("ALTER TABLE AS_Block DROP COLUMN block;");
 		c.createStatement().executeUpdate("ALTER TABLE AS_Container DROP COLUMN item;");

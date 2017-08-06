@@ -32,6 +32,8 @@ public class DataCache {
 		r.next();
 		
 		int result = r.getInt("id");
+		r.close();
+		
 		cache.put(data, result);
 		return result;
 	}
