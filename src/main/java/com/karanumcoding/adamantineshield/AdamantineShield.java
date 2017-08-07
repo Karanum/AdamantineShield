@@ -26,11 +26,7 @@ import com.karanumcoding.adamantineshield.commands.lookup.*;
 import com.karanumcoding.adamantineshield.commands.pages.*;
 import com.karanumcoding.adamantineshield.db.Database;
 import com.karanumcoding.adamantineshield.enums.Permissions;
-import com.karanumcoding.adamantineshield.listeners.MobBlockChangeListener;
-import com.karanumcoding.adamantineshield.listeners.InventoryChangeListener;
-import com.karanumcoding.adamantineshield.listeners.LiquidFlowListener;
-import com.karanumcoding.adamantineshield.listeners.PlayerBlockChangeListener;
-import com.karanumcoding.adamantineshield.listeners.PlayerInspectListener;
+import com.karanumcoding.adamantineshield.listeners.*;
 import com.karanumcoding.adamantineshield.lookup.InspectManager;
 import com.karanumcoding.adamantineshield.lookup.LookupResultManager;
 import com.karanumcoding.adamantineshield.util.FilterParser;
@@ -129,6 +125,9 @@ public class AdamantineShield {
 		if (config.getBool("logging", "containers") || config.getBool("logging", "chests")) {
 			man.registerListeners(this, new InventoryChangeListener(db, config.getBool("logging", "containers")));
 		}
+		
+		// DEBUG OPTION, DISABLE BEFORE RELEASE
+		//man.registerListeners(this, new DebugListeners(logger));
 	}
 	
 	private void registerCommands(CommandManager man) {

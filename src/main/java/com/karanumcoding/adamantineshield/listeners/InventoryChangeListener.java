@@ -4,8 +4,10 @@ import java.util.Date;
 
 import org.spongepowered.api.block.tileentity.carrier.Chest;
 import org.spongepowered.api.block.tileentity.carrier.TileEntityCarrier;
+import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.cause.entity.spawn.EntitySpawnCause;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.event.item.inventory.AffectSlotEvent;
 import org.spongepowered.api.item.ItemTypes;
@@ -27,6 +29,13 @@ public class InventoryChangeListener {
 	public InventoryChangeListener(Database db, boolean logContainers) {
 		this.db = db;
 		this.logContainers = logContainers;
+	}
+	
+	@Listener
+	public void onInventoryTransfer(AffectSlotEvent e, @First EntitySpawnCause c) {
+		Entity entity = c.getEntity();
+		if (!(entity instanceof Player)) return;
+		onInventoryTransfer(e, (Player) entity);
 	}
 	
 	@Listener
@@ -78,7 +87,5 @@ public class InventoryChangeListener {
 			}
 		}
 	}
-	
-	//TODO: Detect when items are insta-dropped from the inventory
 	
 }
