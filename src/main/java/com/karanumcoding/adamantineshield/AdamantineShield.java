@@ -125,9 +125,6 @@ public class AdamantineShield {
 		if (config.getBool("logging", "containers") || config.getBool("logging", "chests")) {
 			man.registerListeners(this, new InventoryChangeListener(db, config.getBool("logging", "containers")));
 		}
-		
-		// DEBUG OPTION, DISABLE BEFORE RELEASE
-		//man.registerListeners(this, new DebugListeners(logger));
 	}
 	
 	private void registerCommands(CommandManager man) {
