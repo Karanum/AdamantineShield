@@ -31,7 +31,7 @@ import com.karanumcoding.adamantineshield.lookup.InspectManager;
 import com.karanumcoding.adamantineshield.lookup.LookupResultManager;
 import com.karanumcoding.adamantineshield.util.FilterParser;
 
-@Plugin(id = "adamantineshield", name = "AdamantineShield", version = "0.2.3", authors = { "Karanum", "Snootiful" },
+@Plugin(id = "adamantineshield", name = "AdamantineShield", version = "0.3.0", authors = { "Karanum", "Snootiful" },
 	description = "Action logging and rollback plugin for Sponge"
 )
 public class AdamantineShield {
