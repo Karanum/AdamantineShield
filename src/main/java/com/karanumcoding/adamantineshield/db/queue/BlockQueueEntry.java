@@ -24,7 +24,7 @@ public class BlockQueueEntry extends QueueEntry {
 	public BlockQueueEntry(BlockSnapshot block, ActionType type, String cause, long timestamp) {
 		this.block = block;
 		this.type = type;
-		this.cause = cause;
+		this.cause = cause.toLowerCase();
 		this.timestamp = timestamp;
 		//this.entity = null;
 	}

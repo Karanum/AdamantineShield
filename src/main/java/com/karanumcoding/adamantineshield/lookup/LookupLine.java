@@ -86,7 +86,7 @@ public class LookupLine {
 			case DESTROY:
 				return PlayerUtils.getName(getPlayerCause()) + " broke " + target.getId();
 			case FLOW:
-				return cause + " flow occurred";
+				return cause.substring(0, 1).toUpperCase() + cause.substring(1) + " flow occurred";
 			case MOB_DESTROY:
 				return "Entity " + cause + " broke " + target.getId();
 			case MOB_PLACE:

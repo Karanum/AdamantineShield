@@ -125,14 +125,7 @@ public final class FilterParser {
 	
 	private static String getCause(String name) throws CommandException {
 		if (name.startsWith("#")) {
-			switch (name.toLowerCase()) {
-				case "#water":
-					return "Water";
-				case "#lava":
-					return "Lava";
-				default:
-					return name.toLowerCase().substring(1);
-			}
+			return name.toLowerCase().substring(1);
 		}
 		Optional<GameProfile> player = Sponge.getServer().getGameProfileManager().getCache().getByName(name);
 		if (!player.isPresent()) {

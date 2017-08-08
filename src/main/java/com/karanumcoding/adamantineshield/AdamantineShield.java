@@ -115,6 +115,7 @@ public class AdamantineShield {
 		man.registerListeners(this, new PlayerInspectListener(this));
 		if (config.getBool("logging", "blocks")) {
 			man.registerListeners(this, new PlayerBlockChangeListener(db));
+			man.registerListeners(this, new EntityBlockChangeListener(db));
 		}
 		if (config.getBool("logging", "mobs")) {
 			man.registerListeners(this, new MobBlockChangeListener(db));
