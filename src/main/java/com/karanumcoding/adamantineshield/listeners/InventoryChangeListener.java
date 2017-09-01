@@ -52,7 +52,7 @@ public class InventoryChangeListener {
 		CarriedInventory<?> c = (CarriedInventory<?>) e.getTransactions().get(0).getSlot().parent();
 		if (!c.getCarrier().isPresent()) {
 			Optional<TileEntityCarrier> optCarrier = accessMan.getEntity(p.getUniqueId());
-			if (optCarrier.isPresent())
+			if (optCarrier.isPresent() && accessMan.isActive(p.getUniqueId()))
 				carrier = optCarrier.get();
 		} else if (c.getCarrier().get() instanceof TileEntityCarrier) {
 			carrier = (TileEntityCarrier) c.getCarrier().get();

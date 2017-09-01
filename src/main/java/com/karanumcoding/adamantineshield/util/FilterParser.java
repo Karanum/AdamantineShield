@@ -106,8 +106,12 @@ public final class FilterParser {
 						} catch (NumberFormatException e) {
 							throw new CommandException(Text.of(TextColors.RED, "Invalid radius: " + bits[1]));
 						}
-						if (radius < 0 || radius > config.getInt("lookup", "max-radius"))
-							throw new CommandException(Text.of(TextColors.RED, "Radius is either negative or too large!"));
+						
+						if (radius < 0) 
+							throw new CommandException(Text.of(TextColors.RED, "Radius can not be negative!"));
+						if (radius > config.getInt("lookup", "max-radius"))
+							throw new CommandException(Text.of(TextColors.RED, "Radius is too large! Maximum allowed radius is ",
+									config.getInt("lookup", "max-radius"), " blocks!"));
 						container.getOrCreate(new PositionFilter(p.getLocation().getBlockPosition(), 0)).setRadius(radius);
 						break;
 				}
