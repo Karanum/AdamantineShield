@@ -3,7 +3,7 @@ plugins {
 }
 
 group= 'com.karanum'
-version = '0.3.0'
+version = '0.3.1'
 description = 'Action logging and rollback plugin for Sponge'
 
 sourceCompatibility = targetCompatibility = "1.8"
@@ -21,7 +21,7 @@ sponge {
         id = 'adamantineshield'
         meta {
             name = 'AdamantineShield'
-            version = '0.3.0'
+            version = '0.3.1'
             description = 'Action logging and rollback plugin for Sponge'
             url = null
         }
