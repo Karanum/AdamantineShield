@@ -1,6 +1,7 @@
 package com.karanumcoding.adamantineshield.listeners;
 
 import java.util.Date;
+import java.util.Optional;
 
 import org.spongepowered.api.block.tileentity.carrier.Chest;
 import org.spongepowered.api.block.tileentity.carrier.TileEntityCarrier;
@@ -20,14 +21,17 @@ import org.spongepowered.api.item.inventory.type.CarriedInventory;
 import com.karanumcoding.adamantineshield.db.Database;
 import com.karanumcoding.adamantineshield.db.queue.InventoryQueueEntry;
 import com.karanumcoding.adamantineshield.enums.ActionType;
+import com.karanumcoding.adamantineshield.util.ContainerAccessManager;
 
 public class InventoryChangeListener {
 
 	private Database db;
+	private ContainerAccessManager accessMan;
 	private boolean logContainers;
 	
-	public InventoryChangeListener(Database db, boolean logContainers) {
+	public InventoryChangeListener(Database db, ContainerAccessManager accessMan, boolean logContainers) {
 		this.db = db;
+		this.accessMan = accessMan;
 		this.logContainers = logContainers;
 	}
 	
@@ -44,10 +48,18 @@ public class InventoryChangeListener {
 		if (!(e.getTransactions().get(0).getSlot().parent() instanceof CarriedInventory))
 			return;
 		
+		TileEntityCarrier carrier = null;
 		CarriedInventory<?> c = (CarriedInventory<?>) e.getTransactions().get(0).getSlot().parent();
-		if (!c.getCarrier().isPresent() || !(c.getCarrier().get() instanceof TileEntityCarrier))
+		if (!c.getCarrier().isPresent()) {
+			Optional<TileEntityCarrier> optCarrier = accessMan.getEntity(p.getUniqueId());
+			if (optCarrier.isPresent())
+				carrier = optCarrier.get();
+		} else if (c.getCarrier().get() instanceof TileEntityCarrier) {
+			carrier = (TileEntityCarrier) c.getCarrier().get();
+		}
+		
+		if (carrier == null)
 			return;
-		TileEntityCarrier carrier = (TileEntityCarrier) c.getCarrier().get();
 		
 		if (!logContainers && !(carrier instanceof Chest))
 			return;

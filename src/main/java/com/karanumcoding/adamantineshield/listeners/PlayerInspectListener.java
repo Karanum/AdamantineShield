@@ -40,7 +40,7 @@ public class PlayerInspectListener {
 	}
 	
 	@Listener
-	public void onBlockSecondaryInteract(InteractBlockEvent.Secondary.MainHand e, @First Player p) {
+	public void onBlockSecondaryInteract(InteractBlockEvent.Secondary.MainHand e, @First Player p) {		
 		if (!plugin.getInspectManager().isInspector(p))
 			return;
 		

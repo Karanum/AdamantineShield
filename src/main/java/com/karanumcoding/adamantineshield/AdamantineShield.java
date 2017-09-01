@@ -29,6 +29,7 @@ import com.karanumcoding.adamantineshield.enums.Permissions;
 import com.karanumcoding.adamantineshield.listeners.*;
 import com.karanumcoding.adamantineshield.lookup.InspectManager;
 import com.karanumcoding.adamantineshield.lookup.LookupResultManager;
+import com.karanumcoding.adamantineshield.util.ContainerAccessManager;
 import com.karanumcoding.adamantineshield.util.FilterParser;
 
 @Plugin(id = "adamantineshield", name = "AdamantineShield", version = "0.3.0", authors = { "Karanum", "Snootiful" },
@@ -46,6 +47,7 @@ public class AdamantineShield {
 	private Database db;
 	
 	private InspectManager inspectManager;
+	private ContainerAccessManager containerAccessManager;
 	
 	@Listener
 	public void onPreInit(GamePreInitializationEvent e) {
@@ -76,6 +78,7 @@ public class AdamantineShield {
 		}
 		
 		inspectManager = new InspectManager(db);
+		containerAccessManager = new ContainerAccessManager();
 		
 		logger.info("Registering event listeners");
 		registerListeners(Sponge.getEventManager());
@@ -113,6 +116,7 @@ public class AdamantineShield {
 	
 	private void registerListeners(EventManager man) {
 		man.registerListeners(this, new PlayerInspectListener(this));
+		man.registerListeners(this, new ContainerAccessListener(containerAccessManager));
 		if (config.getBool("logging", "blocks")) {
 			man.registerListeners(this, new PlayerBlockChangeListener(db));
 			man.registerListeners(this, new EntityBlockChangeListener(db));
@@ -124,7 +128,8 @@ public class AdamantineShield {
 			man.registerListeners(this, new LiquidFlowListener(db));
 		}
 		if (config.getBool("logging", "containers") || config.getBool("logging", "chests")) {
-			man.registerListeners(this, new InventoryChangeListener(db, config.getBool("logging", "containers")));
+			man.registerListeners(this, new InventoryChangeListener(db, containerAccessManager, 
+					config.getBool("logging", "containers")));
 		}
 	}
 	
