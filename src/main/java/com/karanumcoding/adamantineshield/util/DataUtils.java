@@ -26,23 +26,46 @@ public final class DataUtils {
 	private DataUtils() {}
 	
 	public static void populateCompressionMap() {
+		//Parent keys
+		compressionMap.put("BlockState", "b");
+		compressionMap.put("BlockExtendedState", "be");
 		compressionMap.put("ContentVersion", "v");
+		compressionMap.put("DataClass", "dc");
+		compressionMap.put("ManipulatorData", "m");
+		compressionMap.put("TileEntityData", "td");
 		compressionMap.put("UnsafeDamage", "ud");
 		compressionMap.put("UnsafeData", "u");
-		compressionMap.put("BlockState", "b");
 		
-		compressionMap.put("RepairCost", "rc");
-		compressionMap.put("ench", "e");
-		compressionMap.put("display", "dp");
-		compressionMap.put("Name", "n");
-		compressionMap.put("Lore", "l");
-		compressionMap.put("Items", "i");
+		//Unsafe data keys
+		compressionMap.put("BannerBaseColor", "bbc");
+		compressionMap.put("Base", "bb");
+		compressionMap.put("BurnTime", "bt");
+		compressionMap.put("CookTime", "ct");
+		compressionMap.put("CookTimeTotal", "ctt");
 		compressionMap.put("Count", "c");
 		compressionMap.put("Damage", "d");
-		compressionMap.put("Slot", "s");
+		compressionMap.put("display", "dp");
+		compressionMap.put("ench", "e");
 		compressionMap.put("ForgeData", "fd");
+		compressionMap.put("Items", "i");
+		compressionMap.put("Levels", "lv");
 		compressionMap.put("Lock", "lo");
+		compressionMap.put("Lore", "l");
+		compressionMap.put("Name", "n");
+		compressionMap.put("Potion", "po");
+		compressionMap.put("Primary", "bcp");
+		compressionMap.put("RepairCost", "rc");
+		compressionMap.put("Secondary", "bcs");
+		compressionMap.put("Slot", "s");
 		
+		//Block data keys
+		compressionMap.put("ConnectedDirections", "cd");
+		compressionMap.put("ConnectedEast", "ce");
+		compressionMap.put("ConnectedNorth", "cn");
+		compressionMap.put("ConnectedSouth", "cs");
+		compressionMap.put("ConnectedWest", "cw");
+		
+		//Ignored keys
 		ignoredKeys.add("Data");
 		ignoredKeys.add("WorldUuid");
 		ignoredKeys.add("Position");
@@ -97,7 +120,7 @@ public final class DataUtils {
 			ConfigurationNode parent = data.getParent();
 			String key = data.getKey().toString();
 			
-			if (key.equals("BlockState")) {
+			if (key.equals("BlockState") || key.equals("BlockExtendedState")) {
 				if (data.hasMapChildren()) {
 					if (data.getChildrenMap().size() == 1 && data.getChildrenMap().containsKey(compressionMap.get("ContentVersion"))) {
 						parent.removeChild(key);
@@ -144,7 +167,9 @@ public final class DataUtils {
 				parent.removeChild(key);
 			} else {
 				if (key.equals("lvl") || key.equals("id")) {
-					data.setValue(Integer.parseInt(data.getString()));
+					try {
+						data.setValue(Integer.parseInt(data.getString()));
+					} catch (NumberFormatException e) {}
 				}
 			}
 		}
