@@ -13,6 +13,7 @@ import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.event.item.inventory.AffectSlotEvent;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.item.inventory.ItemStackComparators;
 import org.spongepowered.api.item.inventory.ItemStackSnapshot;
 import org.spongepowered.api.item.inventory.property.SlotIndex;
 import org.spongepowered.api.item.inventory.transaction.SlotTransaction;
@@ -76,13 +77,14 @@ public class InventoryChangeListener {
 			if (origItem == finalItem)
 				continue;
 			
-			if (origItem.getType() == finalItem.getType()) {
+			if (origItem.createGameDictionaryEntry().matches(finalItem.createStack()) &&
+					ItemStackComparators.ITEM_DATA.compare(origItem.createStack(), finalItem.createStack()) == 0) {
 				if (origItem.getCount() > finalItem.getCount()) {
 					ItemStackSnapshot stack = ItemStack.builder().itemType(origItem.getType())
 							.quantity(origItem.getCount() - finalItem.getCount())
 							.build().createSnapshot();
 					db.addToQueue(new InventoryQueueEntry(carrier, slotId, stack, ActionType.CONTAINER_REMOVE, p, timestamp));
-				} else {
+				} else if (origItem.getCount() < finalItem.getCount()) {
 					ItemStackSnapshot stack = ItemStack.builder().itemType(origItem.getType())
 							.quantity(finalItem.getCount() - origItem.getCount())
 							.build().createSnapshot();
@@ -92,7 +94,6 @@ public class InventoryChangeListener {
 				if (origItem.getType() != ItemTypes.NONE) {
 					db.addToQueue(new InventoryQueueEntry(carrier, slotId, origItem, ActionType.CONTAINER_REMOVE, p, timestamp));
 				}
-				
 				if (finalItem.getType() != ItemTypes.NONE) {
 					db.addToQueue(new InventoryQueueEntry(carrier, slotId, finalItem, ActionType.CONTAINER_ADD, p, timestamp));
 				}

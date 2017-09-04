@@ -37,7 +37,7 @@ public class PlayerBlockChangeListener {
 	}
 	
 	@Listener(order = Order.POST)
-	public void onBlockBreak(ChangeBlockEvent.Break e, @Root Player p) {
+	public void onBlockBreak(ChangeBlockEvent.Break e, @Root Player p) {		
 		long time = new Date().getTime();
 		for (Transaction<BlockSnapshot> transaction : e.getTransactions()) {
 			db.addToQueue(new BlockQueueEntry(transaction.getOriginal(), ActionType.DESTROY, p.getUniqueId().toString(), time));

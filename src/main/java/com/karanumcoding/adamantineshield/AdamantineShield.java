@@ -30,6 +30,7 @@ import com.karanumcoding.adamantineshield.listeners.*;
 import com.karanumcoding.adamantineshield.lookup.InspectManager;
 import com.karanumcoding.adamantineshield.lookup.LookupResultManager;
 import com.karanumcoding.adamantineshield.util.ContainerAccessManager;
+import com.karanumcoding.adamantineshield.util.DataUtils;
 import com.karanumcoding.adamantineshield.util.FilterParser;
 
 @Plugin(id = "adamantineshield", name = "AdamantineShield", version = "0.3.1", authors = { "Karanum", "Snootiful" },
@@ -51,6 +52,8 @@ public class AdamantineShield {
 	
 	@Listener
 	public void onPreInit(GamePreInitializationEvent e) {
+		DataUtils.populateCompressionMap();
+		
 		try {
 			config = new ConfigHandler(this);
 		} catch (IOException ioEx) {

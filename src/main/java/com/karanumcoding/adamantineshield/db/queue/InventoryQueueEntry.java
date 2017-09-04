@@ -1,5 +1,6 @@
 package com.karanumcoding.adamantineshield.db.queue;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -13,6 +14,7 @@ import org.spongepowered.api.world.World;
 
 import com.karanumcoding.adamantineshield.db.Database;
 import com.karanumcoding.adamantineshield.enums.ActionType;
+import com.karanumcoding.adamantineshield.util.DataUtils;
 
 public class InventoryQueueEntry extends QueueEntry {
 
@@ -49,6 +51,13 @@ public class InventoryQueueEntry extends QueueEntry {
 		ps.setInt(7, Database.causeCache.getDataId(c, cause.getUniqueId().toString()));
 		ps.setInt(8, Database.idCache.getDataId(c, item.getType().getId()));
 		ps.setByte(9, (byte) item.getCount());
+		
+		try {
+			System.out.println(DataUtils.dataToString(item.toContainer()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		ps.setNull(10, Types.VARCHAR);
 		ps.setLong(11, timestamp);
 		ps.executeUpdate();
