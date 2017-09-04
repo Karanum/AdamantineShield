@@ -103,9 +103,12 @@ public final class DataUtils {
 	}
 	
 	public static DataView dataFromString(String str) throws IOException {
-		return DataTranslators.CONFIGURATION_NODE.translate(decompress(
-				GsonConfigurationLoader.builder().setSource(() -> new BufferedReader(
-						new StringReader(str))).build().load()));
+		return DataTranslators.CONFIGURATION_NODE.translate(configNodeFromString(str));
+	}
+	
+	public static ConfigurationNode configNodeFromString(String str) throws IOException {
+		return decompress(GsonConfigurationLoader.builder().setSource(() -> new BufferedReader(
+				new StringReader(str))).build().load());
 	}
 	
 	private static ConfigurationNode compress(ConfigurationNode data) {

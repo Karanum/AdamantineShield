@@ -58,7 +58,7 @@ public class CommandLookup implements CommandExecutor {
 			Connection c = plugin.getDatabase().getConnection();
 			try {
 				int worldId = Database.worldCache.getDataId(c, p.getWorld().getUniqueId().toString());
-				ResultSet r = c.createStatement().executeQuery("SELECT x, y, z, type, time, " + relevantColumns + ", AS_Cause.cause, AS_World.world "
+				ResultSet r = c.createStatement().executeQuery("SELECT x, y, z, type, time, data, " + relevantColumns + ", AS_Cause.cause, AS_World.world "
 						+ "FROM " + targetTable + ", AS_Cause, AS_World, AS_Id "
 						+ "WHERE AS_Cause.id = " + targetTable + ".cause AND " + targetTable + ".world = " + worldId + " "
 						+ "AND AS_Id.id = " + targetTable + ".id "

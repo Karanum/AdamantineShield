@@ -57,7 +57,7 @@ public abstract class LookupResult {
 			LookupLine line = lines.get(i);
 			Text hover = Text.builder(line.toString())
 					.color(TextColors.GOLD)
-					.onHover(TextActions.showText(Text.of("Location: ", line.getPos().toString())))
+					.onHover(TextActions.showText(line.getHoverText()))
 					.build();
 			text = Text.of(text, Text.NEW_LINE, TimeUtils.timeAgoToString(line.getTime()),
 					TextColors.DARK_AQUA, " - ", hover);

@@ -23,10 +23,11 @@ public class ContainerLookupResult extends LookupResult {
 			UUID world = UUID.fromString(results.getString("world"));
 			ActionType type = ActionType.valueCache[results.getByte("type")];
 			String cause = results.getString("cause");
+			String data = results.getString("data");
 			ItemType item = Sponge.getRegistry().getType(ItemType.class, results.getString("AS_Id.value")).get();
 			int count = results.getByte("count");
 			long timestamp = results.getLong("time");
-			lines.add(new LookupLine(pos, world, type, cause, item, count, timestamp));
+			lines.add(new LookupLine(pos, world, type, cause, data, item, count, timestamp));
 		}
 	}
 	

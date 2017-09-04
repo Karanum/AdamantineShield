@@ -1,12 +1,21 @@
 package com.karanumcoding.adamantineshield.lookup;
 
+import java.io.IOException;
 import java.util.UUID;
 
 import org.spongepowered.api.CatalogType;
+import org.spongepowered.api.item.ItemType;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColors;
 
 import com.flowpowered.math.vector.Vector3i;
+import com.google.common.reflect.TypeToken;
 import com.karanumcoding.adamantineshield.enums.ActionType;
+import com.karanumcoding.adamantineshield.util.DataUtils;
 import com.karanumcoding.adamantineshield.util.PlayerUtils;
+
+import ninja.leaping.configurate.ConfigurationNode;
+import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 
 public class LookupLine {
 
@@ -16,17 +25,17 @@ public class LookupLine {
 	private String cause;
 	private CatalogType target;
 	private int count;
-	//private String data;
+	private String data;
 	private long timestamp;
 	
-	public LookupLine(Vector3i pos, UUID world, ActionType type, String cause, CatalogType target, int count, long timestamp) {
+	public LookupLine(Vector3i pos, UUID world, ActionType type, String cause, String data, CatalogType target, int count, long timestamp) {
 		this.pos = pos;
 		this.world = world;
 		this.type = type;
 		this.cause = cause;
 		this.target = target;
 		this.count = count;
-		//this.data = data;
+		this.data = data;
 		this.timestamp = timestamp;
 	}
 	
@@ -76,6 +85,49 @@ public class LookupLine {
 	
 	public long getTime() {
 		return timestamp;
+	}
+	
+	public Text getHoverText() {
+		Text result = Text.of(TextColors.DARK_AQUA, "Location: ", TextColors.AQUA, pos.toString());
+		if (data == null)
+			return result;
+		
+		ConfigurationNode workingNode = null;
+		ConfigurationNode node = null;
+		try {
+			node = DataUtils.configNodeFromString(data);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return result;
+		}
+		
+		if (target instanceof ItemType) {
+			workingNode = node.getNode("UnsafeData", "display");
+			if (!workingNode.isVirtual()) {
+				ConfigurationNode innerNode = workingNode.getNode("Name");
+				if (!innerNode.isVirtual()) {
+					result = Text.of(result, Text.NEW_LINE, TextColors.DARK_AQUA, "Name: ", TextColors.AQUA, innerNode.getString());
+				}
+				innerNode = workingNode.getNode("Lore");
+				if (!innerNode.isVirtual()) {
+					try {
+						Text sub = Text.of(TextColors.DARK_AQUA, "Lore: ");
+						for (String line : innerNode.getList(TypeToken.of(String.class))) {
+							sub = Text.of(sub, Text.NEW_LINE, TextColors.DARK_AQUA, " - ", TextColors.AQUA, line);
+						}
+						result = Text.of(result, Text.NEW_LINE, sub);
+					} catch (ObjectMappingException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		
+//		if (target instanceof BlockType) {
+//			
+//		}
+		
+		return result;
 	}
 	
 	@Override
