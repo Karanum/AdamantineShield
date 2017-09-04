@@ -44,19 +44,16 @@ public class BlockQueueEntry extends QueueEntry {
 		ps.setInt(6, Database.causeCache.getDataId(c, cause));
 		ps.setInt(7, Database.idCache.getDataId(c, block.getState().getType().getId()));
 		
-		if ((type == ActionType.DESTROY || type == ActionType.MOB_DESTROY)) {
-			try {
-				System.out.println(DataUtils.dataToString(block.toContainer()));
-				//ps.setString(8, DataUtils.dataToString(block.toContainer()));
-			} catch (IOException e) {
-				e.printStackTrace();
-				//ps.setNull(8, Types.VARCHAR);
-			}
-		} else {
-			//ps.setNull(8, Types.VARCHAR);
-		}
-		
 		ps.setNull(8, Types.VARCHAR);
+		try {
+			String data = DataUtils.dataToString(block.toContainer());
+			if (data != null)
+				ps.setString(8, data);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+			
 		ps.setLong(9, timestamp);
 		ps.executeUpdate();
 	}

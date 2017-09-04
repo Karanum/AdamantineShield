@@ -24,7 +24,7 @@ public class Database {
 	private ConcurrentLinkedQueue<QueueEntry> queue;
 	private Task task;
 	
-	private static final int DB_VERSION = 2;
+	public static final int DB_VERSION = 3;
 	
 	public static final DataCache worldCache = new DataCache("AS_World", "world");
 	public static final DataCache causeCache = new DataCache("AS_Cause", "cause");
@@ -99,6 +99,7 @@ public class Database {
 		c.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS AS_Container ("
 				+ "x INT, y INT, z INT, world INT, type TINYINT, slot INT, "
 				+ "cause INT, id INT, count TINYINT, data TEXT, time BIGINT, "
+				+ "rolled_back TINYINT(1) DEFAULT 0, "
 				+ "FOREIGN KEY (world) REFERENCES AS_World(id), "
 				+ "FOREIGN KEY (cause) REFERENCES AS_Cause(id), "
 				+ "FOREIGN KEY (id) REFERENCES AS_Id(id));");
@@ -106,6 +107,7 @@ public class Database {
 		c.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS AS_Block ("
 				+ "x INT, y INT, z INT, world INT, type TINYINT, "
 				+ "cause INT, id INT, data TEXT, time BIGINT, "
+				+ "rolled_back TINYINT(1) DEFAULT 0, "
 				+ "FOREIGN KEY (world) REFERENCES AS_World(id), "
 				+ "FOREIGN KEY (cause) REFERENCES AS_Cause(id), "
 				+ "FOREIGN KEY (id) REFERENCES AS_Id(id));");

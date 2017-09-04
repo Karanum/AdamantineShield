@@ -9,8 +9,6 @@ import com.karanumcoding.adamantineshield.db.DataCache;
 import com.karanumcoding.adamantineshield.db.Database;
 
 public final class DatabaseUpdater {
-
-	private static final int LATEST_VERSION = 2;
 	
 	private DatabaseUpdater() {}
 	
@@ -24,10 +22,12 @@ public final class DatabaseUpdater {
 	}
 	
 	public static void updateDatabase(Connection c, int fromVersion) throws SQLException {
-		if (fromVersion >= LATEST_VERSION || fromVersion < 1) return;
+		if (fromVersion >= Database.DB_VERSION || fromVersion < 1) return;
 		
-		if (fromVersion == 1)
+		if (fromVersion < 2)
 			migrateIds(c);
+		if (fromVersion < 3)
+			addRollbackField(c);
 	}
 	
 	private static void migrateIds(Connection c) throws SQLException {
@@ -66,6 +66,14 @@ public final class DatabaseUpdater {
 		
 		c.createStatement().executeUpdate("ALTER TABLE AS_Block DROP COLUMN block;");
 		c.createStatement().executeUpdate("ALTER TABLE AS_Container DROP COLUMN item;");
+	}
+	
+	private static void addRollbackField(Connection c) throws SQLException {
+		c.createStatement().executeUpdate("ALTER TABLE AS_Block ADD rolled_back TINYINT(1) DEFAULT 0;");
+		c.createStatement().executeUpdate("ALTER TABLE AS_Container ADD rolled_back TINYINT(1) DEFAULT 0;");
+		
+		c.createStatement().executeUpdate("UPDATE AS_Block SET rolled_back = 0;");
+		c.createStatement().executeUpdate("UPDATE AS_Container SET rolled_back = 0;");
 	}
 	
 }

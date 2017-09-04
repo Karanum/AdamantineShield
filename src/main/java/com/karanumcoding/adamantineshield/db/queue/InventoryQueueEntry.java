@@ -52,13 +52,15 @@ public class InventoryQueueEntry extends QueueEntry {
 		ps.setInt(8, Database.idCache.getDataId(c, item.getType().getId()));
 		ps.setByte(9, (byte) item.getCount());
 		
+		ps.setNull(10, Types.VARCHAR);
 		try {
-			System.out.println(DataUtils.dataToString(item.toContainer()));
+			String data = DataUtils.dataToString(item.toContainer());
+			if (data != null)
+				ps.setString(10, data);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		ps.setNull(10, Types.VARCHAR);
 		ps.setLong(11, timestamp);
 		ps.executeUpdate();
 	}

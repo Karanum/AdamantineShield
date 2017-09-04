@@ -41,7 +41,7 @@ public final class DataUtils {
 		compressionMap.put("Damage", "d");
 		compressionMap.put("Slot", "s");
 		compressionMap.put("ForgeData", "fd");
-		compressionMap.put("Lock", "l");
+		compressionMap.put("Lock", "lo");
 		
 		ignoredKeys.add("Data");
 		ignoredKeys.add("WorldUuid");
@@ -109,8 +109,12 @@ public final class DataUtils {
 				}
 			}
 			
+			if (key.equals("Lock") && data.getString().isEmpty()) {
+				parent.removeChild(key);
+				return data;
+			}
+			
 			if (ignoredKeys.contains(key) || (parent.getParent() == null && ignoredTopLevelKeys.contains(key))) {
-				System.out.println("Ignoring key: " + key);
 				parent.removeChild(key);
 			} else if (key.equals("UnsafeDamage") && data.getInt() == 0) {
 				parent.removeChild(key);
