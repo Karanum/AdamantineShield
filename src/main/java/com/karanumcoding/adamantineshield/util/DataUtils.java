@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.spongepowered.api.data.DataView;
 import org.spongepowered.api.data.persistence.DataTranslators;
@@ -18,7 +19,9 @@ import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.gson.GsonConfigurationLoader;
 
 public final class DataUtils {
-
+	
+	public static final Pattern SIGN_TEXT_REGEX = Pattern.compile("\\{\"text\"\\:\"(.*)\"\\}");
+	
 	private static BiMap<String, String> compressionMap = HashBiMap.create();
 	private static Set<String> ignoredKeys = Sets.newHashSet();
 	private static Set<String> ignoredTopLevelKeys = Sets.newHashSet();

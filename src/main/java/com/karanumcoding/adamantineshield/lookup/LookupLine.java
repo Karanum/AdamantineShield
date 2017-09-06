@@ -2,6 +2,8 @@ package com.karanumcoding.adamantineshield.lookup;
 
 import java.io.IOException;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.spongepowered.api.CatalogType;
 import org.spongepowered.api.block.BlockType;
@@ -103,18 +105,18 @@ public class LookupLine {
 		}
 		
 		//Common tags
-		workingNode = node.getNode("UnsafeData", "Damage");
+		workingNode = node.getNode("UnsafeDamage");
 		if (!workingNode.isVirtual()) {
 			result = Text.of(result, Text.NEW_LINE, TextColors.DARK_AQUA, "Damage: ", TextColors.AQUA, workingNode.getInt());
 		}
 		
-		workingNode = node.getNode("UnsafeData", "SkullOwner", "Name");
-		if (!workingNode.isVirtual() && !workingNode.getString().isEmpty()) {
-			result = Text.of(result, Text.NEW_LINE, TextColors.DARK_AQUA, "Player: ", TextColors.AQUA, workingNode.getString());
-		}
-		
 		//Item exclusive tags
 		if (target instanceof ItemType) {
+			workingNode = node.getNode("UnsafeData", "SkullOwner");
+			if (!workingNode.isVirtual() && !workingNode.getString().isEmpty()) {
+				result = Text.of(result, Text.NEW_LINE, TextColors.DARK_AQUA, "Player: ", TextColors.AQUA, workingNode.getString());
+			}
+			
 			workingNode = node.getNode("UnsafeData", "display");
 			if (!workingNode.isVirtual()) {
 				ConfigurationNode innerNode = workingNode.getNode("Name");
@@ -127,7 +129,7 @@ public class LookupLine {
 					int color = innerNode.getInt();
 					result = Text.of(result, Text.NEW_LINE, TextColors.DARK_AQUA, "Color: ", TextColors.AQUA, "(",
 							TextColors.RED, color >> 16, TextColors.AQUA, ", ",
-							TextColors.GREEN, color >> 8 % 256, TextColors.AQUA, ", ",
+							TextColors.GREEN, (color >> 8) % 256, TextColors.AQUA, ", ",
 							TextColors.BLUE, color % 256, TextColors.AQUA, ")");
 				}
 				
@@ -145,6 +147,11 @@ public class LookupLine {
 				}
 			}
 			
+			workingNode = node.getNode("UnsafeData", "title");
+			if (!workingNode.isVirtual()) {
+				result = Text.of(result, Text.NEW_LINE, TextColors.DARK_AQUA, "Title: ", TextColors.AQUA, workingNode.getString());
+			}
+			
 			workingNode = node.getNode("UnsafeData", "author");
 			if (!workingNode.isVirtual()) {
 				result = Text.of(result, Text.NEW_LINE, TextColors.DARK_AQUA, "Author: ", TextColors.AQUA, workingNode.getString());
@@ -152,12 +159,17 @@ public class LookupLine {
 			
 			workingNode = node.getNode("UnsafeData", "Unbreakable");
 			if (!workingNode.isVirtual()) {
-				result = Text.of(result, Text.NEW_LINE, TextColors.DARK_AQUA, "Is unbreakable");
+				result = Text.of(result, Text.NEW_LINE, TextColors.AQUA, "Is unbreakable");
 			}
 		}
 		
 		//Block exclusive tags
 		if (target instanceof BlockType) {
+			workingNode = node.getNode("UnsafeData", "Owner", "Name");
+			if (!workingNode.isVirtual() && !workingNode.getString().isEmpty()) {
+				result = Text.of(result, Text.NEW_LINE, TextColors.DARK_AQUA, "Player: ", TextColors.AQUA, workingNode.getString());
+			}
+			
 			workingNode = node.getNode("UnsafeData", "CustomName");
 			if (!workingNode.isVirtual()) {
 				result = Text.of(result, Text.NEW_LINE, TextColors.DARK_AQUA, "Name: ", TextColors.AQUA, workingNode.getString());
@@ -167,11 +179,14 @@ public class LookupLine {
 			if (!workingNode.isVirtual()) {
 				ConfigurationNode dataNode = node.getNode("UnsafeData");
 				if (!(dataNode.getNode("Text2").isVirtual() || dataNode.getNode("Text3").isVirtual() || dataNode.getNode("Text4").isVirtual())) {
-					result = Text.of(result, Text.NEW_LINE, TextColors.DARK_AQUA, "Text: ", 
-							Text.NEW_LINE, TextColors.DARK_AQUA, " - ", TextColors.AQUA, workingNode.getString(),
-							Text.NEW_LINE, TextColors.DARK_AQUA, " - ", TextColors.AQUA, dataNode.getNode("Text2").getString(),
-							Text.NEW_LINE, TextColors.DARK_AQUA, " - ", TextColors.AQUA, dataNode.getNode("Text3").getString(),
-							Text.NEW_LINE, TextColors.DARK_AQUA, " - ", TextColors.AQUA, dataNode.getNode("Text4").getString());
+					result = Text.of(result, Text.NEW_LINE, TextColors.DARK_AQUA, "Text:");
+					Pattern p = DataUtils.SIGN_TEXT_REGEX;
+					for (int i = 1; i <= 4; ++i) {
+						Matcher m = p.matcher(dataNode.getNode("Text" + i).getString());
+						if (m.matches()) {
+							result = Text.of(result, Text.NEW_LINE, TextColors.DARK_AQUA, " - ", TextColors.AQUA, m.group(1));
+						}
+					}
 				} else {
 					result = Text.of(result, Text.NEW_LINE, TextColors.RED, "Contains incomplete sign data");
 				}
@@ -179,7 +194,7 @@ public class LookupLine {
 			
 			workingNode = node.getNode("UnsafeData", "Lock");
 			if (!workingNode.isVirtual()) {
-				result = Text.of(result, Text.NEW_LINE, TextColors.DARK_AQUA, "Is locked");
+				result = Text.of(result, Text.NEW_LINE, TextColors.AQUA, "Is locked");
 			}
 		}
 		
