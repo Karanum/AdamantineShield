@@ -126,9 +126,9 @@ public class LookupLine {
 				if (!innerNode.isVirtual()) {
 					int color = innerNode.getInt();
 					result = Text.of(result, Text.NEW_LINE, TextColors.DARK_AQUA, "Color: ", TextColors.AQUA, "(",
-							TextColors.RED, color << 16, TextColors.AQUA, ", ",
-							TextColors.GREEN, color << 8 % 255, TextColors.AQUA, ", ",
-							TextColors.BLUE, color % 255, TextColors.AQUA, ")");
+							TextColors.RED, color >> 16, TextColors.AQUA, ", ",
+							TextColors.GREEN, color >> 8 % 256, TextColors.AQUA, ", ",
+							TextColors.BLUE, color % 256, TextColors.AQUA, ")");
 				}
 				
 				innerNode = workingNode.getNode("Lore");
