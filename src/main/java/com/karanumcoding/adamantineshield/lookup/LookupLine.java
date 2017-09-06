@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 import org.spongepowered.api.CatalogType;
+import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
@@ -101,6 +102,18 @@ public class LookupLine {
 			return result;
 		}
 		
+		//Common tags
+		workingNode = node.getNode("UnsafeData", "Damage");
+		if (!workingNode.isVirtual()) {
+			result = Text.of(result, Text.NEW_LINE, TextColors.DARK_AQUA, "Damage: ", TextColors.AQUA, workingNode.getInt());
+		}
+		
+		workingNode = node.getNode("UnsafeData", "SkullOwner", "Name");
+		if (!workingNode.isVirtual() && !workingNode.getString().isEmpty()) {
+			result = Text.of(result, Text.NEW_LINE, TextColors.DARK_AQUA, "Player: ", TextColors.AQUA, workingNode.getString());
+		}
+		
+		//Item exclusive tags
 		if (target instanceof ItemType) {
 			workingNode = node.getNode("UnsafeData", "display");
 			if (!workingNode.isVirtual()) {
@@ -108,6 +121,16 @@ public class LookupLine {
 				if (!innerNode.isVirtual()) {
 					result = Text.of(result, Text.NEW_LINE, TextColors.DARK_AQUA, "Name: ", TextColors.AQUA, innerNode.getString());
 				}
+				
+				innerNode = workingNode.getNode("color");
+				if (!innerNode.isVirtual()) {
+					int color = innerNode.getInt();
+					result = Text.of(result, Text.NEW_LINE, TextColors.DARK_AQUA, "Color: ", TextColors.AQUA, "(",
+							TextColors.RED, color << 16, TextColors.AQUA, ", ",
+							TextColors.GREEN, color << 8 % 255, TextColors.AQUA, ", ",
+							TextColors.BLUE, color % 255, TextColors.AQUA, ")");
+				}
+				
 				innerNode = workingNode.getNode("Lore");
 				if (!innerNode.isVirtual()) {
 					try {
@@ -121,11 +144,44 @@ public class LookupLine {
 					}
 				}
 			}
+			
+			workingNode = node.getNode("UnsafeData", "author");
+			if (!workingNode.isVirtual()) {
+				result = Text.of(result, Text.NEW_LINE, TextColors.DARK_AQUA, "Author: ", TextColors.AQUA, workingNode.getString());
+			}
+			
+			workingNode = node.getNode("UnsafeData", "Unbreakable");
+			if (!workingNode.isVirtual()) {
+				result = Text.of(result, Text.NEW_LINE, TextColors.DARK_AQUA, "Is unbreakable");
+			}
 		}
 		
-//		if (target instanceof BlockType) {
-//			
-//		}
+		//Block exclusive tags
+		if (target instanceof BlockType) {
+			workingNode = node.getNode("UnsafeData", "CustomName");
+			if (!workingNode.isVirtual()) {
+				result = Text.of(result, Text.NEW_LINE, TextColors.DARK_AQUA, "Name: ", TextColors.AQUA, workingNode.getString());
+			}
+			
+			workingNode = node.getNode("UnsafeData", "Text1");
+			if (!workingNode.isVirtual()) {
+				ConfigurationNode dataNode = node.getNode("UnsafeData");
+				if (!(dataNode.getNode("Text2").isVirtual() || dataNode.getNode("Text3").isVirtual() || dataNode.getNode("Text4").isVirtual())) {
+					result = Text.of(result, Text.NEW_LINE, TextColors.DARK_AQUA, "Text: ", 
+							Text.NEW_LINE, TextColors.DARK_AQUA, " - ", TextColors.AQUA, workingNode.getString(),
+							Text.NEW_LINE, TextColors.DARK_AQUA, " - ", TextColors.AQUA, dataNode.getNode("Text2").getString(),
+							Text.NEW_LINE, TextColors.DARK_AQUA, " - ", TextColors.AQUA, dataNode.getNode("Text3").getString(),
+							Text.NEW_LINE, TextColors.DARK_AQUA, " - ", TextColors.AQUA, dataNode.getNode("Text4").getString());
+				} else {
+					result = Text.of(result, Text.NEW_LINE, TextColors.RED, "Contains incomplete sign data");
+				}
+			}
+			
+			workingNode = node.getNode("UnsafeData", "Lock");
+			if (!workingNode.isVirtual()) {
+				result = Text.of(result, Text.NEW_LINE, TextColors.DARK_AQUA, "Is locked");
+			}
+		}
 		
 		return result;
 	}
