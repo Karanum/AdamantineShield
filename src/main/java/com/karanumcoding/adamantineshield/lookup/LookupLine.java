@@ -113,8 +113,11 @@ public class LookupLine {
 		//Item exclusive tags
 		if (target instanceof ItemType) {
 			workingNode = node.getNode("UnsafeData", "SkullOwner");
-			if (!workingNode.isVirtual() && !workingNode.getString().isEmpty()) {
-				result = Text.of(result, Text.NEW_LINE, TextColors.DARK_AQUA, "Player: ", TextColors.AQUA, workingNode.getString());
+			if (!workingNode.isVirtual()) {
+				String name = workingNode.getString();
+				if (!workingNode.getNode("Name").isVirtual()) 
+					name = workingNode.getNode("Name").getString();
+				result = Text.of(result, Text.NEW_LINE, TextColors.DARK_AQUA, "Player: ", TextColors.AQUA, name);
 			}
 			
 			workingNode = node.getNode("UnsafeData", "display");
