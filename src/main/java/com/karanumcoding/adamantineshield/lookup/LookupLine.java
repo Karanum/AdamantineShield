@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import org.spongepowered.api.CatalogType;
 import org.spongepowered.api.block.BlockType;
+import org.spongepowered.api.data.DataView;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
@@ -28,17 +29,22 @@ public class LookupLine {
 	private String cause;
 	private CatalogType target;
 	private int count;
+	private int slot;
 	private String data;
+	private boolean rolledBack;
 	private long timestamp;
 	
-	public LookupLine(Vector3i pos, UUID world, ActionType type, String cause, String data, CatalogType target, int count, long timestamp) {
+	public LookupLine(Vector3i pos, UUID world, ActionType type, String cause, String data, CatalogType target, 
+			int count, int slot, boolean rolledBack, long timestamp) {
 		this.pos = pos;
 		this.world = world;
 		this.type = type;
 		this.cause = cause;
 		this.target = target;
 		this.count = count;
+		this.slot = slot;
 		this.data = data;
+		this.rolledBack = rolledBack;
 		this.timestamp = timestamp;
 	}
 	
@@ -86,8 +92,28 @@ public class LookupLine {
 		return count;
 	}
 	
+	public int getSlot() {
+		return slot;
+	}
+	
 	public long getTime() {
 		return timestamp;
+	}
+	
+	public boolean getRolledBack() {
+		return rolledBack;
+	}
+	
+	public DataView getDataAsView() {
+		DataView result = null;
+		if (data == null)
+			return result;
+		try {
+			result = DataUtils.dataFromString(data);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
 	public Text getHoverText() {

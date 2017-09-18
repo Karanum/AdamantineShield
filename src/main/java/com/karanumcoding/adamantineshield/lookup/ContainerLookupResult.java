@@ -26,8 +26,10 @@ public class ContainerLookupResult extends LookupResult {
 			String data = results.getString("data");
 			ItemType item = Sponge.getRegistry().getType(ItemType.class, results.getString("AS_Id.value")).get();
 			int count = results.getByte("count");
+			int slot = results.getInt("slot");
+			boolean rolledBack = results.getBoolean("rolled_back");
 			long timestamp = results.getLong("time");
-			lines.add(new LookupLine(pos, world, type, cause, data, item, count, timestamp));
+			lines.add(new LookupLine(pos, world, type, cause, data, item, count, slot, rolledBack, timestamp));
 		}
 	}
 	

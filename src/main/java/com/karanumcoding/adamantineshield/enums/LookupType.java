@@ -16,6 +16,7 @@ public enum LookupType {
 		return table;
 	}
 	
+	@Deprecated
 	public String getRelevantColumn() {
 		return column;
 	}

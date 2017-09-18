@@ -28,6 +28,10 @@ public abstract class LookupResult {
 	public abstract void filterResult(FilterSet filter);
 	public abstract LookupType getLookupType();
 	
+	public List<LookupLine> getLines() {
+		return lines;
+	}
+	
 	public int getPages(int linesPerPage) {
 		if (lines.isEmpty()) return 0;
 		return ((lines.size() - 1) / linesPerPage) + 1;

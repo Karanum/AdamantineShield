@@ -25,8 +25,9 @@ public class BlockLookupResult extends LookupResult {
 			String cause = results.getString("cause");
 			String data = results.getString("data");
 			BlockType block = Sponge.getRegistry().getType(BlockType.class, results.getString("AS_Id.value")).get();
+			boolean rolledBack = results.getBoolean("rolled_back");
 			long timestamp = results.getLong("time");
-			lines.add(new LookupLine(pos, world, type, cause, data, block, 1, timestamp));
+			lines.add(new LookupLine(pos, world, type, cause, data, block, 1, 0, rolledBack, timestamp));
 		}
 	}
 	
