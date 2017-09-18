@@ -114,7 +114,7 @@ public class Database {
 		
 		if (version > 0 && version < DB_VERSION) {
 			plugin.getLogger().info("Updating database from version " + version + " to version " + DB_VERSION);
-			DatabaseUpdater.updateDatabase(c, version);
+			DatabaseUpdater.updateDatabase(plugin, c, version);
 			plugin.getLogger().info("Database has been updated successfully!");
 		}
 		
