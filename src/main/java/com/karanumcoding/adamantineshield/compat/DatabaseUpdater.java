@@ -56,7 +56,7 @@ public final class DatabaseUpdater {
 	private static void migrateIds(Logger logger, Connection c) throws SQLException {
 		DataCache cache = Database.idCache;
 		
-		logger.info("(1 -> 2) Collecting all block and item IDs");
+		logger.info("(v1 -> v2) Collecting all block and item IDs");
 		
 		ResultSet r = c.createStatement().executeQuery("SELECT DISTINCT item FROM AS_Container;");
 		if (r.isBeforeFirst()) {
@@ -89,23 +89,23 @@ public final class DatabaseUpdater {
 			itemQuery.setInt(1, id);
 			itemQuery.setString(2, value);
 			itemQuery.executeUpdate();
-			logger.info("(1 -> 2) Converting IDs - " + (++curr) + "/" + size );
+			logger.info("(v1 -> v2) Converting IDs - " + (++curr) + "/" + size );
 		}
 		blockQuery.close();
 		itemQuery.close();
 		
-		logger.info("(1 -> 2) Cleaning up old IDs");
+		logger.info("(v1 -> v2) Cleaning up old IDs");
 		
 		c.createStatement().executeUpdate("ALTER TABLE AS_Block DROP COLUMN block;");
 		c.createStatement().executeUpdate("ALTER TABLE AS_Container DROP COLUMN item;");
 	}
 	
 	private static void addRollbackField(Logger logger, Connection c) throws SQLException {
-		logger.info("(2 -> 3) Adding rollback field to block table");
+		logger.info("(v2 -> v3) Adding rollback field to block table");
 		c.createStatement().executeUpdate("ALTER TABLE AS_Block ADD rolled_back TINYINT(1) DEFAULT 0;");
 		c.createStatement().executeUpdate("UPDATE AS_Block SET rolled_back = 0;");
 		
-		logger.info("(2 -> 3) Adding rollback field to container table");
+		logger.info("(v2 -> v3) Adding rollback field to container table");
 		c.createStatement().executeUpdate("ALTER TABLE AS_Container ADD rolled_back TINYINT(1) DEFAULT 0;");
 		c.createStatement().executeUpdate("UPDATE AS_Container SET rolled_back = 0;");
 	}
