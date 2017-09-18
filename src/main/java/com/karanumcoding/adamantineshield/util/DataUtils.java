@@ -40,6 +40,7 @@ public final class DataUtils {
 		compressionMap.put("UnsafeData", "u");
 		
 		//Unsafe data keys
+		compressionMap.put("Activated", "ac");
 		compressionMap.put("BannerBaseColor", "bbc");
 		compressionMap.put("Base", "bb");
 		compressionMap.put("BurnTime", "bt");
@@ -60,6 +61,7 @@ public final class DataUtils {
 		compressionMap.put("RepairCost", "rc");
 		compressionMap.put("Secondary", "bcs");
 		compressionMap.put("Slot", "s");
+		compressionMap.put("StoredEnchantments", "se");
 		
 		//Block data keys
 		compressionMap.put("ConnectedDirections", "cd");
@@ -67,9 +69,12 @@ public final class DataUtils {
 		compressionMap.put("ConnectedNorth", "cn");
 		compressionMap.put("ConnectedSouth", "cs");
 		compressionMap.put("ConnectedWest", "cw");
+		compressionMap.put("Cooldown", "tc2");
+		compressionMap.put("TransferCooldown", "tc");
 		
 		//Ignored keys
 		ignoredKeys.add("Data");
+		ignoredKeys.add("Signature");
 		ignoredKeys.add("WorldUuid");
 		ignoredKeys.add("Position");
 		ignoredKeys.add("x");
