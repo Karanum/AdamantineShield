@@ -5,10 +5,8 @@ import java.util.Optional;
 
 import org.spongepowered.api.block.tileentity.carrier.Chest;
 import org.spongepowered.api.block.tileentity.carrier.TileEntityCarrier;
-import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.cause.entity.spawn.EntitySpawnCause;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.event.item.inventory.AffectSlotEvent;
 import org.spongepowered.api.item.ItemTypes;
@@ -34,13 +32,6 @@ public class InventoryChangeListener {
 		this.db = db;
 		this.accessMan = accessMan;
 		this.logContainers = logContainers;
-	}
-	
-	@Listener
-	public void onInventoryTransfer(AffectSlotEvent e, @First EntitySpawnCause c) {
-		Entity entity = c.getEntity();
-		if (!(entity instanceof Player)) return;
-		onInventoryTransfer(e, (Player) entity);
 	}
 	
 	@Listener
