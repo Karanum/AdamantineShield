@@ -74,8 +74,8 @@ public class RollbackManager {
 			
 			BlockType type = (BlockType) line.getTarget();
 			BlockState block = BlockState.builder().build(line.getDataAsView()).orElse(null);
-			if (block != null)
-				w.setBlock(line.getPos(), block, Cause.of(NamedCause.source("AdamantineShieldRollback")));
+			//if (block != null)
+				//w.setBlock(line.getPos(), block, Cause.of(NamedCause.source("AdamantineShieldRollback")));
 			
 		}
 	}

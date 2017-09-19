@@ -79,14 +79,14 @@ public class InventoryChangeListener {
 			
 			if (origItem.createGameDictionaryEntry().matches(finalItem.createStack()) &&
 					ItemStackComparators.ITEM_DATA.compare(origItem.createStack(), finalItem.createStack()) == 0) {
-				if (origItem.getCount() > finalItem.getCount()) {
+				if (origItem.getQuantity() > finalItem.getQuantity()) {
 					ItemStackSnapshot stack = ItemStack.builder().itemType(origItem.getType())
-							.quantity(origItem.getCount() - finalItem.getCount())
+							.quantity(origItem.getQuantity() - finalItem.getQuantity())
 							.build().createSnapshot();
 					db.addToQueue(new InventoryQueueEntry(carrier, slotId, stack, ActionType.CONTAINER_REMOVE, p, timestamp));
-				} else if (origItem.getCount() < finalItem.getCount()) {
+				} else if (origItem.getQuantity() < finalItem.getQuantity()) {
 					ItemStackSnapshot stack = ItemStack.builder().itemType(origItem.getType())
-							.quantity(finalItem.getCount() - origItem.getCount())
+							.quantity(finalItem.getQuantity() - origItem.getQuantity())
 							.build().createSnapshot();
 					db.addToQueue(new InventoryQueueEntry(carrier, slotId, stack, ActionType.CONTAINER_ADD, p, timestamp));
 				}

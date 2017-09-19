@@ -50,7 +50,7 @@ public class InventoryQueueEntry extends QueueEntry {
 		ps.setInt(6, slot);
 		ps.setInt(7, Database.causeCache.getDataId(c, cause.getUniqueId().toString()));
 		ps.setInt(8, Database.idCache.getDataId(c, item.getType().getId()));
-		ps.setByte(9, (byte) item.getCount());
+		ps.setByte(9, (byte) item.getQuantity());
 		
 		ps.setNull(10, Types.VARCHAR);
 		try {
