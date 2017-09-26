@@ -11,12 +11,12 @@ import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.block.tileentity.TileEntity;
 import org.spongepowered.api.block.tileentity.carrier.TileEntityCarrier;
 import org.spongepowered.api.event.cause.Cause;
-import org.spongepowered.api.event.cause.NamedCause;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.property.SlotIndex;
+import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.world.World;
 
@@ -27,11 +27,13 @@ import com.karanumcoding.adamantineshield.lookup.LookupLine;
 public class RollbackManager {
 	
 	private AdamantineShield plugin;
+	private PluginContainer container;
 	private List<RollbackJob> queue;
 	private Task task;
 	
 	public RollbackManager(AdamantineShield plugin) {
 		this.plugin = plugin;
+		container = Sponge.getPluginManager().fromInstance(plugin).get();
 		
 		queue = Lists.newArrayList();
 		task = null;
@@ -73,6 +75,8 @@ public class RollbackManager {
 	}
 	
 	private void performAddition(LookupLine line) {
+		//TODO: Debug this function, blocks are not being added
+		
 		World w = Sponge.getServer().getWorld(line.getWorld()).orElse(null);
 		if (w == null) return;
 		
@@ -97,7 +101,7 @@ public class RollbackManager {
 			
 			BlockState block = BlockState.builder().build(line.getDataAsView()).orElse(null);
 			if (block != null)
-				w.setBlock(line.getPos(), block, Cause.of(NamedCause.source("AdamantineShieldRollback")));
+				w.setBlock(line.getPos(), block, Cause.source(container).build());
 			
 		}
 	}
@@ -120,7 +124,7 @@ public class RollbackManager {
 		} else if (line.getTarget() instanceof BlockType) {
 			
 			BlockState block = BlockState.builder().blockType(BlockTypes.AIR).build();
-			w.setBlock(line.getPos(), block, Cause.of(NamedCause.source("AdamantineShieldRollback")));
+			w.setBlock(line.getPos(), block, Cause.source(container).build());
 			
 		}
 	}

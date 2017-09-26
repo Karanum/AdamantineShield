@@ -18,7 +18,7 @@ import com.karanumcoding.adamantineshield.util.FilterParser;
 
 public class CommandUndo implements CommandExecutor {
 
-private AdamantineShield plugin;
+	private AdamantineShield plugin;
 	
 	public CommandUndo(AdamantineShield plugin) {
 		this.plugin = plugin;

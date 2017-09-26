@@ -34,6 +34,8 @@ public class QueryHelper {
 	}
 	
 	public static String getRollbackUpdateQuery(FilterSet filters, Player p, int worldId, boolean rolledBack) {
+		//TODO: Fix syntax error in this query
+		
 		String table = filters.getLookupType().getTable();
 		
 		String query = "UPDATE AS_Cause, AS_Id, " + table + " "
