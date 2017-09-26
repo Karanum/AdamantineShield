@@ -1,8 +1,8 @@
 package com.karanumcoding.adamantineshield.enums;
 
 public enum LookupType {
-	BLOCK_LOOKUP("AS_Block", "AS_Id.value"),
-	ITEM_LOOKUP("AS_Container", "AS_Id.value");
+	BLOCK_LOOKUP("AS_Block", null),
+	ITEM_LOOKUP("AS_Container", "count, slot");
 	
 	private String table;
 	private String column;
@@ -16,8 +16,7 @@ public enum LookupType {
 		return table;
 	}
 	
-	@Deprecated
-	public String getRelevantColumn() {
+	public String getRelevantColumns() {
 		return column;
 	}
 	

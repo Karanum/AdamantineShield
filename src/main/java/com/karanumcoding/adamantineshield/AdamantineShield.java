@@ -29,6 +29,7 @@ import com.karanumcoding.adamantineshield.enums.Permissions;
 import com.karanumcoding.adamantineshield.listeners.*;
 import com.karanumcoding.adamantineshield.lookup.InspectManager;
 import com.karanumcoding.adamantineshield.lookup.LookupResultManager;
+import com.karanumcoding.adamantineshield.rollback.RollbackManager;
 import com.karanumcoding.adamantineshield.util.ContainerAccessManager;
 import com.karanumcoding.adamantineshield.util.DataUtils;
 import com.karanumcoding.adamantineshield.util.FilterParser;
@@ -48,6 +49,7 @@ public class AdamantineShield {
 	private Database db;
 	
 	private InspectManager inspectManager;
+	private RollbackManager rollbackManager;
 	private ContainerAccessManager containerAccessManager;
 	
 	@Listener
@@ -81,6 +83,7 @@ public class AdamantineShield {
 		}
 		
 		inspectManager = new InspectManager(db);
+		rollbackManager = new RollbackManager(this);
 		containerAccessManager = new ContainerAccessManager();
 		
 		logger.info("Registering event listeners");
@@ -115,6 +118,10 @@ public class AdamantineShield {
 	
 	public InspectManager getInspectManager() {
 		return inspectManager;
+	}
+	
+	public RollbackManager getRollbackManager() {
+		return rollbackManager;
 	}
 	
 	private void registerListeners(EventManager man) {

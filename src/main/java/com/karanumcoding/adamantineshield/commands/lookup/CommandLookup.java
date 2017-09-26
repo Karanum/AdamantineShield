@@ -17,6 +17,7 @@ import org.spongepowered.api.text.format.TextColors;
 
 import com.karanumcoding.adamantineshield.AdamantineShield;
 import com.karanumcoding.adamantineshield.db.Database;
+import com.karanumcoding.adamantineshield.db.QueryHelper;
 import com.karanumcoding.adamantineshield.enums.LookupType;
 import com.karanumcoding.adamantineshield.lookup.BlockLookupResult;
 import com.karanumcoding.adamantineshield.lookup.ContainerLookupResult;
@@ -45,24 +46,14 @@ public class CommandLookup implements CommandExecutor {
 		
 		FilterSet filterSet = new FilterSet(plugin, p, true);
 		FilterParser.parse(filters, filterSet, p);
-		String targetTable = filterSet.getLookupType().getTable();
 		
 		p.sendMessage(Text.of(TextColors.BLUE, "Querying database, please wait..."));
-		Sponge.getScheduler().createAsyncExecutor(plugin).execute(() -> {
-			String relevantColumns = "AS_Id.value";
-			if (filterSet.getLookupType() == LookupType.ITEM_LOOKUP) {
-				relevantColumns += ", count, slot";
-			}
-			
+		Sponge.getScheduler().createAsyncExecutor(plugin).execute(() -> {			
 			LookupResult lookup;
 			Connection c = plugin.getDatabase().getConnection();
 			try {
 				int worldId = Database.worldCache.getDataId(c, p.getWorld().getUniqueId().toString());
-				ResultSet r = c.createStatement().executeQuery("SELECT x, y, z, type, time, data, rolled_back, " + relevantColumns + ", AS_Cause.cause, AS_World.world "
-						+ "FROM " + targetTable + ", AS_Cause, AS_World, AS_Id "
-						+ "WHERE AS_Cause.id = " + targetTable + ".cause AND " + targetTable + ".world = " + worldId + " "
-						+ "AND AS_Id.id = " + targetTable + ".id "
-						+ "AND " + filterSet.getQueryConditions(p) + " ORDER BY time DESC;");
+				ResultSet r = c.createStatement().executeQuery(QueryHelper.getLookupQuery(filterSet, p, worldId));
 				
 				if (filterSet.getLookupType() == LookupType.ITEM_LOOKUP)
 					lookup = new ContainerLookupResult(r);

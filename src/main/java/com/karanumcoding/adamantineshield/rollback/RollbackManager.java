@@ -2,56 +2,79 @@ package com.karanumcoding.adamantineshield.rollback;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockType;
+import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.block.tileentity.TileEntity;
 import org.spongepowered.api.block.tileentity.carrier.TileEntityCarrier;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.cause.NamedCause;
 import org.spongepowered.api.item.ItemType;
+import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
-import org.spongepowered.api.item.inventory.Slot;
 import org.spongepowered.api.item.inventory.property.SlotIndex;
-import org.spongepowered.api.item.inventory.property.SlotPos;
-import org.spongepowered.api.world.Location;
+import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.world.World;
 
 import com.google.common.collect.Lists;
+import com.karanumcoding.adamantineshield.AdamantineShield;
 import com.karanumcoding.adamantineshield.lookup.LookupLine;
-import com.karanumcoding.adamantineshield.lookup.LookupResult;
-import com.karanumcoding.adamantineshield.util.DataUtils;
 
 public class RollbackManager {
 	
-	private List<LookupLine> queue;
+	private AdamantineShield plugin;
+	private List<RollbackJob> queue;
+	private Task task;
 	
-	public RollbackManager() {
+	public RollbackManager(AdamantineShield plugin) {
+		this.plugin = plugin;
+		
 		queue = Lists.newArrayList();
+		task = null;
 	}
 	
-	public void rollbackResult(LookupResult r) {
-		queue(r, false);
+	public void queue(RollbackJob job) {
+		if (job == null) return;
+		queue.add(job);
+		
+		if (task == null) {
+			task = Task.builder().delay(1, TimeUnit.SECONDS).interval(500, TimeUnit.MILLISECONDS)
+					.execute(() -> doRollbackCycle())
+					.submit(plugin);
+		}
 	}
 	
-	public void undoResult(LookupResult r) {
-		queue(r, true);
-	}
-	
-	private void queue(LookupResult r, boolean rolledBack) {
-		if (r == null) return;
-		for (LookupLine line : r.getLines()) {
-			if (line.getRolledBack() == rolledBack)
-				queue.add(line);
+	private void doRollbackCycle() {
+		int i = 0;
+		while (i < 100 && !queue.isEmpty()) {
+			RollbackJob job = queue.get(0);
+			LookupLine line = job.getNext();
+			if (line == null) {
+				queue.remove(0);
+				job.commitToDatabase();
+				continue;
+			}
+			
+			if (line.getAction().isAddition() ^ job.isUndo())
+				performRemoval(line);
+			else
+				performAddition(line);
+			++i;
+		}
+		
+		if (queue.isEmpty()) {
+			task.cancel();
+			task = null;
 		}
 	}
 	
 	private void performAddition(LookupLine line) {
 		World w = Sponge.getServer().getWorld(line.getWorld()).orElse(null);
 		if (w == null) return;
-		Location<World> loc = new Location<World>(w, line.getPos());
 		
 		if (line.getTarget() instanceof ItemType) {
 			
@@ -72,7 +95,6 @@ public class RollbackManager {
 			
 		} else if (line.getTarget() instanceof BlockType) {
 			
-			BlockType type = (BlockType) line.getTarget();
 			BlockState block = BlockState.builder().build(line.getDataAsView()).orElse(null);
 			if (block != null)
 				w.setBlock(line.getPos(), block, Cause.of(NamedCause.source("AdamantineShieldRollback")));
@@ -83,15 +105,22 @@ public class RollbackManager {
 	private void performRemoval(LookupLine line) {
 		World w = Sponge.getServer().getWorld(line.getWorld()).orElse(null);
 		if (w == null) return;
-		Location<World> loc = new Location<World>(w, line.getPos());
 		
 		if (line.getTarget() instanceof ItemType) {
 			
-			//Item removal here
+			Optional<TileEntity> te = w.getTileEntity(line.getPos());
+			if (te.isPresent() && te.get() instanceof TileEntityCarrier) {
+				TileEntityCarrier c = (TileEntityCarrier) te.get();
+				Inventory i = c.getInventory();
+				
+				Inventory slot = i.query(new SlotIndex(line.getSlot()));
+				slot.set(ItemStack.of(ItemTypes.NONE, 0));
+			}
 			
 		} else if (line.getTarget() instanceof BlockType) {
 			
-			//Block removal here
+			BlockState block = BlockState.builder().blockType(BlockTypes.AIR).build();
+			w.setBlock(line.getPos(), block, Cause.of(NamedCause.source("AdamantineShieldRollback")));
 			
 		}
 	}
