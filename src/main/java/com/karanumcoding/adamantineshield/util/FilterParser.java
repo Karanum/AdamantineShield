@@ -131,7 +131,7 @@ public final class FilterParser {
 		if (name.startsWith("#")) {
 			return name.toLowerCase().substring(1);
 		}
-		Optional<GameProfile> player = Sponge.getServer().getGameProfileManager().getCache().getByName(name);
+		Optional<Player> player = PlayerUtils.getByName(name);
 		if (!player.isPresent()) {
 			throw new CommandException(Text.of(TextColors.RED, "No player found with name ", name));
 		}
