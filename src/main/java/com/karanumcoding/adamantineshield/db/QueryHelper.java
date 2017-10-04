@@ -27,7 +27,7 @@ public class QueryHelper {
 		}
 		query += " FROM " + table + ", AS_Cause, AS_World, AS_Id "
 				+ "WHERE AS_Cause.id = " + table + ".cause AND " + table + ".world = " + worldId + " "
-				+ "AND AS_Id.id = " + table + ".id AND " + filters.getQueryConditions(p) + ""
+				+ "AND AS_Id.id = " + table + ".id AND " + filters.getQueryConditions(p) + " "
 				+ "ORDER BY time DESC, type";
 		
 		return query;

@@ -3,6 +3,7 @@ package com.karanumcoding.adamantineshield.util;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.spongepowered.api.CatalogType;
 import org.spongepowered.api.Sponge;
@@ -131,11 +132,12 @@ public final class FilterParser {
 		if (name.startsWith("#")) {
 			return name.toLowerCase().substring(1);
 		}
-		Optional<Player> player = PlayerUtils.getByName(name);
-		if (!player.isPresent()) {
+		
+		UUID player = PlayerUtils.getUuidFromName(name);
+		if (player == null) {
 			throw new CommandException(Text.of(TextColors.RED, "No player found with name ", name));
 		}
-		return player.get().getUniqueId().toString();
+		return player.toString();
 	}
 	
 	private static void addIncluded(String include, FilterSet container) throws CommandException {

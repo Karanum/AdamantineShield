@@ -32,18 +32,18 @@ public final class PlayerUtils {
 		return null;
 	}
 	
-	public static Optional<Player> getByName(String name) {
+	public static UUID getUuidFromName(String name) {
 		Optional<Player> p = Sponge.getServer().getPlayer(name);
 		if (p.isPresent())
-			return p;
+			return p.get().getUniqueId();
 		
 		if (service == null)
 			service = Sponge.getServiceManager().provide(UserStorageService.class).get();
 		
 		Optional<User> u = service.get(name);
 		if (u.isPresent())
-			return u.get().getPlayer();
-		return Optional.empty();
+			return u.get().getUniqueId();
+		return null;
 	}
 	
 }
