@@ -5,10 +5,8 @@ import java.util.Optional;
 
 import org.spongepowered.api.block.tileentity.carrier.Chest;
 import org.spongepowered.api.block.tileentity.carrier.TileEntityCarrier;
-import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.cause.entity.spawn.EntitySpawnCause;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.event.item.inventory.AffectSlotEvent;
 import org.spongepowered.api.item.ItemTypes;
@@ -34,13 +32,6 @@ public class InventoryChangeListener {
 		this.db = db;
 		this.accessMan = accessMan;
 		this.logContainers = logContainers;
-	}
-	
-	@Listener
-	public void onInventoryTransfer(AffectSlotEvent e, @First EntitySpawnCause c) {
-		Entity entity = c.getEntity();
-		if (!(entity instanceof Player)) return;
-		onInventoryTransfer(e, (Player) entity);
 	}
 	
 	@Listener
@@ -79,14 +70,14 @@ public class InventoryChangeListener {
 			
 			if (origItem.createGameDictionaryEntry().matches(finalItem.createStack()) &&
 					ItemStackComparators.ITEM_DATA.compare(origItem.createStack(), finalItem.createStack()) == 0) {
-				if (origItem.getCount() > finalItem.getCount()) {
+				if (origItem.getQuantity() > finalItem.getQuantity()) {
 					ItemStackSnapshot stack = ItemStack.builder().itemType(origItem.getType())
-							.quantity(origItem.getCount() - finalItem.getCount())
+							.quantity(origItem.getQuantity() - finalItem.getQuantity())
 							.build().createSnapshot();
 					db.addToQueue(new InventoryQueueEntry(carrier, slotId, stack, ActionType.CONTAINER_REMOVE, p, timestamp));
-				} else if (origItem.getCount() < finalItem.getCount()) {
+				} else if (origItem.getQuantity() < finalItem.getQuantity()) {
 					ItemStackSnapshot stack = ItemStack.builder().itemType(origItem.getType())
-							.quantity(finalItem.getCount() - origItem.getCount())
+							.quantity(finalItem.getQuantity() - origItem.getQuantity())
 							.build().createSnapshot();
 					db.addToQueue(new InventoryQueueEntry(carrier, slotId, stack, ActionType.CONTAINER_ADD, p, timestamp));
 				}
