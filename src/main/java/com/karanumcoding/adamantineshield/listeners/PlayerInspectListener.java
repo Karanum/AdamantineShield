@@ -14,7 +14,6 @@ import org.spongepowered.api.world.World;
 
 import com.karanumcoding.adamantineshield.AdamantineShield;
 
-@SuppressWarnings("ConstantConditions")
 public class PlayerInspectListener {
 
 	private AdamantineShield plugin;
@@ -30,17 +29,15 @@ public class PlayerInspectListener {
 		
 		e.setCancelled(true);
 		BlockSnapshot block = e.getTargetBlock();
-		if (block == null || !block.getLocation().isPresent())
+		if (!block.getLocation().isPresent())
 			return;
 		
 		Location<World> loc = block.getLocation().get();
 		
 		p.sendMessage(Text.of(TextColors.BLUE, "Querying database, please wait..."));
-//		Sponge.getScheduler().createAsyncExecutor(plugin).execute(() -> {
-//			plugin.getInspectManager().inspect(p, block.getWorldUniqueId(), loc.getBlockPosition()); });
-		new Thread(() ->
-			plugin.getInspectManager().inspect(p, block.getWorldUniqueId(), loc.getBlockPosition())
-		).start();
+		plugin.getThreadPool().execute(() ->
+				plugin.getInspectManager().inspect(p, block.getWorldUniqueId(), loc.getBlockPosition())
+		);
 	}
 	
 	@Listener
@@ -52,7 +49,7 @@ public class PlayerInspectListener {
 		
 		e.setCancelled(true);
 		BlockSnapshot block = e.getTargetBlock();
-		if (block == null || !block.getLocation().isPresent())
+		if (!block.getLocation().isPresent())
 			return;
 		
 		Location<World> loc = block.getLocation().get();
@@ -60,17 +57,13 @@ public class PlayerInspectListener {
 		p.sendMessage(Text.of(TextColors.BLUE, "Querying database, please wait..."));
 		Runnable task;
 		if (loc.getTileEntity().isPresent() && loc.getTileEntity().get() instanceof TileEntityCarrier) {
-//			Sponge.getScheduler().createAsyncExecutor(plugin).execute(() -> {
-//				plugin.getInspectManager().inspectContainer(p, block.getWorldUniqueId(), loc.getBlockPosition()); });
 			task = () ->
 				plugin.getInspectManager().inspectContainer(p, block.getWorldUniqueId(), loc.getBlockPosition());
 		} else {
-//			Sponge.getScheduler().createAsyncExecutor(plugin).execute(() -> {
-//				plugin.getInspectManager().inspect(p, block.getWorldUniqueId(), loc.getBlockPosition().add(e.getTargetSide().asBlockOffset())); });
 			task = () ->
 				plugin.getInspectManager().inspect(p, block.getWorldUniqueId(), loc.getBlockPosition().add(e.getTargetSide().asBlockOffset()));
 		}
-		new Thread(task).start();
+		plugin.getThreadPool().execute(task);
 	}
 	
 }

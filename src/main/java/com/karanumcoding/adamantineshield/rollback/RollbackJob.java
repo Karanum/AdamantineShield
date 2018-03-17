@@ -44,7 +44,6 @@ public class RollbackJob {
 		this.filter.addFilter(new RolledBackFilter(isUndo));
 		
 		player.sendMessage(Text.of(TextColors.BLUE, "Queueing rollback operation..."));
-		//Sponge.getScheduler().createAsyncExecutor(plugin).execute(() -> {
 		Runnable task = () -> {
 			LookupResult lookup;
 			Connection c = plugin.getDatabase().getConnection();
@@ -69,7 +68,7 @@ public class RollbackJob {
 			iter = lines.listIterator();
 			plugin.getRollbackManager().queue(this);
 		};
-		new Thread(task).start();
+		plugin.getThreadPool().execute(task);
 	}
 	
 	public LookupLine getNext() {
@@ -84,7 +83,6 @@ public class RollbackJob {
 	
 	public void commitToDatabase() {
 		player.sendMessage(Text.of(TextColors.DARK_AQUA, "[AC] ", TextColors.YELLOW, "Successfully rolled back " + lines.size() + " entries"));
-		//Sponge.getScheduler().createAsyncExecutor(plugin).execute(() -> {
 		Runnable task = () -> {
 			Connection c = plugin.getDatabase().getConnection();
 			try {

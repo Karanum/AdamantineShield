@@ -73,7 +73,7 @@ public class CommandLookup implements CommandExecutor {
 			
 			lookup.showPage(p, 1);
 		};
-		new Thread(task).start();
+		plugin.getThreadPool().execute(task);
 		return CommandResult.success();
 	}
 	

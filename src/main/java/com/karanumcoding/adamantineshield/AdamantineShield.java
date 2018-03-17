@@ -3,6 +3,8 @@ package com.karanumcoding.adamantineshield;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -48,6 +50,7 @@ public class AdamantineShield {
 	
 	private ConfigHandler config;
 	private Database db;
+	private ExecutorService threadPool;
 	
 	private InspectManager inspectManager;
 	private RollbackManager rollbackManager;
@@ -74,6 +77,10 @@ public class AdamantineShield {
 			logger.error("Could not connect to the database! Plugin was not loaded!");
 			return;
 		}
+
+		int threadMax = config.getInt("threading", "max-threads");
+		if (threadMax < 1) threadMax = 1;
+		threadPool = Executors.newFixedThreadPool(threadMax);
 		
 		if (config.getBool("purge", "auto-purge")) {
 			int days = config.getInt("purge", "auto-purge-days");
@@ -102,6 +109,15 @@ public class AdamantineShield {
 	public void onServerStopping(GameStoppingServerEvent e) {
 		if (db == null) return;
 		db.stop();
+
+		threadPool.shutdown();
+		logger.info("Waiting for tasks to finish executing");
+		try {
+			if (!threadPool.awaitTermination(10, TimeUnit.SECONDS))
+				threadPool.shutdownNow();
+		} catch (InterruptedException e1) {
+			threadPool.shutdownNow();
+		}
 	}
 	
 	@Listener
@@ -117,6 +133,10 @@ public class AdamantineShield {
 		return config;
 	}
 	
+	public ExecutorService getThreadPool() {
+		return threadPool;
+	}
+
 	public InspectManager getInspectManager() {
 		return inspectManager;
 	}
