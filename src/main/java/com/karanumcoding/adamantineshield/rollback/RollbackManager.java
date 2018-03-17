@@ -100,8 +100,8 @@ public class RollbackManager {
 		} else if (line.getTarget() instanceof BlockType) {
 			
 			BlockState block = BlockState.builder().build(line.getDataAsView()).orElse(null);
-			if (block != null)
-				w.setBlock(line.getPos(), block, Cause.source(container).build());
+//			if (block != null)
+//				w.setBlock(line.getPos(), block, Cause.source(container).build());
 			
 		}
 	}
@@ -124,7 +124,7 @@ public class RollbackManager {
 		} else if (line.getTarget() instanceof BlockType) {
 			
 			BlockState block = BlockState.builder().blockType(BlockTypes.AIR).build();
-			w.setBlock(line.getPos(), block, Cause.source(container).build());
+//			w.setBlock(line.getPos(), block, Cause.source(container).build());
 			
 		}
 	}
