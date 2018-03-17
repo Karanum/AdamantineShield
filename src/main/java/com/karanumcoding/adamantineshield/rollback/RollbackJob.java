@@ -44,7 +44,8 @@ public class RollbackJob {
 		this.filter.addFilter(new RolledBackFilter(isUndo));
 		
 		player.sendMessage(Text.of(TextColors.BLUE, "Queueing rollback operation..."));
-		Sponge.getScheduler().createAsyncExecutor(plugin).execute(() -> {
+		//Sponge.getScheduler().createAsyncExecutor(plugin).execute(() -> {
+		Runnable task = () -> {
 			LookupResult lookup;
 			Connection c = plugin.getDatabase().getConnection();
 			try {
@@ -67,7 +68,8 @@ public class RollbackJob {
 			lines = lookup.getLines();
 			iter = lines.listIterator();
 			plugin.getRollbackManager().queue(this);
-		});
+		};
+		new Thread(task).start();
 	}
 	
 	public LookupLine getNext() {
@@ -82,7 +84,8 @@ public class RollbackJob {
 	
 	public void commitToDatabase() {
 		player.sendMessage(Text.of(TextColors.DARK_AQUA, "[AC] ", TextColors.YELLOW, "Successfully rolled back " + lines.size() + " entries"));
-		Sponge.getScheduler().createAsyncExecutor(plugin).execute(() -> {
+		//Sponge.getScheduler().createAsyncExecutor(plugin).execute(() -> {
+		Runnable task = () -> {
 			Connection c = plugin.getDatabase().getConnection();
 			try {
 				int worldId = Database.worldCache.getDataId(c, player.getWorld().getUniqueId().toString());
@@ -91,9 +94,8 @@ public class RollbackJob {
 			} catch (SQLException e) {
 				e.printStackTrace();
 				player.sendMessage(Text.of(TextColors.DARK_AQUA, "[AC] ", TextColors.RED, "A database error has occurred! Contact your server administrator!"));
-				return;
 			}
-		});
+		};
 	}
 	
 }

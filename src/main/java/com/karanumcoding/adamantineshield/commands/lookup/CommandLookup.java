@@ -25,6 +25,7 @@ import com.karanumcoding.adamantineshield.lookup.FilterSet;
 import com.karanumcoding.adamantineshield.lookup.LookupResult;
 import com.karanumcoding.adamantineshield.lookup.LookupResultManager;
 import com.karanumcoding.adamantineshield.util.FilterParser;
+import org.spongepowered.api.util.annotation.NonnullByDefault;
 
 public class CommandLookup implements CommandExecutor {
 
@@ -48,7 +49,8 @@ public class CommandLookup implements CommandExecutor {
 		FilterParser.parse(filters, filterSet, p);
 		
 		p.sendMessage(Text.of(TextColors.BLUE, "Querying database, please wait..."));
-		Sponge.getScheduler().createAsyncExecutor(plugin).execute(() -> {			
+		//Sponge.getScheduler().createAsyncExecutor(plugin).execute(() -> {
+		Runnable task = () -> {
 			LookupResult lookup;
 			Connection c = plugin.getDatabase().getConnection();
 			try {
@@ -70,7 +72,8 @@ public class CommandLookup implements CommandExecutor {
 			}
 			
 			lookup.showPage(p, 1);
-		});
+		};
+		new Thread(task).start();
 		return CommandResult.success();
 	}
 	

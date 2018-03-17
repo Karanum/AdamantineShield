@@ -1,3 +1,4 @@
+
 *.bat
 *.lnk
 
@@ -10,3 +11,6 @@ build/*
 /.settings/
 /bin/
 /build/
+
+/.idea/
+/*.iml
