@@ -213,11 +213,11 @@ public class AdamantineShield {
 //				.executor(new CommandReload())
 //				.build();
 		
-//		CommandSpec rollbackCommand = CommandSpec.builder()
-//				.permission(Permissions.ROLLBACK.get())
-//				.arguments(GenericArguments.allOf(GenericArguments.string(Text.of("filter"))))
-//				.executor(new CommandRollback(this))
-//				.build();
+		CommandSpec rollbackCommand = CommandSpec.builder()
+				.permission(Permissions.ROLLBACK.get())
+				.arguments(GenericArguments.allOf(GenericArguments.string(Text.of("filter"))))
+				.executor(new CommandRollback(this))
+				.build();
 //		
 //		CommandSpec undoCommand = CommandSpec.builder()
 //				.permission(Permissions.UNDO.get())
@@ -233,7 +233,7 @@ public class AdamantineShield {
 				.child(pageCommand, "page", "p")
 				.child(nextPageCommand, "nextpage", "next")
 				.child(prevPageCommand, "prevpage", "prev")
-//				.child(rollbackCommand, "rollback", "rb", "r")
+				.child(rollbackCommand, "rollback", "rb", "r")
 //				.child(undoCommand, "undo", "u")
 				.child(purgeCommand, "purge")
 				//.child(reloadCommand, "reload")

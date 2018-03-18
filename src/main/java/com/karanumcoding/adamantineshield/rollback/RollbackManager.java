@@ -73,9 +73,10 @@ public class RollbackManager {
 			task = null;
 		}
 	}
-	
+
+	//TODO: Set proper causes for block changes caused by rollback/undo
+
 	private void performAddition(LookupLine line) {
-		//TODO: Debug this function, blocks are not being added
 		
 		World w = Sponge.getServer().getWorld(line.getWorld()).orElse(null);
 		if (w == null) return;
@@ -98,10 +99,14 @@ public class RollbackManager {
 			}
 			
 		} else if (line.getTarget() instanceof BlockType) {
-			
-			BlockState block = BlockState.builder().build(line.getDataAsView()).orElse(null);
-//			if (block != null)
-//				w.setBlock(line.getPos(), block, Cause.source(container).build());
+			BlockState block;
+			if (line.getDataAsView() == null)
+				block = BlockState.builder().blockType((BlockType) line.getTarget()).build();
+			else
+				block = BlockState.builder().build(line.getDataAsView()).orElse(null);
+
+			if (block != null)
+				w.setBlock(line.getPos(), block);
 			
 		}
 	}
@@ -124,7 +129,7 @@ public class RollbackManager {
 		} else if (line.getTarget() instanceof BlockType) {
 			
 			BlockState block = BlockState.builder().blockType(BlockTypes.AIR).build();
-//			w.setBlock(line.getPos(), block, Cause.source(container).build());
+			w.setBlock(line.getPos(), block);
 			
 		}
 	}

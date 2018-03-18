@@ -46,7 +46,7 @@ public class BlockQueueEntry extends QueueEntry {
 		
 		ps.setNull(8, Types.VARCHAR);
 		try {
-			String data = DataUtils.dataToString(block.toContainer());
+			String data = DataUtils.dataToString(block.getExtendedState().toContainer());
 			if (data != null)
 				ps.setString(8, data);
 		} catch (IOException e) {
