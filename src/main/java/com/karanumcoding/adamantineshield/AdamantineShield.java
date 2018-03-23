@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -41,7 +42,9 @@ import com.karanumcoding.adamantineshield.util.FilterParser;
 	description = "Action logging and rollback plugin for Sponge"
 )
 public class AdamantineShield {
-	
+
+	private static AdamantineShield instance;
+
 	@Inject
 	private Logger logger;
 	public Logger getLogger() {
@@ -59,6 +62,8 @@ public class AdamantineShield {
 	@Listener
 	public void onPreInit(GamePreInitializationEvent e) {
 		DataUtils.populateCompressionMap();
+
+		instance = this;
 		
 		try {
 			config = new ConfigHandler(this);
@@ -80,7 +85,16 @@ public class AdamantineShield {
 
 		int threadMax = config.getInt("threading", "max-threads");
 		if (threadMax < 1) threadMax = 1;
-		threadPool = Executors.newFixedThreadPool(threadMax);
+		threadPool = Executors.newFixedThreadPool(threadMax, new ThreadFactory() {
+			private int counter = 0;
+
+			@Override
+			public Thread newThread(Runnable r) {
+				return new Thread(r, String.format("%sPool-Thread-%d",
+						Sponge.getPluginManager().fromInstance(AdamantineShield.instance).get().getId(),
+						counter++));
+			}
+		});
 		
 		if (config.getBool("purge", "auto-purge")) {
 			int days = config.getInt("purge", "auto-purge-days");
