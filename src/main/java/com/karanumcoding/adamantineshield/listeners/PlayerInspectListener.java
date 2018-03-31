@@ -1,6 +1,5 @@
 package com.karanumcoding.adamantineshield.listeners;
 
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.tileentity.carrier.TileEntityCarrier;
 import org.spongepowered.api.entity.living.player.Player;
@@ -44,8 +43,6 @@ public class PlayerInspectListener {
 	public void onBlockSecondaryInteract(InteractBlockEvent.Secondary.MainHand e, @First Player p) {		
 		if (!plugin.getInspectManager().isInspector(p))
 			return;
-		
-		//TODO: Figure out why shearing sheep causes weird shit to happen
 		
 		e.setCancelled(true);
 		BlockSnapshot block = e.getTargetBlock();

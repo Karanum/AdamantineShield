@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -25,7 +24,6 @@ import com.karanumcoding.adamantineshield.lookup.FilterSet;
 import com.karanumcoding.adamantineshield.lookup.LookupResult;
 import com.karanumcoding.adamantineshield.lookup.LookupResultManager;
 import com.karanumcoding.adamantineshield.util.FilterParser;
-import org.spongepowered.api.util.annotation.NonnullByDefault;
 
 public class CommandLookup implements CommandExecutor {
 
@@ -49,7 +47,6 @@ public class CommandLookup implements CommandExecutor {
 		FilterParser.parse(filters, filterSet, p);
 		
 		p.sendMessage(Text.of(TextColors.BLUE, "Querying database, please wait..."));
-		//Sponge.getScheduler().createAsyncExecutor(plugin).execute(() -> {
 		Runnable task = () -> {
 			LookupResult lookup;
 			Connection c = plugin.getDatabase().getConnection();
