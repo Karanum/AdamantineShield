@@ -6,6 +6,7 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.InteractBlockEvent;
 import org.spongepowered.api.event.filter.cause.First;
+import org.spongepowered.api.item.inventory.MultiBlockCarrier;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.world.Location;
@@ -52,15 +53,25 @@ public class PlayerInspectListener {
 		Location<World> loc = block.getLocation().get();
 		
 		p.sendMessage(Text.of(TextColors.BLUE, "Querying database, please wait..."));
-		Runnable task;
-		if (loc.getTileEntity().isPresent() && loc.getTileEntity().get() instanceof TileEntityCarrier) {
-			task = () ->
-				plugin.getInspectManager().inspectContainer(p, block.getWorldUniqueId(), loc.getBlockPosition());
+		Runnable task = null;
+		if (loc.getTileEntity().isPresent()) {
+			if (loc.getTileEntity().get() instanceof MultiBlockCarrier) {
+				task = () -> {
+					MultiBlockCarrier carrier = (MultiBlockCarrier) loc.getTileEntity().get();
+					plugin.getInspectManager().inspectContainer(p, block.getWorldUniqueId(), carrier.getLocation().getBlockPosition());
+				};
+			}
+			else if (loc.getTileEntity().get() instanceof TileEntityCarrier) {
+				task = () ->
+					plugin.getInspectManager().inspectContainer(p, block.getWorldUniqueId(), loc.getBlockPosition());
+			}
 		} else {
 			task = () ->
 				plugin.getInspectManager().inspect(p, block.getWorldUniqueId(), loc.getBlockPosition().add(e.getTargetSide().asBlockOffset()));
 		}
-		plugin.getThreadPool().execute(task);
+		
+		if (task != null)
+			plugin.getThreadPool().execute(task);
 	}
 	
 }

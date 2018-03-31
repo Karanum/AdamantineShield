@@ -16,7 +16,7 @@ import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.property.SlotIndex;
 import org.spongepowered.api.item.inventory.query.QueryOperationTypes;
-import org.spongepowered.api.plugin.PluginContainer;
+
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.world.World;
 
@@ -27,24 +27,22 @@ import com.karanumcoding.adamantineshield.lookup.LookupLine;
 public class RollbackManager {
 	
 	private AdamantineShield plugin;
-	private PluginContainer container;
 	private List<RollbackJob> queue;
 	private Task task;
 	
 	public RollbackManager(AdamantineShield plugin) {
 		this.plugin = plugin;
-		container = Sponge.getPluginManager().fromInstance(plugin).get();
 		
 		queue = Lists.newArrayList();
 		task = null;
 	}
 	
-	public void queue(RollbackJob job) {
+	public synchronized void queue(RollbackJob job) {
 		if (job == null) return;
 		queue.add(job);
 		
 		if (task == null) {
-			task = Task.builder().delay(1, TimeUnit.SECONDS).interval(500, TimeUnit.MILLISECONDS)
+			task = Task.builder().interval(200, TimeUnit.MILLISECONDS)
 					.execute(() -> doRollbackCycle())
 					.submit(plugin);
 		}
