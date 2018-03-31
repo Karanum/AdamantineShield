@@ -33,7 +33,7 @@ import com.karanumcoding.adamantineshield.listeners.*;
 import com.karanumcoding.adamantineshield.lookup.InspectManager;
 import com.karanumcoding.adamantineshield.lookup.LookupResultManager;
 import com.karanumcoding.adamantineshield.rollback.RollbackManager;
-import com.karanumcoding.adamantineshield.util.ContainerAccessManager;
+import com.karanumcoding.adamantineshield.util.MultiBlockAccessManager;
 import com.karanumcoding.adamantineshield.util.DataUtils;
 import com.karanumcoding.adamantineshield.util.FilterParser;
 
@@ -54,7 +54,7 @@ public class AdamantineShield {
 	
 	private InspectManager inspectManager;
 	private RollbackManager rollbackManager;
-	private ContainerAccessManager containerAccessManager;
+	private MultiBlockAccessManager containerAccessManager;
 	
 	@Listener
 	public void onPreInit(GamePreInitializationEvent e) {
@@ -92,7 +92,7 @@ public class AdamantineShield {
 		
 		inspectManager = new InspectManager(db);
 		rollbackManager = new RollbackManager(this);
-		containerAccessManager = new ContainerAccessManager();
+		containerAccessManager = new MultiBlockAccessManager();
 		
 		logger.info("Registering event listeners");
 		registerListeners(Sponge.getEventManager());
@@ -147,7 +147,7 @@ public class AdamantineShield {
 	
 	private void registerListeners(EventManager man) {
 		man.registerListeners(this, new PlayerInspectListener(this));
-		man.registerListeners(this, new ContainerAccessListener(containerAccessManager));
+		man.registerListeners(this, new MultiBlockAccessListener(containerAccessManager));
 		if (config.getBool("logging", "blocks")) {
 			man.registerListeners(this, new PlayerBlockChangeListener(db));
 			man.registerListeners(this, new EntityBlockChangeListener(db));
@@ -159,8 +159,7 @@ public class AdamantineShield {
 			man.registerListeners(this, new LiquidFlowListener(db));
 		}
 		if (config.getBool("logging", "containers") || config.getBool("logging", "chests")) {
-			man.registerListeners(this, new InventoryChangeListener(db, containerAccessManager, 
-					config.getBool("logging", "containers")));
+			man.registerListeners(this, new InventoryChangeListener(db, config.getBool("logging", "containers")));
 		}
 	}
 	

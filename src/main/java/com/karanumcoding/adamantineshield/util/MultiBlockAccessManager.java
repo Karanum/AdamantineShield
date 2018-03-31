@@ -4,25 +4,25 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.spongepowered.api.block.tileentity.carrier.TileEntityCarrier;
+import org.spongepowered.api.item.inventory.MultiBlockCarrier;
 
 import com.google.common.collect.Maps;
 
-public class ContainerAccessManager {
+public class MultiBlockAccessManager {
 	
 	private class AccessData {
 		public int tick;
-		public TileEntityCarrier entity;
+		public MultiBlockCarrier entity;
 		public boolean active;
 	}
 	
 	private Map<UUID, AccessData> accessMap;
 	
-	public ContainerAccessManager() {
+	public MultiBlockAccessManager() {
 		accessMap = Maps.newHashMap();
 	}
 	
-	public void addPlayer(UUID id, int tick, TileEntityCarrier entity) {
+	public void addPlayer(UUID id, int tick, MultiBlockCarrier entity) {
 		AccessData data = new AccessData();
 		data.tick = tick;
 		data.entity = entity;
@@ -51,7 +51,7 @@ public class ContainerAccessManager {
 		return (accessMap.get(id).tick == tick);
 	}
 	
-	public Optional<TileEntityCarrier> getEntity(UUID id) {
+	public Optional<MultiBlockCarrier> getEntity(UUID id) {
 		if (!accessMap.containsKey(id))
 			return Optional.empty();
 		return Optional.of(accessMap.get(id).entity);

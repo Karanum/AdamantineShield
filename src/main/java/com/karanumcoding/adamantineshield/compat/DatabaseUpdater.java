@@ -51,6 +51,18 @@ public final class DatabaseUpdater {
 				c.setAutoCommit(true);
 				throw e;
 			}
+		
+		if (fromVersion < 4) {}
+			try {
+				c.setAutoCommit(false);
+				addMultiBlockField(plugin.getLogger(), c);
+				c.commit();
+				c.setAutoCommit(true);
+			} catch (SQLException e) {
+				c.rollback();
+				c.setAutoCommit(true);
+				throw e;
+			}
 	}
 	
 	private static void migrateIds(Logger logger, Connection c) throws SQLException {
@@ -108,6 +120,11 @@ public final class DatabaseUpdater {
 		logger.info("(v2 -> v3) Adding rollback field to container table");
 		c.createStatement().executeUpdate("ALTER TABLE AS_Container ADD rolled_back TINYINT(1) DEFAULT 0;");
 		c.createStatement().executeUpdate("UPDATE AS_Container SET rolled_back = 0;");
+	}
+	
+	private static void addMultiBlockField(Logger logger, Connection c) throws SQLException {
+		logger.info("(v3 -> v4) Adding multiblock field to container table");
+		c.createStatement().executeUpdate("ALTER TABLE AS_Container ADD multiblock INT;");
 	}
 	
 }

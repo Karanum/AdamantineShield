@@ -5,23 +5,23 @@ import java.util.Optional;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.tileentity.TileEntity;
-import org.spongepowered.api.block.tileentity.carrier.TileEntityCarrier;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.InteractBlockEvent;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.event.item.inventory.InteractInventoryEvent;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
+import org.spongepowered.api.item.inventory.MultiBlockCarrier;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
-import com.karanumcoding.adamantineshield.util.ContainerAccessManager;
+import com.karanumcoding.adamantineshield.util.MultiBlockAccessManager;
 
-public class ContainerAccessListener {
+public class MultiBlockAccessListener {
 	
-	private ContainerAccessManager manager;
+	private MultiBlockAccessManager manager;
 	
-	public ContainerAccessListener(ContainerAccessManager manager) {
+	public MultiBlockAccessListener(MultiBlockAccessManager manager) {
 		this.manager = manager;
 	}
 	
@@ -33,10 +33,10 @@ public class ContainerAccessListener {
 			return;
 		
 		Optional<TileEntity> entity = loc.getExtent().getTileEntity(loc.getBlockPosition());
-		if (!entity.isPresent() || !(entity.get() instanceof TileEntityCarrier))
+		if (!entity.isPresent() || !(entity.get() instanceof MultiBlockCarrier))
 			return;
 
-		manager.addPlayer(p.getUniqueId(), Sponge.getServer().getRunningTimeTicks(), (TileEntityCarrier) entity.get());
+		manager.addPlayer(p.getUniqueId(), Sponge.getServer().getRunningTimeTicks(), (MultiBlockCarrier) entity.get());
 	}
 	
 	@Listener

@@ -15,6 +15,7 @@ import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.property.SlotIndex;
+import org.spongepowered.api.item.inventory.query.QueryOperationTypes;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.world.World;
@@ -93,7 +94,7 @@ public class RollbackManager {
 						.itemType(type)
 						.quantity(line.getCount())
 						.build();
-				Inventory slot = i.query(new SlotIndex(line.getSlot()));
+				Inventory slot = i.query(QueryOperationTypes.INVENTORY_PROPERTY.of(SlotIndex.of(line.getSlot())));
 				slot.set(stack);
 			}
 			
@@ -121,7 +122,7 @@ public class RollbackManager {
 				TileEntityCarrier c = (TileEntityCarrier) te.get();
 				Inventory i = c.getInventory();
 				
-				Inventory slot = i.query(new SlotIndex(line.getSlot()));
+				Inventory slot = i.query(QueryOperationTypes.INVENTORY_PROPERTY.of(SlotIndex.of(line.getSlot())));
 				slot.set(ItemStack.of(ItemTypes.NONE, 0));
 			}
 			
