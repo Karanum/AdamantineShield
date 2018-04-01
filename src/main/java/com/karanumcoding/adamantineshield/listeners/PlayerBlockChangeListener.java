@@ -1,20 +1,24 @@
 package com.karanumcoding.adamantineshield.listeners;
 
 import java.util.Date;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.Transaction;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.block.ChangeBlockEvent;
+import org.spongepowered.api.event.cause.EventContextKeys;
 import org.spongepowered.api.event.filter.cause.Root;
 
 import com.karanumcoding.adamantineshield.db.Database;
 import com.karanumcoding.adamantineshield.db.queue.BlockQueueEntry;
 import com.karanumcoding.adamantineshield.enums.ActionType;
+import org.spongepowered.api.world.LocatableBlock;
 
 public class PlayerBlockChangeListener {
 	
@@ -41,6 +45,17 @@ public class PlayerBlockChangeListener {
 		long time = new Date().getTime();
 		for (Transaction<BlockSnapshot> transaction : e.getTransactions()) {
 			db.addToQueue(new BlockQueueEntry(transaction.getOriginal(), ActionType.DESTROY, p.getUniqueId().toString(), time));
+		}
+	}
+
+	@Listener(order = Order.POST)
+	public void onBreakCascade(ChangeBlockEvent.Break e, @Root LocatableBlock b) {
+		Optional<User> optionalUser = e.getCause().getContext().get(EventContextKeys.NOTIFIER);
+		if (!optionalUser.isPresent()) return;
+		User user = optionalUser.get();
+		long time = new Date().getTime();
+		for (Transaction<BlockSnapshot> transaction : e.getTransactions()) {
+			db.addToQueue(new BlockQueueEntry(transaction.getOriginal(), ActionType.DESTROY, user.getUniqueId().toString(), time));
 		}
 	}
 	

@@ -171,6 +171,12 @@ public class AdamantineShield {
 		if (config.getBool("logging", "containers") || config.getBool("logging", "chests")) {
 			man.registerListeners(this, new InventoryChangeListener(db, config.getBool("logging", "containers")));
 		}
+		if (config.getBool("logging", "plant-growth") || config.getBool("logging", "tree-growth")) {
+			man.registerListeners(this, new PlantGrowthListener(
+					db,
+					config.getBool("logging", "plant-growth"),
+					config.getBool("logging", "tree-growth")));
+		}
 	}
 	
 	private void registerCommands(CommandManager man) {
