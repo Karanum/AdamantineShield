@@ -2,8 +2,8 @@ plugins {
     id 'org.spongepowered.plugin' version '0.8.1'
 }
 
-group= 'com.karanum'
-version = '0.3.4'
+group = 'com.karanum'
+version = '0.4.0'
 description = 'Action logging and rollback plugin for Sponge'
 
 sourceCompatibility = targetCompatibility = "1.8"
@@ -18,11 +18,7 @@ dependencies {
 
 sponge {
     plugin {
-        id = 'adamantineshield'
         meta {
-            name = 'AdamantineShield'
-            version = '0.3.4'
-            description = 'Action logging and rollback plugin for Sponge'
             url = null
         }
     }
