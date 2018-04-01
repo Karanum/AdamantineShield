@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -52,10 +54,10 @@ public final class DatabaseUpdater {
 				throw e;
 			}
 		
-		if (fromVersion < 4) {}
+		if (fromVersion < 4)
 			try {
 				c.setAutoCommit(false);
-				addMultiBlockField(plugin.getLogger(), c);
+				removeDuplicates(plugin.getLogger(), c);
 				c.commit();
 				c.setAutoCommit(true);
 			} catch (SQLException e) {
@@ -122,9 +124,60 @@ public final class DatabaseUpdater {
 		c.createStatement().executeUpdate("UPDATE AS_Container SET rolled_back = 0;");
 	}
 	
-	private static void addMultiBlockField(Logger logger, Connection c) throws SQLException {
-		logger.info("(v3 -> v4) Adding multiblock field to container table");
-		c.createStatement().executeUpdate("ALTER TABLE AS_Container ADD multiblock INT;");
+	private static void removeDuplicates(Logger logger, Connection c) throws SQLException {
+		ResultSet r;
+		Map<String, Integer> entryMap = new HashMap<>();
+		
+		logger.info("(v3 -> v4) Removing duplicates from ID table;");
+		r = c.createStatement().executeQuery("SELECT * FROM AS_Id ORDER BY id;");
+		if (r.isBeforeFirst()) {
+			while (r.next()) {
+				String value = r.getString("value");
+				if (entryMap.containsKey(value)) {
+					int id = r.getInt("id");
+					c.createStatement().executeUpdate("UPDATE AS_Block SET id = " + entryMap.get(value) + " WHERE id = " + id + ";");
+					c.createStatement().executeUpdate("UPDATE AS_Container SET id = " + entryMap.get(value) + " WHERE id = " + id + ";");
+					c.createStatement().executeUpdate("DELETE FROM AS_Id WHERE id = " + id + ";");
+				} else {
+					entryMap.put(value, r.getInt("id"));
+				}
+			}
+		}
+		entryMap.clear();
+		
+		logger.info("(v3 -> v4) Removing duplicates from world table;");
+		r = c.createStatement().executeQuery("SELECT * FROM AS_World ORDER BY id;");
+		if (r.isBeforeFirst()) {
+			while (r.next()) {
+				String value = r.getString("world");
+				if (entryMap.containsKey(value)) {
+					int id = r.getInt("id");
+					c.createStatement().executeUpdate("UPDATE AS_Block SET world = " + entryMap.get(value) + " WHERE world = " + id + ";");
+					c.createStatement().executeUpdate("UPDATE AS_Container SET world = " + entryMap.get(value) + " WHERE world = " + id + ";");
+					c.createStatement().executeUpdate("DELETE FROM AS_World WHERE id = " + id + ";");
+				} else {
+					entryMap.put(value, r.getInt("id"));
+				}
+			}
+		}
+		entryMap.clear();
+		
+		logger.info("(v3 -> v4) Removing duplicates from cause table;");
+		r = c.createStatement().executeQuery("SELECT * FROM AS_Cause ORDER BY id;");
+		if (r.isBeforeFirst()) {
+			while (r.next()) {
+				String value = r.getString("cause");
+				if (entryMap.containsKey(value)) {
+					int id = r.getInt("id");
+					c.createStatement().executeUpdate("UPDATE AS_Block SET cause = " + entryMap.get(value) + " WHERE cause = " + id + ";");
+					c.createStatement().executeUpdate("UPDATE AS_Container SET cause = " + entryMap.get(value) + " WHERE cause = " + id + ";");
+					c.createStatement().executeUpdate("DELETE FROM AS_Cause WHERE id = " + id + ";");
+				} else {
+					entryMap.put(value, r.getInt("id"));
+				}
+			}
+		}
+		entryMap.clear();
 	}
 	
 }

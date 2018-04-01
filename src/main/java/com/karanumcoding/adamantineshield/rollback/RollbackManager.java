@@ -10,13 +10,14 @@ import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.block.tileentity.TileEntity;
 import org.spongepowered.api.block.tileentity.carrier.TileEntityCarrier;
+import org.spongepowered.api.data.DataQuery;
+import org.spongepowered.api.data.DataView;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.property.SlotIndex;
 import org.spongepowered.api.item.inventory.query.QueryOperationTypes;
-
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.world.World;
 
@@ -96,15 +97,19 @@ public class RollbackManager {
 				slot.set(stack);
 			}
 			
-		} else if (line.getTarget() instanceof BlockType) {
-			BlockState block;
-			if (line.getDataAsView() == null)
+		} else if (line.getTarget() instanceof BlockType) {	
+			
+			BlockState block = null;
+			if (line.getDataAsView() == null) {
 				block = BlockState.builder().blockType((BlockType) line.getTarget()).build();
-			else
-				block = BlockState.builder().build(line.getDataAsView()).orElse(null);
-
-			if (block != null)
 				w.setBlock(line.getPos(), block);
+			} else {
+				DataView blockData = line.getDataAsView();
+				DataView blockState = blockData.getView(DataQuery.of("BlockState")).orElse(null);
+				block = BlockState.builder().build(blockState).orElse(null);
+				if (block != null)
+					w.setBlock(line.getPos(), block);
+			}
 			
 		}
 	}

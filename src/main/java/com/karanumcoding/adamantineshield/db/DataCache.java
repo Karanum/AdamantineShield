@@ -24,10 +24,13 @@ public class DataCache {
 		if (cache.containsKey(data))
 			return cache.get(data);
 		
-		ResultSet r = c.createStatement().executeQuery("SELECT id FROM " + tableName + " WHERE " + dataRowName + " = '" + data + "'");
-		if (!r.isBeforeFirst()) {
-			c.createStatement().executeUpdate("INSERT INTO " + tableName + " (" + dataRowName + ") VALUES ('" + data + "');");
+		ResultSet r;
+		synchronized (this) {
 			r = c.createStatement().executeQuery("SELECT id FROM " + tableName + " WHERE " + dataRowName + " = '" + data + "'");
+			if (!r.isBeforeFirst()) {
+				c.createStatement().executeUpdate("INSERT INTO " + tableName + " (" + dataRowName + ") VALUES ('" + data + "');");
+				r = c.createStatement().executeQuery("SELECT id FROM " + tableName + " WHERE " + dataRowName + " = '" + data + "'");
+			}
 		}
 		r.next();
 		

@@ -18,8 +18,8 @@ import com.karanumcoding.adamantineshield.util.DataUtils;
 
 public class InventoryQueueEntry extends QueueEntry {
 
-	private static final String QUERY = "INSERT INTO AS_Container (x, y, z, multiblock, world, type, slot, cause, id, count, data, time) "
-			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+	private static final String QUERY = "INSERT INTO AS_Container (x, y, z, world, type, slot, cause, id, count, data, time) "
+			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 	
 	private BlockCarrier carrier;
 	private int slot;
@@ -40,11 +40,6 @@ public class InventoryQueueEntry extends QueueEntry {
 	@Override
 	public void writeToConnection(Connection c) throws SQLException {
 		PreparedStatement ps;
-//		if (carrier instanceof MultiBlockCarrier) {
-//			ps = prepareMultiBlockQuery(c);
-//		} else {
-//			ps = prepareSingleBlockQuery(c);
-//		}
 		ps = prepareSingleBlockQuery(c);
 		ps.executeUpdate();
 	}
@@ -56,24 +51,23 @@ public class InventoryQueueEntry extends QueueEntry {
 		ps.setInt(1, loc.getBlockX());
 		ps.setInt(2, loc.getBlockY());
 		ps.setInt(3, loc.getBlockZ());
-		ps.setNull(4, Types.INTEGER);
-		ps.setInt(5, Database.worldCache.getDataId(c, carrier.getLocation().getExtent().getUniqueId().toString()));
-		ps.setByte(6, (byte) type.ordinal());
-		ps.setInt(7, slot);
-		ps.setInt(8, Database.causeCache.getDataId(c, cause.getUniqueId().toString()));
-		ps.setInt(9, Database.idCache.getDataId(c, item.getType().getId()));
-		ps.setByte(10, (byte) item.getQuantity());
+		ps.setInt(4, Database.worldCache.getDataId(c, carrier.getLocation().getExtent().getUniqueId().toString()));
+		ps.setByte(5, (byte) type.ordinal());
+		ps.setInt(6, slot);
+		ps.setInt(7, Database.causeCache.getDataId(c, cause.getUniqueId().toString()));
+		ps.setInt(8, Database.idCache.getDataId(c, item.getType().getId()));
+		ps.setByte(9, (byte) item.getQuantity());
 		
-		ps.setNull(11, Types.VARCHAR);
+		ps.setNull(10, Types.VARCHAR);
 		try {
 			String data = DataUtils.dataToString(item.toContainer());
 			if (data != null)
-				ps.setString(11, data);
+				ps.setString(10, data);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		ps.setLong(12, timestamp);
+		ps.setLong(11, timestamp);
 		return ps;
 	}
 

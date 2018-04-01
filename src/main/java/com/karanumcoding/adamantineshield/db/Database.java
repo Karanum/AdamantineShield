@@ -99,7 +99,7 @@ public class Database {
 		c.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS AS_Container ("
 				+ "x INT, y INT, z INT, world INT, type TINYINT, slot INT, "
 				+ "cause INT, id INT, count TINYINT, data TEXT, time BIGINT, "
-				+ "multiblock INT, rolled_back TINYINT(1) DEFAULT 0, "
+				+ "rolled_back TINYINT(1) DEFAULT 0, "
 				+ "FOREIGN KEY (world) REFERENCES AS_World(id), "
 				+ "FOREIGN KEY (cause) REFERENCES AS_Cause(id), "
 				+ "FOREIGN KEY (id) REFERENCES AS_Id(id));");
