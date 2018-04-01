@@ -1,6 +1,5 @@
 package com.karanumcoding.adamantineshield.listeners;
 
-import com.karanumcoding.adamantineshield.AdamantineShield;
 import com.karanumcoding.adamantineshield.db.Database;
 import com.karanumcoding.adamantineshield.db.queue.BlockQueueEntry;
 import com.karanumcoding.adamantineshield.enums.ActionType;
@@ -21,14 +20,10 @@ import java.util.List;
 public class PlantGrowthListener {
 
     private Database db;
-    private boolean logPlantGrowth;
-    private boolean logTreeGrowth;
     private List<BlockType> acceptedBlocks;
 
     public PlantGrowthListener(Database db, boolean logPlantGrowth, boolean logTreeGrowth) {
         this.db = db;
-        this.logPlantGrowth = logPlantGrowth;
-        this.logTreeGrowth = logTreeGrowth;
         acceptedBlocks = new ArrayList<>();
         if (logPlantGrowth) {
             acceptedBlocks.add(BlockTypes.REEDS);
