@@ -10,13 +10,14 @@ import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.block.tileentity.TileEntity;
 import org.spongepowered.api.block.tileentity.carrier.TileEntityCarrier;
-import org.spongepowered.api.event.cause.Cause;
+import org.spongepowered.api.data.DataQuery;
+import org.spongepowered.api.data.DataView;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.property.SlotIndex;
-import org.spongepowered.api.plugin.PluginContainer;
+import org.spongepowered.api.item.inventory.query.QueryOperationTypes;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.world.World;
 
@@ -27,24 +28,22 @@ import com.karanumcoding.adamantineshield.lookup.LookupLine;
 public class RollbackManager {
 	
 	private AdamantineShield plugin;
-	private PluginContainer container;
 	private List<RollbackJob> queue;
 	private Task task;
 	
 	public RollbackManager(AdamantineShield plugin) {
 		this.plugin = plugin;
-		container = Sponge.getPluginManager().fromInstance(plugin).get();
 		
 		queue = Lists.newArrayList();
 		task = null;
 	}
 	
-	public void queue(RollbackJob job) {
+	public synchronized void queue(RollbackJob job) {
 		if (job == null) return;
 		queue.add(job);
 		
 		if (task == null) {
-			task = Task.builder().delay(1, TimeUnit.SECONDS).interval(500, TimeUnit.MILLISECONDS)
+			task = Task.builder().interval(200, TimeUnit.MILLISECONDS)
 					.execute(() -> doRollbackCycle())
 					.submit(plugin);
 		}
@@ -94,19 +93,23 @@ public class RollbackManager {
 						.itemType(type)
 						.quantity(line.getCount())
 						.build();
-				Inventory slot = i.query(new SlotIndex(line.getSlot()));
+				Inventory slot = i.query(QueryOperationTypes.INVENTORY_PROPERTY.of(SlotIndex.of(line.getSlot())));
 				slot.set(stack);
 			}
 			
-		} else if (line.getTarget() instanceof BlockType) {
-			BlockState block;
-			if (line.getDataAsView() == null)
+		} else if (line.getTarget() instanceof BlockType) {	
+			
+			BlockState block = null;
+			if (line.getDataAsView() == null) {
 				block = BlockState.builder().blockType((BlockType) line.getTarget()).build();
-			else
-				block = BlockState.builder().build(line.getDataAsView()).orElse(null);
-
-			if (block != null)
 				w.setBlock(line.getPos(), block);
+			} else {
+				DataView blockData = line.getDataAsView();
+				DataView blockState = blockData.getView(DataQuery.of("BlockState")).orElse(null);
+				block = BlockState.builder().build(blockState).orElse(null);
+				if (block != null)
+					w.setBlock(line.getPos(), block);
+			}
 			
 		}
 	}
@@ -122,7 +125,7 @@ public class RollbackManager {
 				TileEntityCarrier c = (TileEntityCarrier) te.get();
 				Inventory i = c.getInventory();
 				
-				Inventory slot = i.query(new SlotIndex(line.getSlot()));
+				Inventory slot = i.query(QueryOperationTypes.INVENTORY_PROPERTY.of(SlotIndex.of(line.getSlot())));
 				slot.set(ItemStack.of(ItemTypes.NONE, 0));
 			}
 			

@@ -1,15 +1,14 @@
 package com.karanumcoding.adamantineshield.listeners;
 
 import java.util.Date;
-import java.util.Optional;
 
 import org.spongepowered.api.block.tileentity.carrier.Chest;
-import org.spongepowered.api.block.tileentity.carrier.TileEntityCarrier;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.event.item.inventory.AffectSlotEvent;
 import org.spongepowered.api.item.ItemTypes;
+import org.spongepowered.api.item.inventory.BlockCarrier;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.ItemStackComparators;
 import org.spongepowered.api.item.inventory.ItemStackSnapshot;
@@ -20,34 +19,27 @@ import org.spongepowered.api.item.inventory.type.CarriedInventory;
 import com.karanumcoding.adamantineshield.db.Database;
 import com.karanumcoding.adamantineshield.db.queue.InventoryQueueEntry;
 import com.karanumcoding.adamantineshield.enums.ActionType;
-import com.karanumcoding.adamantineshield.util.ContainerAccessManager;
 
 public class InventoryChangeListener {
 
 	private Database db;
-	private ContainerAccessManager accessMan;
 	private boolean logContainers;
 	
-	public InventoryChangeListener(Database db, ContainerAccessManager accessMan, boolean logContainers) {
+	public InventoryChangeListener(Database db, boolean logContainers) {
 		this.db = db;
-		this.accessMan = accessMan;
 		this.logContainers = logContainers;
 	}
 	
 	@Listener
-	public void onInventoryTransfer(AffectSlotEvent e, @First Player p) {
+	public void onInventoryTransfer(AffectSlotEvent e, @First Player p) {		
 		if (e.getTransactions().isEmpty()) return;
 		if (!(e.getTransactions().get(0).getSlot().parent() instanceof CarriedInventory))
 			return;
 		
-		TileEntityCarrier carrier = null;
+		BlockCarrier carrier = null;
 		CarriedInventory<?> c = (CarriedInventory<?>) e.getTransactions().get(0).getSlot().parent();
-		if (!c.getCarrier().isPresent()) {
-			Optional<TileEntityCarrier> optCarrier = accessMan.getEntity(p.getUniqueId());
-			if (optCarrier.isPresent() && accessMan.isActive(p.getUniqueId()))
-				carrier = optCarrier.get();
-		} else if (c.getCarrier().get() instanceof TileEntityCarrier) {
-			carrier = (TileEntityCarrier) c.getCarrier().get();
+		if (c.getCarrier().get() instanceof BlockCarrier) {
+			carrier = (BlockCarrier) c.getCarrier().get();
 		}
 		
 		if (carrier == null)

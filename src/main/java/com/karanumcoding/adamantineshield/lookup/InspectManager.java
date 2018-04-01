@@ -91,4 +91,32 @@ public class InspectManager {
 		lookup.showPage(p, 1);
 	}
 	
+	/*
+	public synchronized void inspectMultiblockContainer(Player p, UUID world, MultiBlockCarrier carrier) {
+		Connection c = db.getConnection();
+		ContainerLookupResult lookup = null;
+		
+		try {
+			PreparedStatement ps = c.prepareStatement(QueryHelper.INSPECT_CONTAINER_QUERY);
+			ps.setInt(1, carrier.getLocation().getBlockX());
+			ps.setInt(2, carrier.getLocation().getBlockY());
+			ps.setInt(3, carrier.getLocation().getBlockZ());
+			ps.setString(4, world.toString());
+			ResultSet result = ps.executeQuery();
+			
+			lookup = new ContainerLookupResult(result);
+			LookupResultManager.instance().setLookupResult(p, lookup);
+			
+			result.close();
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			p.sendMessage(Text.of(TextColors.DARK_AQUA, "[AC] ", TextColors.RED, "A database error has occurred! Contact your server administrator!"));
+			return;
+		}
+		
+		lookup.showPage(p, 1);
+	}
+	*/
+	
 }

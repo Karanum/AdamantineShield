@@ -24,7 +24,7 @@ public class Database {
 	private ConcurrentLinkedQueue<QueueEntry> queue;
 	private Task task;
 	
-	public static final int DB_VERSION = 3;
+	public static final int DB_VERSION = 4;
 	
 	public static final DataCache worldCache = new DataCache("AS_World", "world");
 	public static final DataCache causeCache = new DataCache("AS_Cause", "cause");

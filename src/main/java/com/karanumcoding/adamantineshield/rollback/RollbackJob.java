@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
@@ -94,6 +93,7 @@ public class RollbackJob {
 				player.sendMessage(Text.of(TextColors.DARK_AQUA, "[AC] ", TextColors.RED, "A database error has occurred! Contact your server administrator!"));
 			}
 		};
+		plugin.getThreadPool().execute(task);
 	}
 	
 }
