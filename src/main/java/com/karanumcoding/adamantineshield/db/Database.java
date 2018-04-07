@@ -112,6 +112,12 @@ public class Database {
 				+ "FOREIGN KEY (cause) REFERENCES AS_Cause(id), "
 				+ "FOREIGN KEY (id) REFERENCES AS_Id(id));");
 		
+		c.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS AS_Chat ("
+				+ "x INT, y INT, z INT, world INT, type TINYINT, "
+				+ "cause INT, message TEXT, time BIGINT, "
+				+ "FOREIGN KEY (world) REFERENCES AS_World(id), "
+				+ "FOREIGN KEY (cause) REFERENCES AS_Cause(id));");
+		
 		if (version > 0 && version < DB_VERSION) {
 			plugin.getLogger().info("Updating database from version " + version + " to version " + DB_VERSION);
 			DatabaseUpdater.updateDatabase(plugin, c, version);

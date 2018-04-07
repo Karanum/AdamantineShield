@@ -12,7 +12,7 @@ compileJava {
 }
 
 dependencies {
-    compile 'org.spongepowered:spongeapi:7.0.0'
+    compile 'org.spongepowered:spongeapi:7.1.0-SNAPSHOT'
     compile fileTree(dir: "libs", include: "*.jar")
 }
 

@@ -177,6 +177,10 @@ public class AdamantineShield {
 					config.getBool("logging", "plant-growth"),
 					config.getBool("logging", "tree-growth")));
 		}
+		if (config.getBool("logging", "chat") || config.getBool("logging", "commands")) {
+			man.registerListeners(this, new ChatListener(db, 
+					config.getBool("logging", "chat"), config.getBool("logging", "commands")));
+		}
 	}
 	
 	private void registerCommands(CommandManager man) {
