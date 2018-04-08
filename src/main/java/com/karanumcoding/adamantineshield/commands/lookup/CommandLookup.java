@@ -23,6 +23,7 @@ import com.karanumcoding.adamantineshield.lookup.ContainerLookupResult;
 import com.karanumcoding.adamantineshield.lookup.FilterSet;
 import com.karanumcoding.adamantineshield.lookup.LookupResult;
 import com.karanumcoding.adamantineshield.lookup.LookupResultManager;
+import com.karanumcoding.adamantineshield.lookup.chat.ChatLookupResult;
 import com.karanumcoding.adamantineshield.util.FilterParser;
 
 public class CommandLookup implements CommandExecutor {
@@ -56,6 +57,8 @@ public class CommandLookup implements CommandExecutor {
 				
 				if (filterSet.getLookupType() == LookupType.ITEM_LOOKUP)
 					lookup = new ContainerLookupResult(r);
+				else if (filterSet.getLookupType() == LookupType.CHAT_LOOKUP)
+					lookup = new ChatLookupResult(r);
 				else
 					lookup = new BlockLookupResult(r);
 				LookupResultManager.instance().setLookupResult(p, lookup);

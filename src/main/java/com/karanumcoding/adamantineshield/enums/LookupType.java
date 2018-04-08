@@ -2,7 +2,8 @@ package com.karanumcoding.adamantineshield.enums;
 
 public enum LookupType {
 	BLOCK_LOOKUP("AS_Block", null),
-	ITEM_LOOKUP("AS_Container", "count, slot");
+	ITEM_LOOKUP("AS_Container", "count, slot"),
+	CHAT_LOOKUP("AS_Chat", null);
 	
 	private String table;
 	private String column;

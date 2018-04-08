@@ -21,15 +21,27 @@ public class QueryHelper {
 		LookupType type = filters.getLookupType();
 		String table = type.getTable();
 		
+		if (type == LookupType.CHAT_LOOKUP)
+			return getChatLookupQuery(filters, p, worldId);
+		
 		String query = "SELECT x, y, z, type, time, data, rolled_back, AS_Cause.cause, AS_World.world, AS_Id.value";
 		if (type.getRelevantColumns() != null) {
 			query += ", " + type.getRelevantColumns();
 		}
 		query += " FROM " + table + ", AS_Cause, AS_World, AS_Id "
 				+ "WHERE AS_Cause.id = " + table + ".cause AND " + table + ".world = " + worldId + " "
-				+ "AND AS_Id.id = " + table + ".id AND " + filters.getQueryConditions(p) + " "
-				+ "ORDER BY time DESC, type";
+				+ "AND AS_World.id = " + table + ".world AND AS_Id.id = " + table + ".id "
+				+ "AND " + filters.getQueryConditions(p) + " ORDER BY time DESC, type";
 		
+		return query;
+	}
+	
+	public static String getChatLookupQuery(FilterSet filters, Player p, int worldId) {
+		String query = "SELECT x, y, z, type, time, message, AS_Cause.cause, AS_World.world "
+				+ "FROM AS_Chat, AS_Cause, AS_World "
+				+ "WHERE AS_Cause.id = AS_Chat.cause AND AS_World.id = AS_Chat.world "
+				+ "AND AS_Chat.world = " + worldId + " AND " + filters.getQueryConditions(p) + " "
+				+ "ORDER BY time DESC, type";
 		return query;
 	}
 	

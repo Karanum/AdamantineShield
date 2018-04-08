@@ -18,6 +18,9 @@ public class RolledBackFilter implements FilterBase {
 
 	@Override
 	public String getQueryCondition(LookupType lookupType) {
+		if (lookupType == LookupType.CHAT_LOOKUP)
+			return "";
+		
 		return "rolled_back = " + (rolledBack ? "1" : "0");
 	}
 

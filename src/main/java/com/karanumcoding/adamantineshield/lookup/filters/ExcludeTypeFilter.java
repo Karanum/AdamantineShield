@@ -28,6 +28,9 @@ public class ExcludeTypeFilter implements FilterBase {
 
 	@Override
 	public String getQueryCondition(LookupType lookupType) {
+		if (lookupType == LookupType.CHAT_LOOKUP)
+			return "";
+		
 		Iterator<CatalogType> iter = exclude.iterator();
 		String result = "NOT (AS_Id.value = '" + iter.next().getId() + "'";
 		while (iter.hasNext()) {

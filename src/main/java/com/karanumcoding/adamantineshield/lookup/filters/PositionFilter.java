@@ -8,14 +8,17 @@ public class PositionFilter implements FilterBase {
 
 	private Vector3i pos;
 	private int radius;
+	private boolean isInitialValue;
 	
 	public PositionFilter(Vector3i pos, int radius) {
 		this.pos = pos;
 		this.radius = radius;
+		isInitialValue = true;
 	}
 	
 	public void setRadius(int radius) {
 		this.radius = radius;
+		isInitialValue = false;
 	}
 	
 	@Override
@@ -29,6 +32,9 @@ public class PositionFilter implements FilterBase {
 
 	@Override
 	public String getQueryCondition(LookupType lookupType) {
+		if (lookupType == LookupType.CHAT_LOOKUP && isInitialValue)
+			return "";
+		
 		if (radius == 0)
 			return "x = " + pos.getX() + " AND z = " + pos.getZ();
 		return String.format("x >= %d AND x <= %d AND z >= %d AND z <= %d",

@@ -28,6 +28,9 @@ public class IncludeTypeFilter implements FilterBase {
 
 	@Override
 	public String getQueryCondition(LookupType lookupType) {
+		if (lookupType == LookupType.CHAT_LOOKUP)
+			return "";
+		
 		Iterator<CatalogType> iter = include.iterator();
 		String result = "(AS_Id.value = '" + iter.next().getId() + "'";
 		while (iter.hasNext()) {

@@ -59,6 +59,8 @@ public class FilterSet {
 		ActionFilter filter = (ActionFilter) filters.get(ActionFilter.class);
 		if (filter.isItemLookup())
 			return LookupType.ITEM_LOOKUP;
+		if (filter.isChatLookup())
+			return LookupType.CHAT_LOOKUP;
 		return LookupType.BLOCK_LOOKUP;
 	}
 	
@@ -83,13 +85,19 @@ public class FilterSet {
 		}
 		
 		LookupType type = LookupType.BLOCK_LOOKUP;
-		if (((ActionFilter) filters.get(ActionFilter.class)).isItemLookup())
+		ActionFilter actionFilter = (ActionFilter) filters.get(ActionFilter.class);
+		if (actionFilter.isItemLookup())
 			type = LookupType.ITEM_LOOKUP;
+		if (actionFilter.isChatLookup())
+			type = LookupType.CHAT_LOOKUP;
 		
 		Iterator<FilterBase> iter = filters.values().iterator();
 		String result = iter.next().getQueryCondition(type);
 		while (iter.hasNext()) {
-			result += " AND " + iter.next().getQueryCondition(type);
+			String condition = iter.next().getQueryCondition(type);
+			if (!condition.isEmpty()) {
+				result += " AND " + condition;
+			}
 		}
 		return result;
 	}
