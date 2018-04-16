@@ -36,10 +36,8 @@ public class InventoryChangeListener {
 	@Listener
 	public void onTransferPost(ChangeInventoryEvent.Transfer.Post e) {
 		if (e.getTransactions().isEmpty()) return;
-		if (!(e.getSourceInventory() instanceof CarriedInventory) || !(e.getTargetInventory() instanceof CarriedInventory)) {
-			System.out.println("Either one of the inventories wasn't a Carrier, you nasty Bidoof");
+		if (!(e.getSourceInventory() instanceof CarriedInventory) || !(e.getTargetInventory() instanceof CarriedInventory))
 			return;
-		}
 		
 		String cause = null;
 		if (e.getCause().containsType(Hopper.class)) {
