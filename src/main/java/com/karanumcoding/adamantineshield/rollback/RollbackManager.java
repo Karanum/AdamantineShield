@@ -82,7 +82,7 @@ public class RollbackManager {
 		
 		if (line.getTarget() instanceof ItemType) {
 			
-			Optional<TileEntity> te = w.getTileEntity(line.getPos());
+			Optional<TileEntity> te = w.getTileEntity(line.getPos());			
 			if (te.isPresent() && te.get() instanceof TileEntityCarrier) {
 				TileEntityCarrier c = (TileEntityCarrier) te.get();
 				Inventory i = c.getInventory();

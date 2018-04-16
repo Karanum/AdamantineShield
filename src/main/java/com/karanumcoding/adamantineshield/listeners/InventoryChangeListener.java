@@ -38,10 +38,14 @@ public class InventoryChangeListener {
 		
 		BlockCarrier carrier = null;
 		CarriedInventory<?> c = (CarriedInventory<?>) e.getTransactions().get(0).getSlot().parent();
+		if (!c.getCarrier().isPresent())
+			return;
+		
 		if (c.getCarrier().get() instanceof BlockCarrier) {
 			carrier = (BlockCarrier) c.getCarrier().get();
 		}
 		
+		// Still needed for catching non-tile-entity carriers (MINECART CHESTS I'M LOOKING AT YOU)
 		if (carrier == null)
 			return;
 		
