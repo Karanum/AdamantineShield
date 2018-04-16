@@ -48,14 +48,18 @@ public class ActionFilter implements FilterBase {
 			case "container":
 				actions.add(ActionType.CONTAINER_ADD);
 				actions.add(ActionType.CONTAINER_REMOVE);
+				actions.add(ActionType.ENTITY_CONTAINER_ADD);
+				actions.add(ActionType.ENTITY_CONTAINER_REMOVE);
 				break;
 			case "+container":
 			case "add":
 				actions.add(ActionType.CONTAINER_ADD);
+				actions.add(ActionType.ENTITY_CONTAINER_ADD);
 				break;
 			case "-container":
 			case "remove":
 				actions.add(ActionType.CONTAINER_REMOVE);
+				actions.add(ActionType.ENTITY_CONTAINER_REMOVE);
 				break;
 			case "flow":
 				actions.add(ActionType.FLOW);

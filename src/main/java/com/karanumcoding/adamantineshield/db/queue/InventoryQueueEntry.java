@@ -25,10 +25,19 @@ public class InventoryQueueEntry extends QueueEntry {
 	private int slot;
 	private ItemStackSnapshot item;
 	private ActionType type;
-	private Player cause;
+	private String cause;
 	private long timestamp;
 	
 	public InventoryQueueEntry(BlockCarrier carrier, int slot, ItemStackSnapshot item, ActionType type, Player cause, long timestamp) {
+		this.carrier = carrier;
+		this.slot = slot;
+		this.item = item;
+		this.type = type;
+		this.cause = cause.getUniqueId().toString();
+		this.timestamp = timestamp;
+	}
+	
+	public InventoryQueueEntry(BlockCarrier carrier, int slot, ItemStackSnapshot item, ActionType type, String cause, long timestamp) {
 		this.carrier = carrier;
 		this.slot = slot;
 		this.item = item;
@@ -54,7 +63,7 @@ public class InventoryQueueEntry extends QueueEntry {
 		ps.setInt(4, Database.worldCache.getDataId(c, carrier.getLocation().getExtent().getUniqueId().toString()));
 		ps.setByte(5, (byte) type.ordinal());
 		ps.setInt(6, slot);
-		ps.setInt(7, Database.causeCache.getDataId(c, cause.getUniqueId().toString()));
+		ps.setInt(7, Database.causeCache.getDataId(c, cause));
 		ps.setInt(8, Database.idCache.getDataId(c, item.getType().getId()));
 		ps.setByte(9, (byte) item.getQuantity());
 		

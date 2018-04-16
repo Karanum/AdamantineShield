@@ -247,6 +247,10 @@ public class LookupLine {
 				return PlayerUtils.getName(getPlayerCause()) + " added " + count + "x " + target.getId();
 			case CONTAINER_REMOVE:
 				return PlayerUtils.getName(getPlayerCause()) + " removed " + count + "x " + target.getId();
+			case ENTITY_CONTAINER_ADD:
+				return "Entity " + cause + " added " + count + "x " + target.getId();
+			case ENTITY_CONTAINER_REMOVE:
+				return "Entity " + cause + " removed " + count + "x " + target.getId();
 			default:
 				return "(unsupported action type)";
 		}

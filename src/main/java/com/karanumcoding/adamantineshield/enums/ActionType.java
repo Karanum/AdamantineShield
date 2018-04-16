@@ -7,7 +7,9 @@ public enum ActionType {
 	MOB_DESTROY(false),
 	FLOW(true),
 	CONTAINER_ADD(true),
-	CONTAINER_REMOVE(false);
+	CONTAINER_REMOVE(false),
+	ENTITY_CONTAINER_ADD(true),
+	ENTITY_CONTAINER_REMOVE(false);
 	
 	private boolean isAddition;
 	

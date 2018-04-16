@@ -18,7 +18,6 @@ public class BlockQueueEntry extends QueueEntry {
 			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
 	
 	private BlockSnapshot block;
-	//private TileEntity entity;
 	private ActionType type;
 	private String cause;
 	private long timestamp;
@@ -28,7 +27,6 @@ public class BlockQueueEntry extends QueueEntry {
 		this.type = type;
 		this.cause = cause.toLowerCase();
 		this.timestamp = timestamp;
-		//this.entity = null;
 	}
 
 	@Override
